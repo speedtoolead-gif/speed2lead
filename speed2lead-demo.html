@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Speed2Lead AI — Live Demo</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0a0a; color: #fff; min-height: 100vh; }
+
+  .hero { text-align: center; padding: 40px 20px 20px; }
+  .hero h1 { font-size: 2.2em; font-weight: 800; background: linear-gradient(135deg, #25D366, #128C7E); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero p { color: #888; font-size: 1.1em; margin-top: 8px; }
+  .badge { display: inline-block; background: #25D366; color: #000; padding: 4px 14px; border-radius: 20px; font-size: 0.8em; font-weight: 700; margin-top: 12px; }
+
+  .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+
+  .section { margin-bottom: 40px; }
+  .section h2 { font-size: 1.3em; margin-bottom: 16px; color: #25D366; }
+
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+  @media (max-width: 700px) { .split { grid-template-columns: 1fr; } }
+
+  .card { background: #161616; border: 1px solid #2a2a2a; border-radius: 16px; padding: 28px; }
+  .card h3 { font-size: 1.05em; margin-bottom: 16px; color: #ccc; }
+
+  label { display: block; font-size: 0.85em; color: #888; margin-bottom: 4px; }
+  input, select, textarea { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #333; background: #1a1a1a; color: #fff; font-size: 0.95em; margin-bottom: 14px; }
+  input:focus, textarea:focus { outline: none; border-color: #25D366; }
+
+  .btn { width: 100%; padding: 14px; border: none; border-radius: 10px; font-size: 1.05em; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+  .btn-primary { background: linear-gradient(135deg, #25D366, #128C7E); color: #000; }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(37,211,102,0.3); }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  .spinner { display: inline-block; width: 18px; height: 18px; border: 2px solid #000; border-top-color: transparent; border-radius: 50%; animation: spin 0.6s linear infinite; margin-right: 8px; vertical-align: middle; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .whatsapp-reply { display: none; margin-top: 20px; }
+  .whatsapp-reply.show { display: block; animation: fadeUp 0.4s ease; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  .wa-phone { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .wa-phone .avatar { width: 40px; height: 40px; border-radius: 50%; background: #25D366; display: flex; align-items: center; justify-content: center; font-size: 1.2em; }
+  .wa-phone .name { font-weight: 600; }
+  .wa-phone .status { font-size: 0.75em; color: #666; }
+
+  .wa-bubble { background: #005c4b; border-radius: 12px 12px 12px 0; padding: 14px 18px; max-width: 95%; margin-bottom: 8px; white-space: pre-wrap; line-height: 1.5; font-size: 0.95em; position: relative; box-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+  .wa-bubble::after { content: ''; position: absolute; bottom: 0; left: -8px; width: 0; height: 0; border: 8px solid transparent; border-right-color: #005c4b; border-bottom-color: #005c4b; }
+  .wa-time { text-align: right; font-size: 0.7em; color: #999; margin-top: 4px; }
+
+  .score-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.8em; font-weight: 700; margin-top: 10px; }
+  .score-warm { background: #ff9800; color: #000; }
+  .score-hot { background: #f44336; color: #fff; }
+  .score-cold { background: #2196F3; color: #fff; }
+
+  .timeline { margin-top: 20px; }
+  .timeline-item { display: flex; gap: 12px; margin-bottom: 14px; padding-left: 4px; }
+  .timeline-dot { width: 10px; height: 10px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .timeline-dot.done { background: #25D366; }
+  .timeline-dot.pending { background: #555; }
+  .timeline-text { font-size: 0.88em; color: #aaa; }
+  .timeline-text strong { color: #fff; }
+
+  .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+  .stat-box { background: #161616; border: 1px solid #2a2a2a; border-radius: 12px; padding: 18px; text-align: center; }
+  .stat-box .num { font-size: 2em; font-weight: 800; color: #25D366; }
+  .stat-box .lbl { font-size: 0.75em; color: #666; margin-top: 4px; }
+
+  .footer { text-align: center; padding: 40px 20px; color: #555; font-size: 0.85em; }
+  .footer a { color: #25D366; text-decoration: none; }
+
+  .log { margin-top: 16px; background: #111; border: 1px solid #2a2a2a; border-radius: 10px; padding: 14px; max-height: 220px; overflow-y: auto; font-family: 'Courier New', monospace; font-size: 0.8em; display: none; }
+  .log.show { display: block; }
+  .log-line { padding: 3px 0; border-bottom: 1px solid #1a1a1a; }
+  .log-line .ts { color: #555; }
+  .log-line .ok { color: #25D366; }
+  .log-line .info { color: #2196F3; }
+  .log-line .warn { color: #ff9800; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Speed2Lead AI</h1>
+  <p>See what happens when a lead texts your number at 2 AM</p>
+  <div class="badge">LIVE DEMO</div>
+</div>
+
+<div class="container">
+
+  <div class="stats-row">
+    <div class="stat-box"><div class="num">&lt;10s</div><div class="lbl">Response Time</div></div>
+    <div class="stat-box"><div class="num">3x</div><div class="lbl">More Appointments</div></div>
+    <div class="stat-box"><div class="num">24/7</div><div class="lbl">Always Working</div></div>
+  </div>
+
+  <div class="split">
+    <div class="card">
+      <h3>New Lead Received</h3>
+      <label>Lead Name</label>
+      <input type="text" id="leadName" value="Sarah Martinez" placeholder="Lead name">
+      <label>Phone Number</label>
+      <input type="tel" id="leadPhone" value="(813) 555-0147" placeholder="(813) 555-0147">
+      <label>Email</label>
+      <input type="email" id="leadEmail" value="sarah.m@gmail.com" placeholder="sarah.m@gmail.com">
+      <label>Source</label>
+      <select id="leadSource">
+        <option value="Zillow">Zillow Inquiry</option>
+        <option value="Realtor.com">Realtor.com</option>
+        <option value="Facebook">Facebook Lead</option>
+        <option value="Google">Google Ads</option>
+        <option value="Referral">Referral</option>
+        <option value="Website">Website Contact Form</option>
+      </select>
+      <label>Listing Interest</label>
+      <input type="text" id="listingInterest" value="Waterfront homes in South Tampa under $800K" placeholder="Property or area of interest">
+      <label>Notes</label>
+      <textarea id="leadNotes" rows="2" placeholder="Any context about this lead...">Looking for a 3-bedroom with water access. Pre-approved with Bank of America.</textarea>
+
+      <button class="btn btn-primary" id="simulateBtn" onclick="runDemo()">Simulate AI Response</button>
+    </div>
+
+    <div>
+      <div class="card">
+        <h3>WhatsApp Response</h3>
+        <div class="whatsapp-reply" id="waReply">
+          <div class="wa-phone">
+            <div class="avatar">🤖</div>
+            <div>
+              <div class="name">Speed2Lead AI</div>
+              <div class="status">online</div>
+            </div>
+          </div>
+          <div class="wa-bubble" id="waBubble"></div>
+          <div class="wa-time" id="waTime"></div>
+          <div id="scoreBadge"></div>
+        </div>
+        <div id="placeholderMsg" style="color:#555; text-align:center; padding:40px 0;">
+          Click "Simulate" to see the AI in action
+        </div>
+      </div>
+
+      <div class="timeline" id="timeline" style="display:none;">
+        <div class="card" style="margin-top:16px;">
+          <h3>Follow-Up Sequence</h3>
+          <div class="timeline-item"><div class="timeline-dot done"></div><div class="timeline-text"><strong>Instant Reply</strong> — Personalized response sent via WhatsApp</div></div>
+          <div class="timeline-item"><div class="timeline-dot done"></div><div class="timeline-text"><strong>CRM Updated</strong> — Lead logged to database with AI score</div></div>
+          <div class="timeline-item"><div class="timeline-dot pending"></div><div class="timeline-text"><strong>24h Follow-Up</strong> — "Hi Sarah, any questions about the waterfront properties?"</div></div>
+          <div class="timeline-item"><div class="timeline-dot pending"></div><div class="timeline-text"><strong>3-Day Check-In</strong> — New listings alert</div></div>
+          <div class="timeline-item"><div class="timeline-dot pending"></div><div class="timeline-text"><strong>7-Day Nurture</strong> — Market update + open house invites</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="log" id="log"></div>
+
+  <div class="card" style="margin-top:32px; text-align:center; border-color:#25D366;">
+    <h3 style="color:#25D366; font-size:1.2em;">This is what your AI does 24/7</h3>
+    <p style="color:#888; margin:12px 0;">While you sleep, your AI qualifies every lead, answers questions, and books appointments directly into your calendar.</p>
+    <p style="color:#888; margin-bottom:20px;">No more losing leads to slow response times. No more after-hours missed calls.</p>
+    <a href="mailto:el@speed2lead.ai" style="display:inline-block; background:linear-gradient(135deg,#25D366,#128C7E); color:#000; padding:14px 36px; border-radius:10px; font-weight:700; text-decoration:none; font-size:1.05em;">Get Speed2Lead AI — $500/mo</a>
+    <p style="color:#555; font-size:0.8em; margin-top:12px;">Setup in 48 hours. No contracts. Cancel anytime.</p>
+  </div>
+</div>
+
+<div class="footer">
+  Speed2Lead AI &copy; 2026 &mdash; Powered by Gemini 2.5 Flash &amp; n8n
+</div>
+
+<script>
+function appendLog(text, cls) {
+  const log = document.getElementById('log');
+  log.classList.add('show');
+  const line = document.createElement('div');
+  line.className = 'log-line';
+  const now = new Date().toLocaleTimeString();
+  line.innerHTML = `<span class="ts">[${now}]</span> <span class="${cls}">${text}</span>`;
+  log.appendChild(line);
+  log.scrollTop = log.scrollHeight;
+}
+
+async function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+function getScoreClass(score) {
+  if (score === 'hot') return 'score-hot';
+  if (score === 'warm') return 'score-warm';
+  return 'score-cold';
+}
+
+async function typeText(el, text) {
+  el.textContent = '';
+  for (let i = 0; i < text.length; i++) {
+    el.textContent += text[i];
+    if (text[i] !== ' ') await sleep(12);
+  }
+}
+
+async function runDemo() {
+  const btn = document.getElementById('simulateBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Processing...';
+  document.getElementById('placeholderMsg').style.display = 'none';
+  document.getElementById('waReply').classList.remove('show');
+  document.getElementById('timeline').style.display = 'none';
+  document.getElementById('log').innerHTML = '';
+
+  const name = document.getElementById('leadName').value || 'New Lead';
+  const phone = document.getElementById('leadPhone').value || '(813) 555-0000';
+  const email = document.getElementById('leadEmail').value || '';
+  const source = document.getElementById('leadSource').value;
+  const listing = document.getElementById('listingInterest').value || '';
+  const notes = document.getElementById('leadNotes').value || '';
+
+  appendLog('Receiving lead from ' + source + '...', 'info');
+  await sleep(600);
+  appendLog('Lead data: ' + name + ' | ' + phone, 'info');
+  await sleep(400);
+
+  appendLog('AI analyzing lead intent and urgency...', 'ok');
+  await sleep(800);
+
+  const score = listing.toLowerCase().includes('pre-approval') || listing.toLowerCase().includes('under') ? 'hot' :
+                notes.toLowerCase().includes('pre-approved') || source === 'Referral' ? 'hot' : 'warm';
+  appendLog('Lead score: ' + score.toUpperCase(), 'warn');
+  await sleep(300);
+
+  appendLog('Generating personalized WhatsApp response...', 'info');
+  await sleep(700);
+
+  const firstName = name.split(' ')[0];
+
+  let reply = '';
+  if (listing.toLowerCase().includes('waterfront') || listing.toLowerCase().includes('south tampa')) {
+    reply = `Hi ${firstName}! 👋\n\nI saw your interest in ${listing || 'properties in Tampa'} — great timing! I just listed a stunning 3BR/2BA waterfront home in Ballast Point for $749K with a private dock.\n\nHere's what makes it special:\n• Direct bay access (no bridges)\n• Renovated kitchen with quartz counters\n• Screened lanai with water views\n\nI also have 2 other waterfront options in your range that aren't on Zillow yet.\n\nWould you be available for a quick 10-min call today or tomorrow? I can share the full details and schedule a private showing.\n\n— Jared`;
+  } else {
+    reply = `Hi ${firstName}! 👋\n\nThanks for reaching out about ${listing || 'homes in Tampa'} — I'd love to help you find the perfect place.\n\nI have some properties that match your criteria that aren't listed on Zillow yet. Would you be open to a quick call to discuss what you're looking for?\n\nI'm available today between 2-6 PM. What works best for you?\n\n— Jared`;
+  }
+
+  appendLog('Response generated — ' + reply.length + ' chars', 'ok');
+  await sleep(400);
+  appendLog('Sending WhatsApp reply...', 'info');
+  await sleep(500);
+  appendLog('WhatsApp message delivered ✓', 'ok');
+  await sleep(300);
+  appendLog('Saving lead to CRM (Airtable)...', 'info');
+  await sleep(400);
+  appendLog('CRM entry created ✓', 'ok');
+  await sleep(200);
+  appendLog('Logging consent record...', 'info');
+  await sleep(300);
+  appendLog('Consent logged ✓', 'ok');
+  await sleep(200);
+  appendLog('Scheduling follow-up sequence (24h, 3d, 7d)...', 'info');
+  await sleep(400);
+  appendLog('Follow-up scheduled ✓', 'ok');
+
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+  document.getElementById('waBubble').textContent = '';
+  document.getElementById('waTime').textContent = timeStr + ' ✓✓';
+  document.getElementById('scoreBadge').innerHTML = `<span class="score-badge ${getScoreClass(score)}">AI Score: ${score.toUpperCase()}</span>`;
+  document.getElementById('waReply').classList.add('show');
+
+  await typeText(document.getElementById('waBubble'), reply);
+
+  appendLog('Total processing time: 1.2 seconds', 'warn');
+  appendLog('Lead would have been waiting 47 MINUTES for a human reply', 'warn');
+
+  document.getElementById('timeline').style.display = 'block';
+  btn.disabled = false;
+  btn.innerHTML = 'Simulate AI Response';
+}
+</script>
+</body>
+</html>

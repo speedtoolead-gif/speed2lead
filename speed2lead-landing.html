@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Speed2Lead AI — Instant Lead Response for Real Estate</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0a0a; color: #fff; }
+  a { text-decoration: none; }
+
+  .nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; border-bottom: 1px solid #1a1a1a; }
+  .nav .logo { font-size: 1.3em; font-weight: 800; background: linear-gradient(135deg, #25D366, #128C7E); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .nav a.cta-sm { background: #25D366; color: #000; padding: 8px 20px; border-radius: 8px; font-weight: 600; font-size: 0.9em; }
+
+  .hero { text-align: center; padding: 80px 20px 60px; max-width: 800px; margin: 0 auto; }
+  .hero h1 { font-size: 3em; font-weight: 800; line-height: 1.15; margin-bottom: 20px; }
+  .hero h1 span { background: linear-gradient(135deg, #25D366, #128C7E); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero p { font-size: 1.2em; color: #888; max-width: 600px; margin: 0 auto 30px; line-height: 1.6; }
+  .hero .btn-main { display: inline-block; background: linear-gradient(135deg, #25D366, #128C7E); color: #000; padding: 16px 40px; border-radius: 10px; font-size: 1.1em; font-weight: 700; }
+  .hero .btn-main:hover { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(37,211,102,0.3); }
+  .hero .sub { color: #555; font-size: 0.85em; margin-top: 12px; }
+
+  .proof { display: flex; justify-content: center; gap: 40px; padding: 40px 20px; border-top: 1px solid #1a1a1a; border-bottom: 1px solid #1a1a1a; }
+  .proof-item .num { font-size: 2em; font-weight: 800; color: #25D366; }
+  .proof-item .lbl { font-size: 0.8em; color: #666; margin-top: 4px; }
+
+  .section { max-width: 900px; margin: 0 auto; padding: 60px 20px; }
+  .section h2 { font-size: 2em; text-align: center; margin-bottom: 12px; }
+  .section .sub { text-align: center; color: #666; margin-bottom: 40px; font-size: 1.05em; }
+
+  .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  @media (max-width: 700px) { .features { grid-template-columns: 1fr; } }
+  .feature { background: #161616; border: 1px solid #2a2a2a; border-radius: 14px; padding: 28px; }
+  .feature .icon { font-size: 2em; margin-bottom: 12px; }
+  .feature h3 { font-size: 1.1em; margin-bottom: 8px; }
+  .feature p { font-size: 0.9em; color: #888; line-height: 1.5; }
+
+  .pricing { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  @media (max-width: 700px) { .pricing { grid-template-columns: 1fr; } }
+  .plan { background: #161616; border: 1px solid #2a2a2a; border-radius: 14px; padding: 32px; text-align: center; position: relative; }
+  .plan.pop { border-color: #25D366; }
+  .plan.pop::before { content: 'MOST POPULAR'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #25D366; color: #000; padding: 4px 14px; border-radius: 20px; font-size: 0.7em; font-weight: 700; }
+  .plan h3 { font-size: 1.1em; margin-bottom: 8px; }
+  .plan .price { font-size: 2.5em; font-weight: 800; margin: 12px 0; }
+  .plan .price span { font-size: 0.4em; color: #666; font-weight: 400; }
+  .plan .period { color: #666; font-size: 0.85em; margin-bottom: 16px; }
+  .plan ul { list-style: none; text-align: left; margin-bottom: 24px; }
+  .plan ul li { padding: 6px 0; font-size: 0.9em; color: #aaa; }
+  .plan ul li::before { content: '✓ '; color: #25D366; font-weight: 700; }
+  .btn-plan { display: block; padding: 12px; border-radius: 8px; font-weight: 700; font-size: 0.95em; }
+  .btn-outline { border: 1px solid #333; color: #fff; }
+  .btn-outline:hover { border-color: #25D366; }
+  .btn-green { background: #25D366; color: #000; }
+  .btn-green:hover { box-shadow: 0 4px 20px rgba(37,211,102,0.3); }
+
+  .faq { max-width: 700px; margin: 0 auto; padding: 60px 20px; }
+  .faq h2 { text-align: center; margin-bottom: 30px; }
+  .faq-item { border-bottom: 1px solid #222; padding: 16px 0; }
+  .faq-item h4 { font-size: 1em; font-weight: 600; cursor: pointer; }
+  .faq-item h4::before { content: '+ '; color: #25D366; }
+  .faq-item p { font-size: 0.9em; color: #888; margin-top: 8px; line-height: 1.5; display: none; }
+
+  .footer { text-align: center; padding: 40px 20px; border-top: 1px solid #1a1a1a; color: #555; font-size: 0.85em; }
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="logo">Speed2Lead AI</div>
+  <a href="#pricing" class="cta-sm">Get Started</a>
+</div>
+
+<div class="hero">
+  <h1>Your AI assistant answers every lead <span>in under 10 seconds</span></h1>
+  <p>While you sleep, your AI qualifies leads, answers questions, and books appointments directly into your calendar. Never lose a lead to slow response times again.</p>
+  <a href="#pricing" class="btn-main">Get Speed2Lead AI — Starting at $500/mo</a>
+  <div class="sub">Setup in 48 hours · No contracts · Cancel anytime</div>
+</div>
+
+<div class="proof">
+  <div class="proof-item"><div class="num">&lt;10s</div><div class="lbl">Response Time</div></div>
+  <div class="proof-item"><div class="num">3x</div><div class="lbl">More Appointments</div></div>
+  <div class="proof-item"><div class="num">24/7</div><div class="lbl">Always Working</div></div>
+  <div class="proof-item"><div class="num">0</div><div class="lbl">Leads Lost</div></div>
+</div>
+
+<div class="section">
+  <h2>How It Works</h2>
+  <p class="sub">Three steps to never missing a lead again</p>
+  <div class="features">
+    <div class="feature">
+      <div class="icon">📱</div>
+      <h3>Lead Comes In</h3>
+      <p>A lead texts your number, fills out your website form, or messages you on Facebook at 2 AM.</p>
+    </div>
+    <div class="feature">
+      <div class="icon">🤖</div>
+      <h3>AI Responds Instantly</h3>
+      <p>Speed2Lead AI sends a personalized WhatsApp message in under 10 seconds, qualifying the lead and asking the right questions.</p>
+    </div>
+    <div class="feature">
+      <div class="icon">📅</div>
+      <h3>Appointment Booked</h3>
+      <p>The AI books qualified leads directly into your calendar and stops following up once you've connected.</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>What You Get</h2>
+  <p class="sub">Everything included — no hidden fees</p>
+  <div class="features">
+    <div class="feature">
+      <div class="icon">💬</div>
+      <h3>AI WhatsApp Assistant</h3>
+      <p>Personalized responses that sound like you, not a robot. Learns your style and listing details.</p>
+    </div>
+    <div class="feature">
+      <div class="icon">🔄</div>
+      <h3>3-Touch Follow-Up</h3>
+      <p>Automated follow-ups at 24 hours, 3 days, and 7 days. Stops when the lead responds or books.</p>
+    </div>
+    <div class="feature">
+      <div class="icon">📊</div>
+      <h3>Lead Scoring (AI)</h3>
+      <p>Every lead scored HOT / WARM / COLD so you know who to call first. Prioritized in your dashboard.</p>
+    </div>
+    <div class="feature">
+      <div class="icon">📋</div>
+      <h3>CRM Integration</h3>
+      <p>Leads automatically saved to your database with full conversation history and consent records.</p>
+    </div>
+    <div class="feature">
+      <div class="icon">⚖️</div>
+      <h3>TCPA Compliant</h3>
+      <p>Opt-in/opt-out logging from day one. You're protected against compliance issues.</p>
+    </div>
+    <div class="feature">
+      <div class="icon">🔔</div>
+      <h3>Hot Lead Alerts</h3>
+      <p>Instant WhatsApp notification when a lead scores HOT. Call them before they go to another agent.</p>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="pricing">
+  <h2>Simple Pricing</h2>
+  <p class="sub">No contracts. Cancel anytime. Setup in 48 hours.</p>
+  <div class="pricing">
+    <div class="plan">
+      <h3>Starter</h3>
+      <div class="price">$500<span>/mo</span></div>
+      <div class="period">Up to 100 leads/month</div>
+      <ul>
+        <li>AI WhatsApp responses</li>
+        <li>Lead scoring</li>
+        <li>3-touch follow-up</li>
+        <li>CRM integration</li>
+        <li>TCPA compliance</li>
+      </ul>
+      <a href="#contact" class="btn-plan btn-outline">Get Started</a>
+    </div>
+    <div class="plan pop">
+      <h3>Growth</h3>
+      <div class="price">$1,500<span>/mo</span></div>
+      <div class="period">Up to 500 leads/month</div>
+      <ul>
+        <li>Everything in Starter</li>
+        <li>Hot lead alerts</li>
+        <li>Calendar booking</li>
+        <li>Multi-channel (WhatsApp + SMS + Email)</li>
+        <li>Priority support</li>
+      </ul>
+      <a href="#contact" class="btn-plan btn-green">Get Started</a>
+    </div>
+    <div class="plan">
+      <h3>Team</h3>
+      <div class="price">$2,250<span>/mo</span></div>
+      <div class="period">Up to 1,000 leads/month</div>
+      <ul>
+        <li>Everything in Growth</li>
+        <li>Up to 5 agents</li>
+        <li>Custom AI training</li>
+        <li>Dedicated account manager</li>
+        <li>White-label option</li>
+      </ul>
+      <a href="#contact" class="btn-plan btn-outline">Get Started</a>
+    </div>
+  </div>
+</div>
+
+<div class="faq">
+  <h2>FAQ</h2>
+  <div class="faq-item" onclick="this.querySelector('p').style.display=this.querySelector('p').style.display==='block'?'none':'block'">
+    <h4>How fast is the setup?</h4>
+    <p>48 hours. We connect to your WhatsApp, set up the AI, and train it on your listings. You don't need to do anything technical.</p>
+  </div>
+  <div class="faq-item" onclick="this.querySelector('p').style.display=this.querySelector('p').style.display==='block'?'none':'block'">
+    <h4>Do I need to change my CRM?</h4>
+    <p>No. Speed2Lead AI integrates with your existing setup. We connect via API — no migration required.</p>
+  </div>
+  <div class="faq-item" onclick="this.querySelector('p').style.display=this.querySelector('p').style.display==='block'?'none':'block'">
+    <h4>What if a lead asks something the AI can't handle?</h4>
+    <p>The AI routes complex questions to you instantly. It knows when to stop and let the human take over.</p>
+  </div>
+  <div class="faq-item" onclick="this.querySelector('p').style.display=this.querySelector('p').style.display==='block'?'none':'block'">
+    <h4>Is this compliant with real estate regulations?</h4>
+    <p>Yes. We log TCPA opt-ins/opt-outs from day one. All conversations are recorded and stored for compliance.</p>
+  </div>
+  <div class="faq-item" onclick="this.querySelector('p').style.display=this.querySelector('p').style.display==='block'?'none':'block'">
+    <h4>Can I try before I buy?</h4>
+    <p>Yes. We offer a free 7-day trial. No credit card required. See real results before committing.</p>
+  </div>
+</div>
+
+<div id="contact" style="text-align:center; padding:60px 20px; border-top:1px solid #1a1a1a;">
+  <h2>Ready to Never Miss a Lead?</h2>
+  <p style="color:#888; margin:16px 0 30px;">Get started in 48 hours. No contracts. Cancel anytime.</p>
+  <div style="display:flex; justify-content:center; gap:16px; flex-wrap:wrap;">
+    <a href="https://wa.me/14026212519" target="_blank" style="display:inline-block; background:linear-gradient(135deg,#25D366,#128C7E); color:#000; padding:16px 40px; border-radius:10px; font-weight:700; font-size:1.1em;">WhatsApp Us</a>
+    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=speedtoolead@gmail.com" target="_blank" style="display:inline-block; background:#222; color:#fff; padding:16px 40px; border-radius:10px; font-weight:700; font-size:1.1em; border:1px solid #333;">Email Us</a>
+  </div>
+  <p style="color:#555; font-size:0.85em; margin-top:16px;">WhatsApp: +1 (402) 621-2519 · Email: <a href="https://mail.google.com/mail/?view=cm&fs=1&to=speedtoolead@gmail.com" target="_blank" style="color:#25D366;">speedtoolead@gmail.com</a></p>
+</div>
+
+<div class="footer">
+  Speed2Lead AI &copy; 2026 &mdash; Powered by Gemini 2.5 Flash &amp; n8n
+</div>
+
+</body>
+</html>
