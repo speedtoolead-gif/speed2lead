@@ -7,679 +7,236 @@
 <meta name="description" content="Speed2Lead AI sends a WhatsApp reply to your real estate leads within 10 seconds. Built for solo agents in Tampa who lose deals to slow follow-up.">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  :root {
-    --green: #16a34a;
-    --green-dim: #15803d;
-    --dark: #0a0a0a;
-    --dark-card: #111111;
-    --dark-surface: #1a1a1a;
-    --border: rgba(255,255,255,0.06);
-    --text: #e5e5e5;
-    --text-dim: #888;
-    --glass: rgba(255,255,255,0.03);
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --green:#16a34a;--green-dim:#15803d;--dark:#0a0a0a;
+    --card:rgba(255,255,255,0.03);--border:rgba(255,255,255,0.06);
+    --text:#e5e5e5;--dim:#888;
   }
-  html { scroll-behavior: smooth; }
-  body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: var(--dark);
-    color: var(--text);
-    line-height: 1.6;
-    overflow-x: hidden;
-  }
-  a { text-decoration: none; color: inherit; }
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--dark);color:var(--text);line-height:1.6;overflow-x:hidden}
+  a{text-decoration:none;color:inherit}
 
-  /* ===== 3D SCENE ===== */
-  .scene-3d {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
-    z-index: 0;
-    perspective: 1200px;
-    overflow: hidden;
+  /* ===== THREE.JS CANVAS ===== */
+  #scene3d{
+    position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;
   }
 
-  /* Floating house silhouettes */
-  .house-3d {
-    position: absolute;
-    transform-style: preserve-3d;
-    opacity: 0.06;
-    animation: float3d 20s ease-in-out infinite;
-  }
-  .house-3d svg { width: 100%; height: 100%; }
-  .house-3d:nth-child(1) { width: 180px; top: 8%; left: 5%; animation-delay: 0s; animation-duration: 22s; }
-  .house-3d:nth-child(2) { width: 120px; top: 15%; right: 8%; animation-delay: -4s; animation-duration: 18s; }
-  .house-3d:nth-child(3) { width: 200px; bottom: 20%; left: 12%; animation-delay: -8s; animation-duration: 25s; }
-  .house-3d:nth-child(4) { width: 100px; bottom: 30%; right: 15%; animation-delay: -12s; animation-duration: 20s; }
-  .house-3d:nth-child(5) { width: 160px; top: 50%; left: 50%; animation-delay: -6s; animation-duration: 28s; }
-
-  @keyframes float3d {
-    0%, 100% { transform: translateZ(0) rotateY(0deg) rotateX(0deg); }
-    25% { transform: translateZ(40px) rotateY(8deg) rotateX(-3deg); }
-    50% { transform: translateZ(20px) rotateY(-5deg) rotateX(5deg); }
-    75% { transform: translateZ(60px) rotateY(3deg) rotateX(-2deg); }
-  }
-
-  /* Grid overlay */
-  .grid-overlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background-image:
-      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
-    background-size: 60px 60px;
-    pointer-events: none;
-    z-index: 0;
-    mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
-    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
-  }
-
-  /* Glow orb */
-  .glow-orb {
-    position: fixed;
-    width: 500px; height: 500px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(22,163,74,0.08) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-    top: 20%; left: 30%;
-    animation: orbFloat 15s ease-in-out infinite;
-  }
-  @keyframes orbFloat {
-    0%, 100% { transform: translate(0, 0); }
-    50% { transform: translate(60px, -40px); }
-  }
-
-  /* ===== CONTENT ===== */
-  .content { position: relative; z-index: 1; }
+  /* Content overlays the 3D scene */
+  .content{position:relative;z-index:1}
 
   /* NAV */
-  .nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 18px 40px;
-    border-bottom: 1px solid var(--border);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    background: rgba(10,10,10,0.7);
-    position: sticky;
-    top: 0;
-    z-index: 100;
+  .nav{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:18px 40px;border-bottom:1px solid var(--border);
+    backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+    background:rgba(10,10,10,0.6);position:sticky;top:0;z-index:100;
   }
-  .nav .logo {
-    font-size: 1.2em;
-    font-weight: 800;
-    letter-spacing: -0.5px;
+  .nav .logo{font-size:1.2em;font-weight:800;letter-spacing:-0.5px}
+  .nav .logo span{color:var(--green)}
+  .nav a.cta-sm{
+    background:var(--green);color:#fff;padding:9px 20px;border-radius:8px;
+    font-weight:600;font-size:0.85em;transition:all 0.2s;
   }
-  .nav .logo span { color: var(--green); }
-  .nav a.cta-sm {
-    background: var(--green);
-    color: #fff;
-    padding: 9px 20px;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 0.85em;
-    transition: all 0.2s;
-  }
-  .nav a.cta-sm:hover { background: var(--green-dim); transform: translateY(-1px); }
+  .nav a.cta-sm:hover{background:var(--green-dim);transform:translateY(-1px)}
 
   /* HERO */
-  .hero {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 100px 32px 60px;
-    text-align: left;
-    position: relative;
+  .hero{
+    max-width:900px;margin:0 auto;padding:100px 32px 60px;
+    text-align:left;min-height:80vh;display:flex;flex-direction:column;justify-content:center;
   }
-  .hero-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(22,163,74,0.1);
-    color: var(--green);
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 0.78em;
-    font-weight: 600;
-    margin-bottom: 24px;
-    border: 1px solid rgba(22,163,74,0.2);
-    backdrop-filter: blur(10px);
-    animation: fadeSlideUp 0.6s ease both;
+  .hero-tag{
+    display:inline-flex;align-items:center;gap:6px;
+    background:rgba(22,163,74,0.1);color:var(--green);
+    padding:6px 14px;border-radius:20px;font-size:0.78em;font-weight:600;
+    margin-bottom:24px;border:1px solid rgba(22,163,74,0.2);
+    animation:fadeUp 0.6s ease both;
   }
-  .hero-tag .dot {
-    width: 6px; height: 6px;
-    background: var(--green);
-    border-radius: 50%;
-    animation: pulse 2s ease-in-out infinite;
+  .hero-tag .dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+  .hero h1{
+    font-size:3.5em;font-weight:900;line-height:1.05;margin-bottom:20px;
+    letter-spacing:-1.5px;animation:fadeUp 0.6s ease 0.1s both;
   }
-  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .hero h1 .hl{
+    background:linear-gradient(135deg,var(--green) 0%,#4ade80 100%);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  }
+  .hero p{
+    font-size:1.15em;color:var(--dim);max-width:520px;line-height:1.6;
+    margin-bottom:32px;animation:fadeUp 0.6s ease 0.2s both;
+  }
+  .hero-actions{
+    display:flex;gap:12px;align-items:center;flex-wrap:wrap;
+    animation:fadeUp 0.6s ease 0.3s both;
+  }
+  .btn-main{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--green);color:#fff;padding:14px 32px;border-radius:10px;
+    font-size:1em;font-weight:700;transition:all 0.25s;
+    box-shadow:0 0 30px rgba(22,163,74,0.3);
+  }
+  .btn-main:hover{background:var(--green-dim);transform:translateY(-2px);box-shadow:0 0 50px rgba(22,163,74,0.4)}
+  .btn-ghost{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:14px 28px;border-radius:10px;font-weight:600;font-size:0.95em;
+    border:1px solid var(--border);color:var(--dim);transition:all 0.25s;
+    backdrop-filter:blur(10px);
+  }
+  .btn-ghost:hover{border-color:var(--green);color:var(--text)}
+  .hero-sub{color:#555;font-size:0.8em;margin-top:14px;animation:fadeUp 0.6s ease 0.4s both}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
-  .hero h1 {
-    font-size: 3.5em;
-    font-weight: 900;
-    line-height: 1.05;
-    margin-bottom: 20px;
-    letter-spacing: -1.5px;
-    animation: fadeSlideUp 0.6s ease 0.1s both;
+  /* STATS */
+  .stats-bar{
+    display:flex;justify-content:center;gap:48px;padding:40px 32px;
+    border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+    background:rgba(255,255,255,0.01);flex-wrap:wrap;
   }
-  .hero h1 .highlight {
-    background: linear-gradient(135deg, var(--green) 0%, #4ade80 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  .stat{text-align:center}
+  .stat .num{
+    font-size:2.2em;font-weight:900;letter-spacing:-1px;
+    background:linear-gradient(135deg,#fff 0%,#aaa 100%);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
   }
-  .hero p {
-    font-size: 1.15em;
-    color: var(--text-dim);
-    max-width: 520px;
-    line-height: 1.6;
-    margin-bottom: 32px;
-    animation: fadeSlideUp 0.6s ease 0.2s both;
-  }
-  .hero-actions {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    flex-wrap: wrap;
-    animation: fadeSlideUp 0.6s ease 0.3s both;
-  }
-  .btn-main {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--green);
-    color: #fff;
-    padding: 14px 32px;
-    border-radius: 10px;
-    font-size: 1em;
-    font-weight: 700;
-    transition: all 0.25s;
-    box-shadow: 0 0 30px rgba(22,163,74,0.3);
-  }
-  .btn-main:hover { background: var(--green-dim); transform: translateY(-2px); box-shadow: 0 0 50px rgba(22,163,74,0.4); }
-  .btn-ghost {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 14px 28px;
-    border-radius: 10px;
-    font-weight: 600;
-    font-size: 0.95em;
-    border: 1px solid var(--border);
-    color: var(--text-dim);
-    transition: all 0.25s;
-    backdrop-filter: blur(10px);
-  }
-  .btn-ghost:hover { border-color: var(--green); color: var(--text); }
-  .hero-sub {
-    color: #555;
-    font-size: 0.8em;
-    margin-top: 14px;
-    animation: fadeSlideUp 0.6s ease 0.4s both;
-  }
+  .stat .label{font-size:0.82em;color:var(--dim);margin-top:4px}
 
-  @keyframes fadeSlideUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+  /* SECTIONS */
+  .section{max-width:900px;margin:0 auto;padding:80px 32px}
+  .section-label{
+    display:inline-block;font-size:0.75em;font-weight:700;
+    text-transform:uppercase;letter-spacing:2px;color:var(--green);margin-bottom:12px;
   }
+  .section h2{font-size:2.4em;font-weight:800;margin-bottom:12px;letter-spacing:-0.8px;line-height:1.15}
+  .section .lead{color:var(--dim);font-size:1.05em;max-width:560px;line-height:1.6;margin-bottom:40px}
 
-  /* STATS BAR */
-  .stats-bar {
-    display: flex;
-    justify-content: center;
-    gap: 48px;
-    padding: 40px 32px;
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    background: rgba(255,255,255,0.01);
-    flex-wrap: wrap;
+  /* PROBLEM */
+  .problem-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:700px){.problem-grid{grid-template-columns:1fr}}
+  .problem-card{
+    background:var(--card);border:1px solid var(--border);border-radius:16px;
+    padding:28px;transition:all 0.35s ease;
   }
-  .stat { text-align: center; }
-  .stat .num {
-    font-size: 2.2em;
-    font-weight: 900;
-    letter-spacing: -1px;
-    background: linear-gradient(135deg, #fff 0%, #aaa 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  .problem-card:hover{
+    border-color:rgba(22,163,74,0.3);transform:translateY(-4px);
+    box-shadow:0 20px 40px rgba(0,0,0,0.3),0 0 60px rgba(22,163,74,0.05);
   }
-  .stat .label { font-size: 0.82em; color: var(--text-dim); margin-top: 4px; }
+  .problem-card .icon{
+    width:48px;height:48px;background:rgba(22,163,74,0.1);border-radius:12px;
+    display:flex;align-items:center;justify-content:center;margin-bottom:16px;
+  }
+  .problem-card h3{font-size:1.05em;font-weight:700;margin-bottom:8px}
+  .problem-card p{font-size:0.88em;color:var(--dim);line-height:1.55}
 
-  /* 3D PHONE MOCKUP */
-  .phone-scene {
-    display: flex;
-    justify-content: center;
-    padding: 80px 32px;
-    perspective: 1000px;
+  /* STEPS */
+  .steps-3d{position:relative;padding-left:40px}
+  .steps-3d::before{
+    content:'';position:absolute;left:15px;top:0;bottom:0;width:2px;
+    background:linear-gradient(to bottom,var(--green),rgba(22,163,74,0.1));
   }
-  .phone-3d {
-    width: 280px;
-    position: relative;
-    transform: rotateY(-8deg) rotateX(4deg);
-    transform-style: preserve-3d;
-    animation: phoneFloat 6s ease-in-out infinite;
-    transition: transform 0.4s ease;
+  .step-3d{
+    position:relative;margin-bottom:40px;padding:24px;
+    background:var(--card);border:1px solid var(--border);border-radius:14px;
+    transition:all 0.3s ease;
   }
-  .phone-3d:hover { transform: rotateY(0deg) rotateX(0deg) scale(1.02); }
-  @keyframes phoneFloat {
-    0%, 100% { transform: rotateY(-8deg) rotateX(4deg) translateZ(0); }
-    50% { transform: rotateY(-5deg) rotateX(2deg) translateZ(20px); }
+  .step-3d:hover{
+    border-color:rgba(22,163,74,0.3);transform:translateX(4px);
+    box-shadow:0 10px 30px rgba(0,0,0,0.2);
   }
-  .phone-frame {
-    background: #1a1a1a;
-    border-radius: 32px;
-    border: 2px solid #333;
-    padding: 12px;
-    box-shadow:
-      0 25px 60px rgba(0,0,0,0.5),
-      0 0 100px rgba(22,163,74,0.05),
-      inset 0 1px 0 rgba(255,255,255,0.05);
-    transform: translateZ(20px);
+  .step-3d::before{
+    content:'';position:absolute;left:-33px;top:28px;width:14px;height:14px;
+    background:var(--green);border-radius:50%;border:3px solid var(--dark);
+    box-shadow:0 0 15px rgba(22,163,74,0.4);
   }
-  .phone-screen {
-    background: #0f0f0f;
-    border-radius: 22px;
-    overflow: hidden;
-    min-height: 480px;
+  .step-3d .step-num{
+    font-size:0.7em;font-weight:800;text-transform:uppercase;letter-spacing:2px;
+    color:var(--green);margin-bottom:8px;
   }
-  .phone-header {
-    background: #1a1a1a;
-    padding: 14px 16px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    border-bottom: 1px solid #222;
-  }
-  .phone-avatar {
-    width: 32px; height: 32px;
-    background: var(--green);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 800;
-    font-size: 0.7em;
-    color: #fff;
-  }
-  .phone-name { font-weight: 600; font-size: 0.88em; }
-  .phone-status { font-size: 0.7em; color: var(--green); }
-  .phone-body { padding: 16px; }
-  .wa-bubble {
-    background: #1f3a1f;
-    border-radius: 12px 12px 12px 0;
-    padding: 12px 14px;
-    font-size: 0.82em;
-    line-height: 1.55;
-    color: #ddd;
-    max-width: 90%;
-    transform: translateZ(10px);
-  }
-  .wa-time {
-    text-align: right;
-    font-size: 0.65em;
-    color: #555;
-    margin-top: 4px;
-  }
-  .phone-shadow {
-    position: absolute;
-    bottom: -40px;
-    left: 10%;
-    width: 80%;
-    height: 40px;
-    background: radial-gradient(ellipse, rgba(22,163,74,0.15) 0%, transparent 70%);
-    filter: blur(15px);
-    transform: translateZ(-10px);
-  }
+  .step-3d h3{font-size:1.1em;font-weight:700;margin-bottom:6px}
+  .step-3d p{font-size:0.9em;color:var(--dim);line-height:1.55}
 
-  /* SECTION */
-  .section {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 80px 32px;
+  /* FEATURES */
+  .features-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:700px){.features-grid{grid-template-columns:1fr}}
+  .feature-item{
+    display:flex;gap:14px;align-items:flex-start;padding:18px;
+    background:var(--card);border:1px solid var(--border);border-radius:12px;
+    transition:all 0.25s;
   }
-  .section-label {
-    display: inline-block;
-    font-size: 0.75em;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--green);
-    margin-bottom: 12px;
+  .feature-item:hover{border-color:rgba(22,163,74,0.2);background:rgba(22,163,74,0.03)}
+  .feature-icon{
+    width:36px;height:36px;background:rgba(22,163,74,0.1);border-radius:8px;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+    color:var(--green);font-weight:800;font-size:0.9em;
   }
-  .section h2 {
-    font-size: 2.4em;
-    font-weight: 800;
-    margin-bottom: 12px;
-    letter-spacing: -0.8px;
-    line-height: 1.15;
-  }
-  .section .lead {
-    color: var(--text-dim);
-    font-size: 1.05em;
-    max-width: 560px;
-    line-height: 1.6;
-    margin-bottom: 40px;
-  }
+  .feature-text{font-size:0.9em;line-height:1.5}
 
-  /* PROBLEM CARDS - 3D tilt */
-  .problem-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
+  /* PRICING */
+  .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;perspective:1200px}
+  @media(max-width:800px){.pricing-grid{grid-template-columns:1fr}}
+  .price-card{
+    background:var(--card);border:1px solid var(--border);border-radius:18px;
+    padding:32px 28px;transition:all 0.4s ease;position:relative;
   }
-  @media (max-width: 700px) { .problem-grid { grid-template-columns: 1fr; } }
-  .problem-card {
-    background: var(--glass);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 28px;
-    transition: all 0.35s ease;
-    transform-style: preserve-3d;
-    perspective: 800px;
-    cursor: default;
+  .price-card:hover{
+    transform:translateY(-8px) rotateX(2deg);
+    box-shadow:0 30px 60px rgba(0,0,0,0.4),0 0 80px rgba(22,163,74,0.08);
   }
-  .problem-card:hover {
-    border-color: rgba(22,163,74,0.3);
-    transform: translateY(-4px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 60px rgba(22,163,74,0.05);
+  .price-card.featured{border-color:var(--green);background:rgba(22,163,74,0.05)}
+  .price-card.featured::before{
+    content:'MOST POPULAR';position:absolute;top:-10px;left:50%;transform:translateX(-50%);
+    background:var(--green);color:#fff;padding:3px 14px;border-radius:12px;
+    font-size:0.65em;font-weight:800;letter-spacing:1px;
   }
-  .problem-card .icon {
-    width: 48px; height: 48px;
-    background: rgba(22,163,74,0.1);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 16px;
-    font-size: 1.4em;
+  .price-card h3{font-size:1.1em;font-weight:700;margin-bottom:4px}
+  .price-card .price{font-size:2.6em;font-weight:900;letter-spacing:-1px;margin:12px 0}
+  .price-card .price span{font-size:0.4em;color:var(--dim);font-weight:400}
+  .price-card .desc{font-size:0.85em;color:var(--dim);margin-bottom:20px}
+  .price-card ul{list-style:none;margin-bottom:24px}
+  .price-card ul li{
+    padding:5px 0;font-size:0.85em;color:#bbb;display:flex;gap:8px;align-items:center;
   }
-  .problem-card h3 { font-size: 1.05em; font-weight: 700; margin-bottom: 8px; }
-  .problem-card p { font-size: 0.88em; color: var(--text-dim); line-height: 1.55; }
-
-  /* HOW IT WORKS - 3D timeline */
-  .steps-3d { position: relative; padding-left: 40px; }
-  .steps-3d::before {
-    content: '';
-    position: absolute;
-    left: 15px;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: linear-gradient(to bottom, var(--green), rgba(22,163,74,0.1));
+  .price-card ul li::before{
+    content:'';width:5px;height:5px;background:var(--green);border-radius:50%;flex-shrink:0;
   }
-  .step-3d {
-    position: relative;
-    margin-bottom: 40px;
-    padding: 24px;
-    background: var(--glass);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    transition: all 0.3s ease;
-    transform-style: preserve-3d;
-  }
-  .step-3d:hover {
-    border-color: rgba(22,163,74,0.3);
-    transform: translateX(4px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  }
-  .step-3d::before {
-    content: '';
-    position: absolute;
-    left: -33px;
-    top: 28px;
-    width: 14px;
-    height: 14px;
-    background: var(--green);
-    border-radius: 50%;
-    border: 3px solid var(--dark);
-    box-shadow: 0 0 15px rgba(22,163,74,0.4);
-  }
-  .step-3d .step-num {
-    font-size: 0.7em;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--green);
-    margin-bottom: 8px;
-  }
-  .step-3d h3 { font-size: 1.1em; font-weight: 700; margin-bottom: 6px; }
-  .step-3d p { font-size: 0.9em; color: var(--text-dim); line-height: 1.55; }
-
-  /* FEATURES - glass grid */
-  .features-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-  @media (max-width: 700px) { .features-grid { grid-template-columns: 1fr; } }
-  .feature-item {
-    display: flex;
-    gap: 14px;
-    align-items: flex-start;
-    padding: 18px;
-    background: var(--glass);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    transition: all 0.25s;
-  }
-  .feature-item:hover {
-    border-color: rgba(22,163,74,0.2);
-    background: rgba(22,163,74,0.03);
-  }
-  .feature-icon {
-    width: 36px; height: 36px;
-    background: rgba(22,163,74,0.1);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    color: var(--green);
-    font-weight: 800;
-    font-size: 0.9em;
-  }
-  .feature-text { font-size: 0.9em; line-height: 1.5; }
-
-  /* PRICING - 3D cards */
-  .pricing-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    perspective: 1200px;
-  }
-  @media (max-width: 800px) { .pricing-grid { grid-template-columns: 1fr; } }
-  .price-card {
-    background: var(--glass);
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    padding: 32px 28px;
-    transition: all 0.4s ease;
-    transform-style: preserve-3d;
-    position: relative;
-  }
-  .price-card:hover {
-    transform: translateY(-8px) rotateX(2deg);
-    box-shadow: 0 30px 60px rgba(0,0,0,0.4), 0 0 80px rgba(22,163,74,0.08);
-  }
-  .price-card.featured {
-    border-color: var(--green);
-    background: rgba(22,163,74,0.05);
-  }
-  .price-card.featured::before {
-    content: 'MOST POPULAR';
-    position: absolute;
-    top: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--green);
-    color: #fff;
-    padding: 3px 14px;
-    border-radius: 12px;
-    font-size: 0.65em;
-    font-weight: 800;
-    letter-spacing: 1px;
-  }
-  .price-card h3 {
-    font-size: 1.1em;
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
-  .price-card .price {
-    font-size: 2.6em;
-    font-weight: 900;
-    letter-spacing: -1px;
-    margin: 12px 0;
-  }
-  .price-card .price span { font-size: 0.4em; color: var(--text-dim); font-weight: 400; }
-  .price-card .desc {
-    font-size: 0.85em;
-    color: var(--text-dim);
-    margin-bottom: 20px;
-  }
-  .price-card ul { list-style: none; margin-bottom: 24px; }
-  .price-card ul li {
-    padding: 5px 0;
-    font-size: 0.85em;
-    color: #bbb;
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
-  .price-card ul li::before {
-    content: '';
-    width: 5px; height: 5px;
-    background: var(--green);
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-  .btn-price {
-    display: block;
-    text-align: center;
-    padding: 12px;
-    border-radius: 10px;
-    font-weight: 700;
-    font-size: 0.9em;
-    transition: all 0.2s;
-  }
-  .btn-price.primary { background: var(--green); color: #fff; }
-  .btn-price.primary:hover { background: var(--green-dim); }
-  .btn-price.outline { border: 1px solid var(--border); color: var(--text); }
-  .btn-price.outline:hover { border-color: var(--green); }
+  .btn-price{display:block;text-align:center;padding:12px;border-radius:10px;font-weight:700;font-size:0.9em;transition:all 0.2s}
+  .btn-price.primary{background:var(--green);color:#fff}
+  .btn-price.primary:hover{background:var(--green-dim)}
+  .btn-price.outline{border:1px solid var(--border);color:var(--text)}
+  .btn-price.outline:hover{border-color:var(--green)}
 
   /* FAQ */
-  .faq-list { max-width: 640px; }
-  .faq-item {
-    border-bottom: 1px solid var(--border);
-    padding: 18px 0;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .faq-item:hover { padding-left: 4px; }
-  .faq-item h4 {
-    font-size: 0.95em;
-    font-weight: 600;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .faq-item h4::after {
-    content: '+';
-    color: var(--green);
-    font-weight: 700;
-    font-size: 1.2em;
-    transition: transform 0.2s;
-  }
-  .faq-item.open h4::after { transform: rotate(45deg); }
-  .faq-item p {
-    font-size: 0.88em;
-    color: var(--text-dim);
-    margin-top: 10px;
-    line-height: 1.55;
-    display: none;
-  }
-  .faq-item.open p { display: block; }
+  .faq-list{max-width:640px}
+  .faq-item{border-bottom:1px solid var(--border);padding:18px 0;cursor:pointer;transition:all 0.2s}
+  .faq-item:hover{padding-left:4px}
+  .faq-item h4{font-size:0.95em;font-weight:600;display:flex;justify-content:space-between;align-items:center}
+  .faq-item h4::after{content:'+';color:var(--green);font-weight:700;font-size:1.2em;transition:transform 0.2s}
+  .faq-item.open h4::after{transform:rotate(45deg)}
+  .faq-item p{font-size:0.88em;color:var(--dim);margin-top:10px;line-height:1.55;display:none}
+  .faq-item.open p{display:block}
 
   /* CTA */
-  .cta-section {
-    text-align: center;
-    padding: 100px 32px;
-    position: relative;
-  }
-  .cta-section h2 {
-    font-size: 2.4em;
-    font-weight: 900;
-    margin-bottom: 12px;
-    letter-spacing: -0.8px;
-  }
-  .cta-section p {
-    color: var(--text-dim);
-    font-size: 1.05em;
-    margin-bottom: 32px;
-    max-width: 480px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .cta-section .contact-line {
-    margin-top: 16px;
-    font-size: 0.82em;
-    color: #555;
-  }
+  .cta-section{text-align:center;padding:100px 32px}
+  .cta-section h2{font-size:2.4em;font-weight:900;margin-bottom:12px;letter-spacing:-0.8px}
+  .cta-section p{color:var(--dim);font-size:1.05em;margin-bottom:32px;max-width:480px;margin-left:auto;margin-right:auto}
+  .cta-section .contact-line{margin-top:16px;font-size:0.82em;color:#555}
 
   /* FOOTER */
-  .footer {
-    text-align: center;
-    padding: 32px;
-    border-top: 1px solid var(--border);
-    color: #444;
-    font-size: 0.8em;
-  }
+  .footer{text-align:center;padding:32px;border-top:1px solid var(--border);color:#444;font-size:0.8em}
 
   /* Scroll reveal */
-  .reveal {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  .reveal{opacity:0;transform:translateY(30px);transition:all 0.7s cubic-bezier(0.16,1,0.3,1)}
+  .reveal.visible{opacity:1;transform:translateY(0)}
 
-  @media (max-width: 600px) {
-    .hero h1 { font-size: 2.2em; }
-    .nav { padding: 14px 16px; }
-    .stats-bar { gap: 24px; }
-    .stat .num { font-size: 1.6em; }
-    .phone-3d { width: 240px; }
+  @media(max-width:600px){
+    .hero h1{font-size:2.2em}.nav{padding:14px 16px}
+    .stats-bar{gap:24px}.stat .num{font-size:1.6em}
   }
 </style>
 </head>
 <body>
 
-<!-- 3D Background Scene -->
-<div class="scene-3d">
-  <div class="house-3d">
-    <svg viewBox="0 0 200 180" fill="none"><path d="M100 10L190 80V170H110V120H90V170H10V80L100 10Z" stroke="white" stroke-width="2"/><rect x="120" y="90" width="30" height="30" rx="2" stroke="white" stroke-width="1.5"/><rect x="50" y="90" width="30" height="30" rx="2" stroke="white" stroke-width="1.5"/></svg>
-  </div>
-  <div class="house-3d">
-    <svg viewBox="0 0 200 180" fill="none"><path d="M100 10L190 80V170H110V120H90V170H10V80L100 10Z" stroke="white" stroke-width="2"/><rect x="120" y="90" width="30" height="30" rx="2" stroke="white" stroke-width="1.5"/><rect x="50" y="90" width="30" height="30" rx="2" stroke="white" stroke-width="1.5"/></svg>
-  </div>
-  <div class="house-3d">
-    <svg viewBox="0 0 200 180" fill="none"><path d="M100 10L190 80V170H110V120H90V170H10V80L100 10Z" stroke="white" stroke-width="2"/><rect x="120" y="90" width="30" height="30" rx="2" stroke="white" stroke-width="1.5"/><rect x="50" y="90" width="30" height="30" rx="2" stroke="white" stroke-width="1.5"/></svg>
-  </div>
-  <div class="house-3d">
-    <svg viewBox="0 0 200 180" fill="none"><path d="M100 10L190 80V170H110V120H90V170H10V80L100 10Z" stroke="white" stroke-width="2"/><rect x="120" y="90" width="30" height="30" rx="2" stroke="white" stroke-width="1.5"/><rect x="50" y="90" width="30" height="30" rx="2" stroke="white" stroke-width="1.5"/></svg>
-  </div>
-  <div class="house-3d">
-    <svg viewBox="0 0 200 180" fill="none"><path d="M100 10L190 80V170H110V120H90V170H10V80L100 10Z" stroke="white" stroke-width="2"/><rect x="120" y="90" width="30" height="30" rx="2" stroke="white" stroke-width="1.5"/><rect x="50" y="90" width="30" height="30" rx="2" stroke="white" stroke-width="1.5"/></svg>
-  </div>
-</div>
-<div class="grid-overlay"></div>
-<div class="glow-orb"></div>
+<canvas id="scene3d"></canvas>
 
 <div class="content">
 
@@ -688,10 +245,9 @@
   <a href="#pricing" class="cta-sm">Get started</a>
 </div>
 
-<!-- HERO -->
 <div class="hero">
   <div class="hero-tag"><span class="dot"></span> Built for Tampa real estate agents</div>
-  <h1>Your leads text at <span class="highlight">2 AM.</span><br>They get an answer in <span class="highlight">10 seconds.</span></h1>
+  <h1>Your leads text at <span class="hl">2 AM.</span><br>They get an answer in <span class="hl">10 seconds.</span></h1>
   <p>Speed2Lead AI replies to new leads on WhatsApp before they even finish reading your listing. Qualifies them, asks the right questions, and books appointments into your calendar.</p>
   <div class="hero-actions">
     <a href="#pricing" class="btn-main">
@@ -706,7 +262,6 @@
   <div class="hero-sub">Setup takes about 2 days. Month-to-month. No contracts.</div>
 </div>
 
-<!-- STATS -->
 <div class="stats-bar reveal">
   <div class="stat"><div class="num">10s</div><div class="label">Average first reply</div></div>
   <div class="stat"><div class="num">24/7</div><div class="label">Even on weekends</div></div>
@@ -714,61 +269,27 @@
   <div class="stat"><div class="num">$0</div><div class="label">Setup cost</div></div>
 </div>
 
-<!-- 3D PHONE MOCKUP -->
-<div class="phone-scene reveal">
-  <div class="phone-3d" id="phone3d">
-    <div class="phone-frame">
-      <div class="phone-screen">
-        <div class="phone-header">
-          <div class="phone-avatar">S2L</div>
-          <div>
-            <div class="phone-name">Speed2Lead AI</div>
-            <div class="phone-status">online</div>
-          </div>
-        </div>
-        <div class="phone-body">
-          <div class="wa-bubble">Hey Sarah! I saw your interest in waterfront homes in South Tampa under $800K.
-
-Good timing — I have a 3BR/2BA in Ballast Point that just came on the market. $749K, private dock, no bridges to the bay.
-
-Want me to send details?</div>
-          <div class="wa-time">2:03 AM ✓✓</div>
-        </div>
-      </div>
-    </div>
-    <div class="phone-shadow"></div>
-  </div>
-</div>
-
-<!-- PROBLEM -->
 <div class="section reveal">
   <div class="section-label">The problem</div>
   <h2>Most leads call the first agent who responds</h2>
-  <p class="lead">If that's not you, it's the agent down the street. Every minute you're慢 is a listing someone else closes.</p>
-
+  <p class="lead">If that's not you, it's the agent down the street. Every minute you're slow is a listing someone else closes.</p>
   <div class="problem-grid">
     <div class="problem-card">
-      <div class="icon">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
-      </div>
+      <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg></div>
       <h3>The 5-minute gap</h3>
       <p>Respond within 5 minutes and you're 21x more likely to qualify a lead. After 30 minutes, it drops to almost nothing. Most agents take hours.</p>
     </div>
     <div class="problem-card">
-      <div class="icon">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
-      </div>
+      <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg></div>
       <h3>You can't be everywhere</h3>
       <p>You're at a showing. With clients. At your kid's game. Meanwhile, 4 leads came in and nobody answered. By the time you see them, they've moved on.</p>
     </div>
   </div>
 </div>
 
-<!-- HOW IT WORKS -->
 <div class="section reveal">
   <div class="section-label">How it works</div>
   <h2>Three steps. No technical setup.</h2>
-
   <div class="steps-3d">
     <div class="step-3d">
       <div class="step-num">Step 01</div>
@@ -778,133 +299,70 @@ Want me to send details?</div>
     <div class="step-3d">
       <div class="step-num">Step 02</div>
       <h3>Speed2Lead replies on WhatsApp</h3>
-      <p>Within 10 seconds, the lead gets a personal WhatsApp message. Uses their name, references the property, and asks a qualifying question. Sounds like you, not a bot.</p>
+      <p>Within 10 seconds, the lead gets a personal WhatsApp message. Uses their name, references the property, and asks a qualifying question.</p>
     </div>
     <div class="step-3d">
       <div class="step-num">Step 03</div>
       <h3>Appointment gets booked</h3>
-      <p>The AI qualifies the lead, asks about timeline and budget, and books them directly into your calendar. Complex questions get forwarded to you immediately.</p>
+      <p>The AI qualifies the lead, asks about timeline and budget, and books them directly into your calendar.</p>
     </div>
   </div>
 </div>
 
-<!-- FEATURES -->
 <div class="section reveal">
   <div class="section-label">What you get</div>
   <h2>Everything you need. Nothing you don't.</h2>
-
   <div class="features-grid">
-    <div class="feature-item">
-      <div class="feature-icon">→</div>
-      <div class="feature-text">WhatsApp auto-replies that sound like a real person. Trained on your actual speaking style.</div>
-    </div>
-    <div class="feature-item">
-      <div class="feature-icon">↑</div>
-      <div class="feature-text">Lead scoring: HOT / WARM / COLD so you know who to call first.</div>
-    </div>
-    <div class="feature-item">
-      <div class="feature-icon">↻</div>
-      <div class="feature-text">Follow-up sequence at 24h, 3 days, and 7 days. Stops when they reply or book.</div>
-    </div>
-    <div class="feature-item">
-      <div class="feature-icon">◉</div>
-      <div class="feature-text">Calendar booking: leads pick a time and it's on your schedule.</div>
-    </div>
-    <div class="feature-item">
-      <div class="feature-icon">✓</div>
-      <div class="feature-text">TCPA-compliant opt-in/opt-out logging from day one.</div>
-    </div>
-    <div class="feature-item">
-      <div class="feature-icon">↗</div>
-      <div class="feature-text">Airtable CRM integration or your existing CRM via API.</div>
-    </div>
+    <div class="feature-item"><div class="feature-icon">→</div><div class="feature-text">WhatsApp auto-replies that sound like a real person. Trained on your actual speaking style.</div></div>
+    <div class="feature-item"><div class="feature-icon">↑</div><div class="feature-text">Lead scoring: HOT / WARM / COLD so you know who to call first.</div></div>
+    <div class="feature-item"><div class="feature-icon">↻</div><div class="feature-text">Follow-up sequence at 24h, 3 days, and 7 days. Stops when they reply or book.</div></div>
+    <div class="feature-item"><div class="feature-icon">◉</div><div class="feature-text">Calendar booking: leads pick a time and it's on your schedule.</div></div>
+    <div class="feature-item"><div class="feature-icon">✓</div><div class="feature-text">TCPA-compliant opt-in/opt-out logging from day one.</div></div>
+    <div class="feature-item"><div class="feature-icon">↗</div><div class="feature-text">Airtable CRM integration or your existing CRM via API.</div></div>
   </div>
 </div>
 
-<!-- PRICING -->
 <div class="section" id="pricing">
   <div class="section-label">Pricing</div>
   <h2>Month-to-month. No contracts.</h2>
-
   <div class="pricing-grid reveal">
     <div class="price-card">
-      <h3>Starter</h3>
-      <div class="price">$500<span>/mo</span></div>
+      <h3>Starter</h3><div class="price">$500<span>/mo</span></div>
       <div class="desc">For solo agents up to 100 leads/month.</div>
-      <ul>
-        <li>WhatsApp AI responses</li>
-        <li>Lead scoring (HOT / WARM / COLD)</li>
-        <li>3-touch follow-up sequence</li>
-        <li>Airtable CRM integration</li>
-        <li>TCPA compliance logging</li>
-      </ul>
+      <ul><li>WhatsApp AI responses</li><li>Lead scoring (HOT / WARM / COLD)</li><li>3-touch follow-up sequence</li><li>Airtable CRM integration</li><li>TCPA compliance logging</li></ul>
       <a href="#contact" class="btn-price outline">Get started</a>
     </div>
-
     <div class="price-card featured">
-      <h3>Growth</h3>
-      <div class="price">$1,500<span>/mo</span></div>
+      <h3>Growth</h3><div class="price">$1,500<span>/mo</span></div>
       <div class="desc">For agents doing 100-500 leads/month.</div>
-      <ul>
-        <li>Everything in Starter</li>
-        <li>Hot lead alerts</li>
-        <li>Calendar booking integration</li>
-        <li>WhatsApp + SMS + Email</li>
-        <li>Priority support</li>
-      </ul>
+      <ul><li>Everything in Starter</li><li>Hot lead alerts</li><li>Calendar booking integration</li><li>WhatsApp + SMS + Email</li><li>Priority support</li></ul>
       <a href="#contact" class="btn-price primary">Get started</a>
     </div>
-
     <div class="price-card">
-      <h3>Team</h3>
-      <div class="price">$2,250<span>/mo</span></div>
+      <h3>Team</h3><div class="price">$2,250<span>/mo</span></div>
       <div class="desc">For teams of 2-5 agents. Up to 1,000 leads.</div>
-      <ul>
-        <li>Everything in Growth</li>
-        <li>Up to 5 agent seats</li>
-        <li>Custom AI voice training</li>
-        <li>Dedicated account manager</li>
-        <li>White-label option</li>
-      </ul>
+      <ul><li>Everything in Growth</li><li>Up to 5 agent seats</li><li>Custom AI voice training</li><li>Dedicated account manager</li><li>White-label option</li></ul>
       <a href="#contact" class="btn-price outline">Get started</a>
     </div>
   </div>
 </div>
 
-<!-- FAQ -->
 <div class="section reveal">
   <div class="section-label">Questions</div>
   <h2>FAQ</h2>
-
   <div class="faq-list">
-    <div class="faq-item" onclick="this.classList.toggle('open')">
-      <h4>How long does setup take?</h4>
-      <p>About 2 days. We connect your WhatsApp, train the AI on your listings and speaking style, and you're live. Nothing for you to install.</p>
-    </div>
-    <div class="faq-item" onclick="this.classList.toggle('open')">
-      <h4>Do I need to change my CRM?</h4>
-      <p>No. We connect to Airtable out of the box, or your existing CRM through an API. No migration needed.</p>
-    </div>
-    <div class="faq-item" onclick="this.classList.toggle('open')">
-      <h4>What if the AI can't answer a question?</h4>
-      <p>It forwards the conversation to you right away. The AI knows its limits — good at qualifying and scheduling, won't negotiate a deal for you.</p>
-    </div>
-    <div class="faq-item" onclick="this.classList.toggle('open')">
-      <h4>Is this compliant with real estate regulations?</h4>
-      <p>Yes. Every opt-in and opt-out is logged. All conversations stored. TCPA compliance built in from the start, not an afterthought.</p>
-    </div>
-    <div class="faq-item" onclick="this.classList.toggle('open')">
-      <h4>Can I try it first?</h4>
-      <p>Yes. Free 7-day trial. No credit card. You'll see real leads getting real responses before you pay anything.</p>
-    </div>
+    <div class="faq-item" onclick="this.classList.toggle('open')"><h4>How long does setup take?</h4><p>About 2 days. We connect your WhatsApp, train the AI on your listings and speaking style, and you're live.</p></div>
+    <div class="faq-item" onclick="this.classList.toggle('open')"><h4>Do I need to change my CRM?</h4><p>No. We connect to Airtable out of the box, or your existing CRM through an API.</p></div>
+    <div class="faq-item" onclick="this.classList.toggle('open')"><h4>What if the AI can't answer a question?</h4><p>It forwards the conversation to you right away. The AI knows its limits.</p></div>
+    <div class="faq-item" onclick="this.classList.toggle('open')"><h4>Is this compliant with real estate regulations?</h4><p>Yes. Every opt-in and opt-out is logged. All conversations stored. TCPA compliance built in from the start.</p></div>
+    <div class="faq-item" onclick="this.classList.toggle('open')"><h4>Can I try it first?</h4><p>Yes. Free 7-day trial. No credit card. You'll see real leads getting real responses before you pay anything.</p></div>
   </div>
 </div>
 
-<!-- CTA -->
 <div class="cta-section reveal">
   <h2>Want to see it work on your leads?</h2>
   <p>Send us a message and we'll set up a quick demo with your actual listing data. Takes about 15 minutes.</p>
-  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
     <a href="https://wa.me/14026212519" target="_blank" class="btn-main">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
       WhatsApp us
@@ -917,37 +375,471 @@ Want me to send details?</div>
   <div class="contact-line">WhatsApp: +1 (402) 621-2519 &middot; Email: speedtoolead@gmail.com</div>
 </div>
 
-<div class="footer">
-  Speed2Lead AI &copy; 2026 &middot; Tampa, FL
-</div>
+<div class="footer">Speed2Lead AI &copy; 2026 &middot; Tampa, FL</div>
 
 </div>
 
-<script>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+
+// ===== SCENE SETUP =====
+const canvas = document.getElementById('scene3d');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 0.8;
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x0a0a0a, 0.008);
+
+const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.set(0, 8, 25);
+camera.lookAt(0, 3, 0);
+
+// ===== LIGHTS =====
+const ambientLight = new THREE.AmbientLight(0x1a3a1a, 0.4);
+scene.add(ambientLight);
+
+const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
+dirLight.position.set(10, 20, 10);
+dirLight.castShadow = true;
+dirLight.shadow.mapSize.set(2048, 2048);
+dirLight.shadow.camera.near = 0.5;
+dirLight.shadow.camera.far = 100;
+dirLight.shadow.camera.left = -30;
+dirLight.shadow.camera.right = 30;
+dirLight.shadow.camera.top = 30;
+dirLight.shadow.camera.bottom = -30;
+scene.add(dirLight);
+
+const greenLight = new THREE.PointLight(0x16a34a, 1.5, 50);
+greenLight.position.set(0, 5, 0);
+scene.add(greenLight);
+
+const rimLight = new THREE.PointLight(0x16a34a, 0.8, 80);
+rimLight.position.set(-15, 10, -10);
+scene.add(rimLight);
+
+// ===== MATERIALS =====
+const matGlass = new THREE.MeshPhysicalMaterial({
+  color: 0x111111, metalness: 0.1, roughness: 0.05,
+  transparent: true, opacity: 0.3, envMapIntensity: 1,
+});
+const matBuilding = new THREE.MeshStandardMaterial({
+  color: 0x1a1a1a, metalness: 0.3, roughness: 0.4,
+});
+const matAccent = new THREE.MeshStandardMaterial({
+  color: 0x16a34a, metalness: 0.5, roughness: 0.3, emissive: 0x16a34a, emissiveIntensity: 0.2,
+});
+const matVilla = new THREE.MeshStandardMaterial({
+  color: 0x222222, metalness: 0.1, roughness: 0.6,
+});
+const matRoof = new THREE.MeshStandardMaterial({
+  color: 0x1a1a1a, metalness: 0.2, roughness: 0.5,
+});
+const matWindow = new THREE.MeshStandardMaterial({
+  color: 0x16a34a, emissive: 0x16a34a, emissiveIntensity: 0.5,
+  transparent: true, opacity: 0.6,
+});
+const matGround = new THREE.MeshStandardMaterial({
+  color: 0x080808, metalness: 0.8, roughness: 0.2,
+});
+
+// ===== GROUND =====
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), matGround);
+ground.rotation.x = -Math.PI / 2;
+ground.position.y = -0.01;
+ground.receiveShadow = true;
+scene.add(ground);
+
+// Grid lines on ground
+const gridHelper = new THREE.GridHelper(200, 80, 0x111111, 0x111111);
+gridHelper.position.y = 0.01;
+scene.add(gridHelper);
+
+// ===== BUILDINGS =====
+const buildings = [];
+
+function createBuilding(x, z, w, h, d) {
+  const group = new THREE.Group();
+
+  // Main structure
+  const body = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), matBuilding);
+  body.position.y = h / 2;
+  body.castShadow = true;
+  body.receiveShadow = true;
+  group.add(body);
+
+  // Windows (green glowing)
+  const windowRows = Math.floor(h / 1.2);
+  const windowCols = Math.floor(w / 1.2);
+  for (let r = 0; r < windowRows; r++) {
+    for (let c = 0; c < windowCols; c++) {
+      if (Math.random() > 0.35) {
+        const win = new THREE.Mesh(
+          new THREE.BoxGeometry(0.4, 0.5, 0.05),
+          Math.random() > 0.5 ? matWindow : matBuilding
+        );
+        win.position.set(
+          -w / 2 + 0.8 + c * 1.2,
+          1 + r * 1.2,
+          d / 2 + 0.03
+        );
+        group.add(win);
+        // Back side
+        const winB = win.clone();
+        winB.position.z = -d / 2 - 0.03;
+        group.add(winB);
+      }
+    }
+  }
+
+  // Roof accent
+  const roof = new THREE.Mesh(new THREE.BoxGeometry(w + 0.2, 0.15, d + 0.2), matAccent);
+  roof.position.y = h;
+  group.add(roof);
+
+  group.position.set(x, 0, z);
+  scene.add(group);
+  buildings.push({ group, baseY: h, x, z });
+  return group;
+}
+
+// ===== LUXURY VILLA =====
+function createVilla(x, z, scale = 1) {
+  const group = new THREE.Group();
+  const s = scale;
+
+  // Main house body
+  const body = new THREE.Mesh(new THREE.BoxGeometry(8 * s, 3 * s, 6 * s), matVilla);
+  body.position.y = 1.5 * s;
+  body.castShadow = true;
+  body.receiveShadow = true;
+  group.add(body);
+
+  // Flat roof with overhang
+  const roof = new THREE.Mesh(new THREE.BoxGeometry(9 * s, 0.2 * s, 7 * s), matRoof);
+  roof.position.y = 3.1 * s;
+  group.add(roof);
+
+  // Roof edge accent
+  const edge = new THREE.Mesh(new THREE.BoxGeometry(9.2 * s, 0.08 * s, 7.2 * s), matAccent);
+  edge.position.y = 3.25 * s;
+  group.add(edge);
+
+  // Second floor (smaller, offset)
+  const upper = new THREE.Mesh(new THREE.BoxGeometry(5 * s, 2.5 * s, 5 * s), matVilla);
+  upper.position.set(1 * s, 4.35 * s, 0);
+  upper.castShadow = true;
+  group.add(upper);
+
+  // Upper roof
+  const upperRoof = new THREE.Mesh(new THREE.BoxGeometry(5.4 * s, 0.2 * s, 5.4 * s), matRoof);
+  upperRoof.position.y = 5.7 * s;
+  group.add(upperRoof);
+
+  const upperEdge = new THREE.Mesh(new THREE.BoxGeometry(5.6 * s, 0.06 * s, 5.6 * s), matAccent);
+  upperEdge.position.y = 5.85 * s;
+  group.add(upperEdge);
+
+  // Large windows (front)
+  for (let i = 0; i < 3; i++) {
+    const win = new THREE.Mesh(new THREE.BoxGeometry(1.8 * s, 2 * s, 0.06 * s), matWindow);
+    win.position.set(-2.5 * s + i * 2.5 * s, 1.8 * s, 3.03 * s);
+    group.add(win);
+  }
+
+  // Upper windows
+  for (let i = 0; i < 2; i++) {
+    const win = new THREE.Mesh(new THREE.BoxGeometry(1.5 * s, 1.8 * s, 0.06 * s), matWindow);
+    win.position.set(-0.5 * s + i * 2.2 * s, 4.5 * s, 2.53 * s);
+    group.add(win);
+  }
+
+  // Garage
+  const garage = new THREE.Mesh(new THREE.BoxGeometry(3 * s, 2.2 * s, 5 * s), matVilla);
+  garage.position.set(-5 * s, 1.1 * s, -0.5 * s);
+  garage.castShadow = true;
+  group.add(garage);
+
+  // Pool (glass-like)
+  const pool = new THREE.Mesh(
+    new THREE.BoxGeometry(4 * s, 0.1 * s, 2 * s),
+    new THREE.MeshPhysicalMaterial({
+      color: 0x0a4a2a, metalness: 0.1, roughness: 0.0,
+      transparent: true, opacity: 0.7, emissive: 0x16a34a, emissiveIntensity: 0.15,
+    })
+  );
+  pool.position.set(0, 0.05, 5 * s);
+  group.add(pool);
+
+  // Pool edge
+  const poolEdge = new THREE.Mesh(
+    new THREE.BoxGeometry(4.3 * s, 0.15 * s, 2.3 * s),
+    new THREE.MeshStandardMaterial({ color: 0x333333, metalness: 0.5, roughness: 0.3 })
+  );
+  poolEdge.position.set(0, -0.02, 5 * s);
+  group.add(poolEdge);
+
+  // Palm tree trunks
+  function createPalm(px, pz) {
+    const trunk = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.08 * s, 0.12 * s, 4 * s, 8),
+      new THREE.MeshStandardMaterial({ color: 0x3d2b1f, roughness: 0.8 })
+    );
+    trunk.position.set(px, 2 * s, pz);
+    trunk.castShadow = true;
+    group.add(trunk);
+
+    // Leaves
+    for (let i = 0; i < 5; i++) {
+      const leaf = new THREE.Mesh(
+        new THREE.BoxGeometry(2 * s, 0.05 * s, 0.4 * s),
+        new THREE.MeshStandardMaterial({ color: 0x1a5a1a, roughness: 0.7 })
+      );
+      leaf.position.set(px, 4.1 * s, pz);
+      leaf.rotation.y = (i / 5) * Math.PI * 2;
+      leaf.rotation.z = 0.4;
+      group.add(leaf);
+    }
+  }
+  createPalm(6 * s, 4 * s);
+  createPalm(-6 * s, 3 * s);
+
+  group.position.set(x, 0, z);
+  scene.add(group);
+  buildings.push({ group, baseY: 6 * s, x, z });
+  return group;
+}
+
+// ===== HIGH-RISE TOWERS =====
+function createTower(x, z, floors = 12) {
+  const group = new THREE.Group();
+  const w = 3 + Math.random() * 2;
+  const d = 3 + Math.random() * 2;
+  const h = floors * 1;
+
+  // Main body
+  const body = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), matBuilding);
+  body.position.y = h / 2;
+  body.castShadow = true;
+  body.receiveShadow = true;
+  group.add(body);
+
+  // Glass facade
+  const glass = new THREE.Mesh(
+    new THREE.BoxGeometry(w + 0.05, h - 0.5, 0.08),
+    matGlass
+  );
+  glass.position.set(0, h / 2, d / 2 + 0.04);
+  group.add(glass);
+
+  // Windows
+  for (let r = 0; r < floors; r++) {
+    const cols = Math.floor(w / 0.8);
+    for (let c = 0; c < cols; c++) {
+      if (Math.random() > 0.3) {
+        const win = new THREE.Mesh(
+          new THREE.BoxGeometry(0.3, 0.4, 0.04),
+          Math.random() > 0.6 ? matWindow : matBuilding
+        );
+        win.position.set(
+          -w / 2 + 0.5 + c * 0.8,
+          0.8 + r * 1,
+          d / 2 + 0.06
+        );
+        group.add(win);
+      }
+    }
+  }
+
+  // Green accent lines
+  for (let r = 0; r < floors; r += 3) {
+    const line = new THREE.Mesh(new THREE.BoxGeometry(w + 0.1, 0.04, d + 0.1), matAccent);
+    line.position.y = r * 1;
+    group.add(line);
+  }
+
+  // Crown
+  const crown = new THREE.Mesh(new THREE.BoxGeometry(w + 0.3, 0.3, d + 0.3), matAccent);
+  crown.position.y = h;
+  group.add(crown);
+
+  // Antenna
+  const antenna = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.03, 0.03, 2, 6),
+    matAccent
+  );
+  antenna.position.y = h + 1;
+  group.add(antenna);
+
+  group.position.set(x, 0, z);
+  scene.add(group);
+  buildings.push({ group, baseY: h, x, z });
+  return group;
+}
+
+// ===== PLACE BUILDINGS =====
+// Luxury villas in front
+createVilla(-8, 5, 0.9);
+createVilla(10, 8, 0.7);
+createVilla(-3, 12, 0.6);
+
+// Mid-range buildings
+createBuilding(-15, -5, 4, 8, 4);
+createBuilding(14, -3, 3, 6, 3);
+createBuilding(-6, -10, 5, 10, 4);
+createBuilding(8, -8, 4, 7, 3);
+
+// Tall towers in back
+createTower(-12, -18, 15);
+createTower(0, -20, 18);
+createTower(12, -16, 12);
+createTower(-20, -12, 10);
+createTower(20, -14, 14);
+createTower(-8, -25, 20);
+createTower(8, -28, 16);
+createTower(18, -22, 11);
+
+// ===== FLOATING HOUSE (centerpiece) =====
+const floatHouse = new THREE.Group();
+
+// House body
+const houseBody = new THREE.Mesh(
+  new THREE.BoxGeometry(3, 2, 2.5),
+  new THREE.MeshStandardMaterial({ color: 0x1a1a1a, metalness: 0.2, roughness: 0.5 })
+);
+houseBody.position.y = 1;
+houseBody.castShadow = true;
+floatHouse.add(houseBody);
+
+// Roof
+const houseRoof = new THREE.Mesh(
+  new THREE.ConeGeometry(2.5, 1.5, 4),
+  matAccent
+);
+houseRoof.position.y = 2.75;
+houseRoof.rotation.y = Math.PI / 4;
+floatHouse.add(houseRoof);
+
+// Windows
+const hw1 = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.7, 0.05), matWindow);
+hw1.position.set(-0.7, 1.2, 1.26);
+floatHouse.add(hw1);
+const hw2 = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.7, 0.05), matWindow);
+hw2.position.set(0.7, 1.2, 1.26);
+floatHouse.add(hw2);
+
+// Door
+const door = new THREE.Mesh(
+  new THREE.BoxGeometry(0.5, 0.9, 0.06),
+  new THREE.MeshStandardMaterial({ color: 0x16a34a, metalness: 0.4, roughness: 0.3 })
+);
+door.position.set(0, 0.55, 1.26);
+floatHouse.add(door);
+
+// Glow ring around floating house
+const ringGeo = new THREE.TorusGeometry(2.5, 0.03, 8, 64);
+const ringMat = new THREE.MeshBasicMaterial({ color: 0x16a34a, transparent: true, opacity: 0.4 });
+const ring = new THREE.Mesh(ringGeo, ringMat);
+ring.rotation.x = Math.PI / 2;
+ring.position.y = -0.2;
+floatHouse.add(ring);
+
+floatHouse.position.set(0, 6, 12);
+scene.add(floatHouse);
+
+// ===== ANIMATION =====
+let scrollProgress = 0;
+const maxScroll = document.body.scrollHeight - window.innerHeight;
+
+window.addEventListener('scroll', () => {
+  scrollProgress = window.scrollY / maxScroll;
+});
+
+// Mouse parallax
+let mouseX = 0, mouseY = 0;
+document.addEventListener('mousemove', (e) => {
+  mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+  mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+});
+
+// Animate buildings rising from ground
+buildings.forEach((b, i) => {
+  b.group.children.forEach(child => {
+    child.userData.originalY = child.position.y;
+    child.position.y = -2;
+  });
+});
+
+function animate() {
+  requestAnimationFrame(animate);
+
+  const t = Date.now() * 0.001;
+
+  // Camera follows scroll
+  const camY = 8 + scrollProgress * 15;
+  const camZ = 25 - scrollProgress * 20;
+  const camX = mouseX * 2;
+  camera.position.set(camX, camY, camZ);
+  camera.lookAt(0, camY - 3, 0);
+
+  // Animate buildings rising
+  buildings.forEach((b, i) => {
+    const delay = i * 0.08;
+    const progress = Math.min(1, Math.max(0, (scrollProgress - delay) * 3));
+    const ease = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+
+    b.group.children.forEach(child => {
+      const origY = child.userData.originalY;
+      if (origY !== undefined) {
+        child.position.y = -2 + (origY + 2) * ease;
+      }
+    });
+
+    // Subtle rotation
+    b.group.rotation.y = Math.sin(t * 0.3 + i) * 0.02;
+  });
+
+  // Floating house animation
+  floatHouse.position.y = 6 + Math.sin(t * 0.8) * 0.5;
+  floatHouse.rotation.y = t * 0.15;
+  ring.rotation.z = t * 0.3;
+
+  // Green light follows scroll
+  greenLight.position.y = 5 + scrollProgress * 10;
+  greenLight.intensity = 1.5 + Math.sin(t * 2) * 0.3;
+
+  // Fog clears as you scroll
+  scene.fog.density = 0.008 - scrollProgress * 0.004;
+
+  renderer.render(scene, camera);
+}
+animate();
+
+// Resize
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
 // Scroll reveal
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
 }, { threshold: 0.1 });
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-// 3D phone tilt on mouse
-const phone = document.getElementById('phone3d');
-if (phone) {
-  document.addEventListener('mousemove', (e) => {
-    const x = (e.clientX / window.innerWidth - 0.5) * 12;
-    const y = (e.clientY / window.innerHeight - 0.5) * 8;
-    phone.style.transform = `rotateY(${-8 + x}deg) rotateX(${4 - y}deg)`;
-  });
-}
-
-// Parallax houses on scroll
-window.addEventListener('scroll', () => {
-  const s = window.scrollY;
-  document.querySelectorAll('.house-3d').forEach((h, i) => {
-    const speed = 0.02 + i * 0.01;
-    h.style.transform = `translateY(${s * speed}px) translateZ(${40 + i * 20}px) rotateY(${i * 5}deg)`;
-  });
-});
 </script>
 
 </body>
