@@ -3,229 +3,514 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Speed2Lead AI — Instant Lead Response for Real Estate</title>
+<title>Speed2Lead AI — WhatsApp Lead Response for Realtors</title>
+<meta name="description" content="Speed2Lead AI sends a WhatsApp reply to your real estate leads within 10 seconds. Built for solo agents in Tampa who lose deals to slow follow-up.">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0a0a; color: #fff; }
-  a { text-decoration: none; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #fafafa;
+    color: #1a1a1a;
+    line-height: 1.6;
+  }
+  a { text-decoration: none; color: inherit; }
 
-  .nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; border-bottom: 1px solid #1a1a1a; }
-  .nav .logo { font-size: 1.3em; font-weight: 800; background: linear-gradient(135deg, #25D366, #128C7E); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  .nav a.cta-sm { background: #25D366; color: #000; padding: 8px 20px; border-radius: 8px; font-weight: 600; font-size: 0.9em; }
+  /* NAV */
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 32px;
+    border-bottom: 1px solid #e5e5e5;
+    background: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .nav .logo {
+    font-size: 1.15em;
+    font-weight: 700;
+    color: #1a1a1a;
+    letter-spacing: -0.3px;
+  }
+  .nav .logo span { color: #16a34a; }
+  .nav a.cta-sm {
+    background: #16a34a;
+    color: #fff;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.85em;
+  }
+  .nav a.cta-sm:hover { background: #15803d; }
 
-  .hero { text-align: center; padding: 80px 20px 60px; max-width: 800px; margin: 0 auto; }
-  .hero h1 { font-size: 3em; font-weight: 800; line-height: 1.15; margin-bottom: 20px; }
-  .hero h1 span { background: linear-gradient(135deg, #25D366, #128C7E); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  .hero p { font-size: 1.2em; color: #888; max-width: 600px; margin: 0 auto 30px; line-height: 1.6; }
-  .hero .btn-main { display: inline-block; background: linear-gradient(135deg, #25D366, #128C7E); color: #000; padding: 16px 40px; border-radius: 10px; font-size: 1.1em; font-weight: 700; }
-  .hero .btn-main:hover { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(37,211,102,0.3); }
-  .hero .sub { color: #555; font-size: 0.85em; margin-top: 12px; }
+  /* HERO */
+  .hero {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 72px 24px 48px;
+    text-align: left;
+  }
+  .hero .tag {
+    display: inline-block;
+    background: #f0fdf4;
+    color: #16a34a;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: 600;
+    margin-bottom: 16px;
+    border: 1px solid #bbf7d0;
+  }
+  .hero h1 {
+    font-size: 2.6em;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    color: #111;
+    letter-spacing: -0.5px;
+  }
+  .hero p {
+    font-size: 1.15em;
+    color: #555;
+    max-width: 540px;
+    line-height: 1.55;
+    margin-bottom: 28px;
+  }
+  .hero .btn-main {
+    display: inline-block;
+    background: #16a34a;
+    color: #fff;
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 600;
+  }
+  .hero .btn-main:hover { background: #15803d; }
+  .hero .sub {
+    color: #888;
+    font-size: 0.82em;
+    margin-top: 10px;
+  }
 
-  .proof { display: flex; justify-content: center; gap: 40px; padding: 40px 20px; border-top: 1px solid #1a1a1a; border-bottom: 1px solid #1a1a1a; }
-  .proof-item .num { font-size: 2em; font-weight: 800; color: #25D366; }
-  .proof-item .lbl { font-size: 0.8em; color: #666; margin-top: 4px; }
+  /* SOCIAL PROOF - plain, not flashy */
+  .proof {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 32px 24px;
+    border-top: 1px solid #e5e5e5;
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .proof-item { font-size: 0.88em; color: #666; }
+  .proof-item strong { color: #1a1a1a; font-weight: 700; }
 
-  .section { max-width: 900px; margin: 0 auto; padding: 60px 20px; }
-  .section h2 { font-size: 2em; text-align: center; margin-bottom: 12px; }
-  .section .sub { text-align: center; color: #666; margin-bottom: 40px; font-size: 1.05em; }
+  /* SECTION */
+  .section {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 48px 24px;
+  }
+  .section h2 {
+    font-size: 1.6em;
+    margin-bottom: 8px;
+    color: #111;
+    letter-spacing: -0.3px;
+  }
+  .section .lead {
+    color: #666;
+    margin-bottom: 28px;
+    font-size: 1em;
+  }
 
-  .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-  @media (max-width: 700px) { .features { grid-template-columns: 1fr; } }
-  .feature { background: #161616; border: 1px solid #2a2a2a; border-radius: 14px; padding: 28px; }
-  .feature .icon { font-size: 2em; margin-bottom: 12px; }
-  .feature h3 { font-size: 1.1em; margin-bottom: 8px; }
-  .feature p { font-size: 0.9em; color: #888; line-height: 1.5; }
+  /* PROBLEM SECTION - written like a person talking */
+  .problem {
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    padding: 28px;
+    margin-bottom: 16px;
+  }
+  .problem h3 {
+    font-size: 1.05em;
+    margin-bottom: 8px;
+    color: #111;
+  }
+  .problem p {
+    font-size: 0.92em;
+    color: #555;
+    line-height: 1.55;
+  }
 
-  .pricing { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-  @media (max-width: 700px) { .pricing { grid-template-columns: 1fr; } }
-  .plan { background: #161616; border: 1px solid #2a2a2a; border-radius: 14px; padding: 32px; text-align: center; position: relative; }
-  .plan.pop { border-color: #25D366; }
-  .plan.pop::before { content: 'MOST POPULAR'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #25D366; color: #000; padding: 4px 14px; border-radius: 20px; font-size: 0.7em; font-weight: 700; }
-  .plan h3 { font-size: 1.1em; margin-bottom: 8px; }
-  .plan .price { font-size: 2.5em; font-weight: 800; margin: 12px 0; }
-  .plan .price span { font-size: 0.4em; color: #666; font-weight: 400; }
-  .plan .period { color: #666; font-size: 0.85em; margin-bottom: 16px; }
-  .plan ul { list-style: none; text-align: left; margin-bottom: 24px; }
-  .plan ul li { padding: 6px 0; font-size: 0.9em; color: #aaa; }
-  .plan ul li::before { content: '✓ '; color: #25D366; font-weight: 700; }
-  .btn-plan { display: block; padding: 12px; border-radius: 8px; font-weight: 700; font-size: 0.95em; }
-  .btn-outline { border: 1px solid #333; color: #fff; }
-  .btn-outline:hover { border-color: #25D366; }
-  .btn-green { background: #25D366; color: #000; }
-  .btn-green:hover { box-shadow: 0 4px 20px rgba(37,211,102,0.3); }
+  /* HOW IT WORKS - step by step, not formulaic */
+  .steps { margin-top: 20px; }
+  .step {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    align-items: flex-start;
+  }
+  .step-num {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85em;
+    color: #16a34a;
+  }
+  .step-content h3 {
+    font-size: 1em;
+    margin-bottom: 4px;
+    color: #111;
+  }
+  .step-content p {
+    font-size: 0.9em;
+    color: #666;
+    line-height: 1.5;
+  }
 
-  .faq { max-width: 700px; margin: 0 auto; padding: 60px 20px; }
-  .faq h2 { text-align: center; margin-bottom: 30px; }
-  .faq-item { border-bottom: 1px solid #222; padding: 16px 0; }
-  .faq-item h4 { font-size: 1em; font-weight: 600; cursor: pointer; }
-  .faq-item h4::before { content: '+ '; color: #25D366; }
-  .faq-item p { font-size: 0.9em; color: #888; margin-top: 8px; line-height: 1.5; display: none; }
+  /* WHAT YOU GET - not a feature grid, more like a list */
+  .features-list {
+    list-style: none;
+    margin-top: 16px;
+  }
+  .features-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 0.92em;
+    color: #333;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .features-list li:last-child { border-bottom: none; }
+  .features-list .check {
+    color: #16a34a;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
 
-  .footer { text-align: center; padding: 40px 20px; border-top: 1px solid #1a1a1a; color: #555; font-size: 0.85em; }
+  /* PRICING - plain tables, not cards */
+  .pricing-section { margin-top: 12px; }
+  .pricing-note {
+    font-size: 0.88em;
+    color: #888;
+    margin-bottom: 20px;
+  }
+  .plan {
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .plan.highlight { border-color: #16a34a; border-width: 2px; }
+  .plan .plan-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+  }
+  .plan h3 { font-size: 1.1em; color: #111; }
+  .plan .price { font-size: 1.5em; font-weight: 800; color: #111; }
+  .plan .price span { font-size: 0.55em; color: #888; font-weight: 400; }
+  .plan .plan-desc {
+    font-size: 0.88em;
+    color: #666;
+    margin-bottom: 14px;
+  }
+  .plan ul {
+    list-style: none;
+    margin-bottom: 16px;
+  }
+  .plan ul li {
+    padding: 4px 0;
+    font-size: 0.88em;
+    color: #444;
+  }
+  .plan ul li::before {
+    content: '+ ';
+    color: #16a34a;
+    font-weight: 700;
+  }
+  .btn-plan {
+    display: inline-block;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.88em;
+    background: #16a34a;
+    color: #fff;
+  }
+  .btn-plan:hover { background: #15803d; }
+  .btn-outline {
+    background: transparent;
+    border: 1px solid #d1d5db;
+    color: #333;
+  }
+  .btn-outline:hover { border-color: #16a34a; }
+
+  /* FAQ - conversational */
+  .faq { margin-top: 12px; }
+  .faq-item {
+    border-bottom: 1px solid #f0f0f0;
+    padding: 14px 0;
+  }
+  .faq-item h4 {
+    font-size: 0.95em;
+    font-weight: 600;
+    cursor: pointer;
+    color: #111;
+  }
+  .faq-item h4::before {
+    content: '+ ';
+    color: #16a34a;
+    font-weight: 700;
+  }
+  .faq-item p {
+    font-size: 0.88em;
+    color: #666;
+    margin-top: 8px;
+    line-height: 1.5;
+    display: none;
+  }
+
+  /* CTA - simple, not pushy */
+  .cta-bottom {
+    text-align: left;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 48px 24px;
+    border-top: 1px solid #e5e5e5;
+  }
+  .cta-bottom h2 {
+    font-size: 1.5em;
+    margin-bottom: 8px;
+    color: #111;
+  }
+  .cta-bottom p {
+    color: #666;
+    margin-bottom: 20px;
+    font-size: 0.95em;
+    max-width: 480px;
+  }
+  .cta-bottom .btn-main {
+    display: inline-block;
+    background: #16a34a;
+    color: #fff;
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95em;
+  }
+  .cta-bottom .btn-main:hover { background: #15803d; }
+  .cta-bottom .alt {
+    display: inline-block;
+    margin-left: 12px;
+    color: #666;
+    font-size: 0.9em;
+  }
+  .cta-bottom .alt:hover { color: #16a34a; }
+  .cta-bottom .contact-info {
+    margin-top: 16px;
+    font-size: 0.82em;
+    color: #999;
+  }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    padding: 32px 24px;
+    border-top: 1px solid #e5e5e5;
+    color: #999;
+    font-size: 0.82em;
+  }
+
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 1.8em; }
+    .nav { padding: 12px 16px; }
+    .proof { gap: 20px; }
+  }
 </style>
 </head>
 <body>
 
 <div class="nav">
-  <div class="logo">Speed2Lead AI</div>
-  <a href="#pricing" class="cta-sm">Get Started</a>
+  <div class="logo">Speed2<span>Lead</span></div>
+  <a href="#pricing" class="cta-sm">Get started</a>
 </div>
 
 <div class="hero">
-  <h1>Your AI assistant answers every lead <span>in under 10 seconds</span></h1>
-  <p>While you sleep, your AI qualifies leads, answers questions, and books appointments directly into your calendar. Never lose a lead to slow response times again.</p>
-  <a href="#pricing" class="btn-main">Get Speed2Lead AI — Starting at $500/mo</a>
-  <div class="sub">Setup in 48 hours · No contracts · Cancel anytime</div>
+  <div class="tag">Built for Tampa real estate agents</div>
+  <h1>Your leads text at 2 AM. They get an answer in 10 seconds.</h1>
+  <p>Speed2Lead AI replies to new leads on WhatsApp before they even finish reading your listing. It qualifies them, asks the right questions, and books appointments into your calendar. You wake up to a full pipeline.</p>
+  <a href="#pricing" class="btn-main">See pricing</a>
+  <div class="sub">Setup takes about 2 days. Month-to-month, no contracts.</div>
 </div>
 
 <div class="proof">
-  <div class="proof-item"><div class="num">&lt;10s</div><div class="lbl">Response Time</div></div>
-  <div class="proof-item"><div class="num">3x</div><div class="lbl">More Appointments</div></div>
-  <div class="proof-item"><div class="num">24/7</div><div class="lbl">Always Working</div></div>
-  <div class="proof-item"><div class="num">0</div><div class="lbl">Leads Lost</div></div>
+  <div class="proof-item"><strong>10 seconds</strong> average first reply</div>
+  <div class="proof-item"><strong>24/7</strong> even on weekends and holidays</div>
+  <div class="proof-item"><strong>WhatsApp</strong> where your clients actually are</div>
 </div>
 
 <div class="section">
-  <h2>How It Works</h2>
-  <p class="sub">Three steps to never missing a lead again</p>
-  <div class="features">
-    <div class="feature">
-      <div class="icon">📱</div>
-      <h3>Lead Comes In</h3>
-      <p>A lead texts your number, fills out your website form, or messages you on Facebook at 2 AM.</p>
+  <h2>The problem</h2>
+  <p class="lead">Most leads call the first agent who responds. If that's not you, it's the agent down the street.</p>
+
+  <div class="problem">
+    <h3>The 5-minute gap</h3>
+    <p>Study after study shows that responding to a lead within 5 minutes makes you 21x more likely to qualify them. After 30 minutes, that drops to几乎 nothing. Most agents take hours. Some take days. The lead has already called three other people.</p>
+  </div>
+
+  <div class="problem">
+    <h3>You can't be everywhere</h3>
+    <p>You're at a showing. You're with clients. You're at your kid's soccer game. Meanwhile, 4 new leads came in and nobody answered. By the time you see them, they've moved on.</p>
+  </div>
+</div>
+
+<div class="section">
+  <h2>How it works</h2>
+  <p class="lead">Three steps. No technical setup on your end.</p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h3>Lead comes in</h3>
+        <p>Someone fills out your Zillow form, texts your number, or messages you on Facebook. It's 2 AM on a Saturday.</p>
+      </div>
     </div>
-    <div class="feature">
-      <div class="icon">🤖</div>
-      <h3>AI Responds Instantly</h3>
-      <p>Speed2Lead AI sends a personalized WhatsApp message in under 10 seconds, qualifying the lead and asking the right questions.</p>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h3>Speed2Lead replies on WhatsApp</h3>
+        <p>Within 10 seconds, the lead gets a personal WhatsApp message. It uses their name, references the property they asked about, and asks a qualifying question. It sounds like you, not a bot.</p>
+      </div>
     </div>
-    <div class="feature">
-      <div class="icon">📅</div>
-      <h3>Appointment Booked</h3>
-      <p>The AI books qualified leads directly into your calendar and stops following up once you've connected.</p>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h3>Appointment gets booked</h3>
+        <p>The AI qualifies the lead, asks about their timeline and budget, and books them directly into your calendar. If the question is too complex, it forwards the conversation to you immediately.</p>
+      </div>
     </div>
   </div>
 </div>
 
 <div class="section">
-  <h2>What You Get</h2>
-  <p class="sub">Everything included — no hidden fees</p>
-  <div class="features">
-    <div class="feature">
-      <div class="icon">💬</div>
-      <h3>AI WhatsApp Assistant</h3>
-      <p>Personalized responses that sound like you, not a robot. Learns your style and listing details.</p>
-    </div>
-    <div class="feature">
-      <div class="icon">🔄</div>
-      <h3>3-Touch Follow-Up</h3>
-      <p>Automated follow-ups at 24 hours, 3 days, and 7 days. Stops when the lead responds or books.</p>
-    </div>
-    <div class="feature">
-      <div class="icon">📊</div>
-      <h3>Lead Scoring (AI)</h3>
-      <p>Every lead scored HOT / WARM / COLD so you know who to call first. Prioritized in your dashboard.</p>
-    </div>
-    <div class="feature">
-      <div class="icon">📋</div>
-      <h3>CRM Integration</h3>
-      <p>Leads automatically saved to your database with full conversation history and consent records.</p>
-    </div>
-    <div class="feature">
-      <div class="icon">⚖️</div>
-      <h3>TCPA Compliant</h3>
-      <p>Opt-in/opt-out logging from day one. You're protected against compliance issues.</p>
-    </div>
-    <div class="feature">
-      <div class="icon">🔔</div>
-      <h3>Hot Lead Alerts</h3>
-      <p>Instant WhatsApp notification when a lead scores HOT. Call them before they go to another agent.</p>
-    </div>
-  </div>
+  <h2>What you get</h2>
+  <p class="lead">Everything you need. Nothing you don't.</p>
+
+  <ul class="features-list">
+    <li><span class="check">+</span> <span>WhatsApp auto-replies that sound like a real person (because we train it on your actual speaking style)</span></li>
+    <li><span class="check">+</span> <span>Lead scoring: HOT / WARM / COLD so you know who to call first</span></li>
+    <li><span class="check">+</span> <span>Follow-up sequence at 24 hours, 3 days, and 7 days (stops automatically when they reply or book)</span></li>
+    <li><span class="check">+</span> <span>Calendar booking: leads pick a time and it's on your schedule</span></li>
+    <li><span class="check">+</span> <span>TCPA-compliant opt-in/opt-out logging from day one</span></li>
+    <li><span class="check">+</span> <span>Airtable CRM integration (or your existing CRM via API)</span></li>
+    <li><span class="check">+</span> <span>Hot lead alerts: instant notification when someone scores HOT</span></li>
+  </ul>
 </div>
 
 <div class="section" id="pricing">
-  <h2>Simple Pricing</h2>
-  <p class="sub">No contracts. Cancel anytime. Setup in 48 hours.</p>
-  <div class="pricing">
-    <div class="plan">
+  <h2>Pricing</h2>
+  <p class="pricing-note">All plans are month-to-month. No contracts. Cancel whenever.</p>
+
+  <div class="plan">
+    <div class="plan-header">
       <h3>Starter</h3>
       <div class="price">$500<span>/mo</span></div>
-      <div class="period">Up to 100 leads/month</div>
-      <ul>
-        <li>AI WhatsApp responses</li>
-        <li>Lead scoring</li>
-        <li>3-touch follow-up</li>
-        <li>CRM integration</li>
-        <li>TCPA compliance</li>
-      </ul>
-      <a href="#contact" class="btn-plan btn-outline">Get Started</a>
     </div>
-    <div class="plan pop">
+    <div class="plan-desc">For solo agents getting up to 100 leads per month.</div>
+    <ul>
+      <li>WhatsApp AI responses</li>
+      <li>Lead scoring (HOT / WARM / COLD)</li>
+      <li>3-touch follow-up sequence</li>
+      <li>Airtable CRM integration</li>
+      <li>TCPA compliance logging</li>
+    </ul>
+    <a href="#contact" class="btn-plan btn-outline">Get started</a>
+  </div>
+
+  <div class="plan highlight">
+    <div class="plan-header">
       <h3>Growth</h3>
       <div class="price">$1,500<span>/mo</span></div>
-      <div class="period">Up to 500 leads/month</div>
-      <ul>
-        <li>Everything in Starter</li>
-        <li>Hot lead alerts</li>
-        <li>Calendar booking</li>
-        <li>Multi-channel (WhatsApp + SMS + Email)</li>
-        <li>Priority support</li>
-      </ul>
-      <a href="#contact" class="btn-plan btn-green">Get Started</a>
     </div>
-    <div class="plan">
+    <div class="plan-desc">For agents doing 100-500 leads per month. Most popular.</div>
+    <ul>
+      <li>Everything in Starter</li>
+      <li>Hot lead alerts (instant WhatsApp notification)</li>
+      <li>Calendar booking integration</li>
+      <li>Multi-channel: WhatsApp + SMS + Email</li>
+      <li>Priority support</li>
+    </ul>
+    <a href="#contact" class="btn-plan">Get started</a>
+  </div>
+
+  <div class="plan">
+    <div class="plan-header">
       <h3>Team</h3>
       <div class="price">$2,250<span>/mo</span></div>
-      <div class="period">Up to 1,000 leads/month</div>
-      <ul>
-        <li>Everything in Growth</li>
-        <li>Up to 5 agents</li>
-        <li>Custom AI training</li>
-        <li>Dedicated account manager</li>
-        <li>White-label option</li>
-      </ul>
-      <a href="#contact" class="btn-plan btn-outline">Get Started</a>
+    </div>
+    <div class="plan-desc">For teams of 2-5 agents. Up to 1,000 leads per month.</div>
+    <ul>
+      <li>Everything in Growth</li>
+      <li>Up to 5 agent seats</li>
+      <li>Custom AI training on your team's voice</li>
+      <li>Dedicated account manager</li>
+      <li>White-label option</li>
+    </ul>
+    <a href="#contact" class="btn-plan btn-outline">Get started</a>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Questions</h2>
+  <div class="faq">
+    <div class="faq-item" onclick="this.querySelector('p').style.display=this.querySelector('p').style.display==='block'?'none':'block'">
+      <h4>How long does setup take?</h4>
+      <p>About 2 days. We connect your WhatsApp, train the AI on your listings and speaking style, and you're live. Nothing for you to install or configure.</p>
+    </div>
+    <div class="faq-item" onclick="this.querySelector('p').style.display=this.querySelector('p').style.display==='block'?'none':'block'">
+      <h4>Do I need to change my CRM?</h4>
+      <p>No. We connect to Airtable out of the box, or we can connect to your existing CRM through an API. No migration needed.</p>
+    </div>
+    <div class="faq-item" onclick="this.querySelector('p').style.display=this.querySelector('p').style.display==='block'?'none':'block'">
+      <h4>What if the AI can't answer a question?</h4>
+      <p>It forwards the conversation to you right away. The AI knows its limits. It's good at qualifying and scheduling, but it won't try to negotiate a deal for you.</p>
+    </div>
+    <div class="faq-item" onclick="this.querySelector('p').style.display=this.querySelector('p').style.display==='block'?'none':'block'">
+      <h4>Is this compliant with real estate regulations?</h4>
+      <p>Yes. Every opt-in and opt-out is logged. All conversations are stored. We built TCPA compliance into the system from the start, not as an afterthought.</p>
+    </div>
+    <div class="faq-item" onclick="this.querySelector('p').style.display=this.querySelector('p').style.display==='block'?'none':'block'">
+      <h4>Can I try it first?</h4>
+      <p>Yes. Free 7-day trial. No credit card required. You'll see real leads getting real responses before you pay anything.</p>
     </div>
   </div>
 </div>
 
-<div class="faq">
-  <h2>FAQ</h2>
-  <div class="faq-item" onclick="this.querySelector('p').style.display=this.querySelector('p').style.display==='block'?'none':'block'">
-    <h4>How fast is the setup?</h4>
-    <p>48 hours. We connect to your WhatsApp, set up the AI, and train it on your listings. You don't need to do anything technical.</p>
+<div id="contact" class="cta-bottom">
+  <h2>Want to see it work on your leads?</h2>
+  <p>Send us a message and we'll set up a quick demo with your actual listing data. Takes about 15 minutes.</p>
+  <a href="https://wa.me/14026212519" target="_blank" class="btn-main">WhatsApp us</a>
+  <a href="https://mail.google.com/mail/?view=cm&fs=1&to=speedtoolead@gmail.com" class="alt">or email</a>
+  <div class="contact-info">
+    WhatsApp: +1 (402) 621-2519 &middot; Email: speedtoolead@gmail.com
   </div>
-  <div class="faq-item" onclick="this.querySelector('p').style.display=this.querySelector('p').style.display==='block'?'none':'block'">
-    <h4>Do I need to change my CRM?</h4>
-    <p>No. Speed2Lead AI integrates with your existing setup. We connect via API — no migration required.</p>
-  </div>
-  <div class="faq-item" onclick="this.querySelector('p').style.display=this.querySelector('p').style.display==='block'?'none':'block'">
-    <h4>What if a lead asks something the AI can't handle?</h4>
-    <p>The AI routes complex questions to you instantly. It knows when to stop and let the human take over.</p>
-  </div>
-  <div class="faq-item" onclick="this.querySelector('p').style.display=this.querySelector('p').style.display==='block'?'none':'block'">
-    <h4>Is this compliant with real estate regulations?</h4>
-    <p>Yes. We log TCPA opt-ins/opt-outs from day one. All conversations are recorded and stored for compliance.</p>
-  </div>
-  <div class="faq-item" onclick="this.querySelector('p').style.display=this.querySelector('p').style.display==='block'?'none':'block'">
-    <h4>Can I try before I buy?</h4>
-    <p>Yes. We offer a free 7-day trial. No credit card required. See real results before committing.</p>
-  </div>
-</div>
-
-<div id="contact" style="text-align:center; padding:60px 20px; border-top:1px solid #1a1a1a;">
-  <h2>Ready to Never Miss a Lead?</h2>
-  <p style="color:#888; margin:16px 0 30px;">Get started in 48 hours. No contracts. Cancel anytime.</p>
-  <div style="display:flex; justify-content:center; gap:16px; flex-wrap:wrap;">
-    <a href="https://wa.me/14026212519" target="_blank" style="display:inline-block; background:linear-gradient(135deg,#25D366,#128C7E); color:#000; padding:16px 40px; border-radius:10px; font-weight:700; font-size:1.1em;">WhatsApp Us</a>
-    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=speedtoolead@gmail.com" target="_blank" style="display:inline-block; background:#222; color:#fff; padding:16px 40px; border-radius:10px; font-weight:700; font-size:1.1em; border:1px solid #333;">Email Us</a>
-  </div>
-  <p style="color:#555; font-size:0.85em; margin-top:16px;">WhatsApp: +1 (402) 621-2519 · Email: <a href="https://mail.google.com/mail/?view=cm&fs=1&to=speedtoolead@gmail.com" target="_blank" style="color:#25D366;">speedtoolead@gmail.com</a></p>
 </div>
 
 <div class="footer">
-  Speed2Lead AI &copy; 2026 &mdash; Powered by Gemini 2.5 Flash &amp; n8n
+  Speed2Lead AI &copy; 2026 &middot; Tampa, FL
 </div>
 
 </body>
