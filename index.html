@@ -5,513 +5,950 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Speed2Lead AI — WhatsApp Lead Response for Realtors</title>
 <meta name="description" content="Speed2Lead AI sends a WhatsApp reply to your real estate leads within 10 seconds. Built for solo agents in Tampa who lose deals to slow follow-up.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --green: #16a34a;
+    --green-dim: #15803d;
+    --dark: #0a0a0a;
+    --dark-card: #111111;
+    --dark-surface: #1a1a1a;
+    --border: rgba(255,255,255,0.06);
+    --text: #e5e5e5;
+    --text-dim: #888;
+    --glass: rgba(255,255,255,0.03);
+  }
+  html { scroll-behavior: smooth; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: #fafafa;
-    color: #1a1a1a;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--dark);
+    color: var(--text);
     line-height: 1.6;
+    overflow-x: hidden;
   }
   a { text-decoration: none; color: inherit; }
+
+  /* ===== 3D SCENE ===== */
+  .scene-3d {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    perspective: 1200px;
+    overflow: hidden;
+  }
+
+  /* Floating house silhouettes */
+  .house-3d {
+    position: absolute;
+    transform-style: preserve-3d;
+    opacity: 0.06;
+    animation: float3d 20s ease-in-out infinite;
+  }
+  .house-3d svg { width: 100%; height: 100%; }
+  .house-3d:nth-child(1) { width: 180px; top: 8%; left: 5%; animation-delay: 0s; animation-duration: 22s; }
+  .house-3d:nth-child(2) { width: 120px; top: 15%; right: 8%; animation-delay: -4s; animation-duration: 18s; }
+  .house-3d:nth-child(3) { width: 200px; bottom: 20%; left: 12%; animation-delay: -8s; animation-duration: 25s; }
+  .house-3d:nth-child(4) { width: 100px; bottom: 30%; right: 15%; animation-delay: -12s; animation-duration: 20s; }
+  .house-3d:nth-child(5) { width: 160px; top: 50%; left: 50%; animation-delay: -6s; animation-duration: 28s; }
+
+  @keyframes float3d {
+    0%, 100% { transform: translateZ(0) rotateY(0deg) rotateX(0deg); }
+    25% { transform: translateZ(40px) rotateY(8deg) rotateX(-3deg); }
+    50% { transform: translateZ(20px) rotateY(-5deg) rotateX(5deg); }
+    75% { transform: translateZ(60px) rotateY(3deg) rotateX(-2deg); }
+  }
+
+  /* Grid overlay */
+  .grid-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+  }
+
+  /* Glow orb */
+  .glow-orb {
+    position: fixed;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(22,163,74,0.08) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+    top: 20%; left: 30%;
+    animation: orbFloat 15s ease-in-out infinite;
+  }
+  @keyframes orbFloat {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(60px, -40px); }
+  }
+
+  /* ===== CONTENT ===== */
+  .content { position: relative; z-index: 1; }
 
   /* NAV */
   .nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 32px;
-    border-bottom: 1px solid #e5e5e5;
-    background: #fff;
+    padding: 18px 40px;
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    background: rgba(10,10,10,0.7);
     position: sticky;
     top: 0;
-    z-index: 10;
+    z-index: 100;
   }
   .nav .logo {
-    font-size: 1.15em;
-    font-weight: 700;
-    color: #1a1a1a;
-    letter-spacing: -0.3px;
+    font-size: 1.2em;
+    font-weight: 800;
+    letter-spacing: -0.5px;
   }
-  .nav .logo span { color: #16a34a; }
+  .nav .logo span { color: var(--green); }
   .nav a.cta-sm {
-    background: #16a34a;
+    background: var(--green);
     color: #fff;
-    padding: 8px 18px;
-    border-radius: 6px;
+    padding: 9px 20px;
+    border-radius: 8px;
     font-weight: 600;
     font-size: 0.85em;
+    transition: all 0.2s;
   }
-  .nav a.cta-sm:hover { background: #15803d; }
+  .nav a.cta-sm:hover { background: var(--green-dim); transform: translateY(-1px); }
 
   /* HERO */
   .hero {
-    max-width: 720px;
+    max-width: 900px;
     margin: 0 auto;
-    padding: 72px 24px 48px;
+    padding: 100px 32px 60px;
     text-align: left;
+    position: relative;
   }
-  .hero .tag {
-    display: inline-block;
-    background: #f0fdf4;
-    color: #16a34a;
-    padding: 4px 12px;
-    border-radius: 4px;
-    font-size: 0.8em;
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(22,163,74,0.1);
+    color: var(--green);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.78em;
     font-weight: 600;
-    margin-bottom: 16px;
-    border: 1px solid #bbf7d0;
+    margin-bottom: 24px;
+    border: 1px solid rgba(22,163,74,0.2);
+    backdrop-filter: blur(10px);
+    animation: fadeSlideUp 0.6s ease both;
   }
+  .hero-tag .dot {
+    width: 6px; height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
   .hero h1 {
-    font-size: 2.6em;
-    font-weight: 800;
-    line-height: 1.1;
-    margin-bottom: 16px;
-    color: #111;
-    letter-spacing: -0.5px;
+    font-size: 3.5em;
+    font-weight: 900;
+    line-height: 1.05;
+    margin-bottom: 20px;
+    letter-spacing: -1.5px;
+    animation: fadeSlideUp 0.6s ease 0.1s both;
+  }
+  .hero h1 .highlight {
+    background: linear-gradient(135deg, var(--green) 0%, #4ade80 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
   .hero p {
     font-size: 1.15em;
-    color: #555;
-    max-width: 540px;
-    line-height: 1.55;
-    margin-bottom: 28px;
+    color: var(--text-dim);
+    max-width: 520px;
+    line-height: 1.6;
+    margin-bottom: 32px;
+    animation: fadeSlideUp 0.6s ease 0.2s both;
   }
-  .hero .btn-main {
-    display: inline-block;
-    background: #16a34a;
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    animation: fadeSlideUp 0.6s ease 0.3s both;
+  }
+  .btn-main {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--green);
     color: #fff;
     padding: 14px 32px;
-    border-radius: 8px;
+    border-radius: 10px;
     font-size: 1em;
-    font-weight: 600;
+    font-weight: 700;
+    transition: all 0.25s;
+    box-shadow: 0 0 30px rgba(22,163,74,0.3);
   }
-  .hero .btn-main:hover { background: #15803d; }
-  .hero .sub {
-    color: #888;
-    font-size: 0.82em;
-    margin-top: 10px;
+  .btn-main:hover { background: var(--green-dim); transform: translateY(-2px); box-shadow: 0 0 50px rgba(22,163,74,0.4); }
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.95em;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    transition: all 0.25s;
+    backdrop-filter: blur(10px);
+  }
+  .btn-ghost:hover { border-color: var(--green); color: var(--text); }
+  .hero-sub {
+    color: #555;
+    font-size: 0.8em;
+    margin-top: 14px;
+    animation: fadeSlideUp 0.6s ease 0.4s both;
   }
 
-  /* SOCIAL PROOF - plain, not flashy */
-  .proof {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 32px 24px;
-    border-top: 1px solid #e5e5e5;
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* STATS BAR */
+  .stats-bar {
     display: flex;
-    gap: 32px;
+    justify-content: center;
+    gap: 48px;
+    padding: 40px 32px;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: rgba(255,255,255,0.01);
     flex-wrap: wrap;
   }
-  .proof-item { font-size: 0.88em; color: #666; }
-  .proof-item strong { color: #1a1a1a; font-weight: 700; }
+  .stat { text-align: center; }
+  .stat .num {
+    font-size: 2.2em;
+    font-weight: 900;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, #fff 0%, #aaa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .stat .label { font-size: 0.82em; color: var(--text-dim); margin-top: 4px; }
 
-  /* SECTION */
-  .section {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 48px 24px;
-  }
-  .section h2 {
-    font-size: 1.6em;
-    margin-bottom: 8px;
-    color: #111;
-    letter-spacing: -0.3px;
-  }
-  .section .lead {
-    color: #666;
-    margin-bottom: 28px;
-    font-size: 1em;
-  }
-
-  /* PROBLEM SECTION - written like a person talking */
-  .problem {
-    background: #fff;
-    border: 1px solid #e5e5e5;
-    border-radius: 10px;
-    padding: 28px;
-    margin-bottom: 16px;
-  }
-  .problem h3 {
-    font-size: 1.05em;
-    margin-bottom: 8px;
-    color: #111;
-  }
-  .problem p {
-    font-size: 0.92em;
-    color: #555;
-    line-height: 1.55;
-  }
-
-  /* HOW IT WORKS - step by step, not formulaic */
-  .steps { margin-top: 20px; }
-  .step {
+  /* 3D PHONE MOCKUP */
+  .phone-scene {
     display: flex;
-    gap: 16px;
-    margin-bottom: 24px;
-    align-items: flex-start;
+    justify-content: center;
+    padding: 80px 32px;
+    perspective: 1000px;
   }
-  .step-num {
-    flex-shrink: 0;
-    width: 32px;
-    height: 32px;
-    background: #f0fdf4;
-    border: 1px solid #bbf7d0;
+  .phone-3d {
+    width: 280px;
+    position: relative;
+    transform: rotateY(-8deg) rotateX(4deg);
+    transform-style: preserve-3d;
+    animation: phoneFloat 6s ease-in-out infinite;
+    transition: transform 0.4s ease;
+  }
+  .phone-3d:hover { transform: rotateY(0deg) rotateX(0deg) scale(1.02); }
+  @keyframes phoneFloat {
+    0%, 100% { transform: rotateY(-8deg) rotateX(4deg) translateZ(0); }
+    50% { transform: rotateY(-5deg) rotateX(2deg) translateZ(20px); }
+  }
+  .phone-frame {
+    background: #1a1a1a;
+    border-radius: 32px;
+    border: 2px solid #333;
+    padding: 12px;
+    box-shadow:
+      0 25px 60px rgba(0,0,0,0.5),
+      0 0 100px rgba(22,163,74,0.05),
+      inset 0 1px 0 rgba(255,255,255,0.05);
+    transform: translateZ(20px);
+  }
+  .phone-screen {
+    background: #0f0f0f;
+    border-radius: 22px;
+    overflow: hidden;
+    min-height: 480px;
+  }
+  .phone-header {
+    background: #1a1a1a;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #222;
+  }
+  .phone-avatar {
+    width: 32px; height: 32px;
+    background: var(--green);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 700;
-    font-size: 0.85em;
-    color: #16a34a;
-  }
-  .step-content h3 {
-    font-size: 1em;
-    margin-bottom: 4px;
-    color: #111;
-  }
-  .step-content p {
-    font-size: 0.9em;
-    color: #666;
-    line-height: 1.5;
-  }
-
-  /* WHAT YOU GET - not a feature grid, more like a list */
-  .features-list {
-    list-style: none;
-    margin-top: 16px;
-  }
-  .features-list li {
-    padding: 10px 0;
-    border-bottom: 1px solid #f0f0f0;
-    font-size: 0.92em;
-    color: #333;
-    display: flex;
-    gap: 10px;
-    align-items: flex-start;
-  }
-  .features-list li:last-child { border-bottom: none; }
-  .features-list .check {
-    color: #16a34a;
-    font-weight: 700;
-    flex-shrink: 0;
-  }
-
-  /* PRICING - plain tables, not cards */
-  .pricing-section { margin-top: 12px; }
-  .pricing-note {
-    font-size: 0.88em;
-    color: #888;
-    margin-bottom: 20px;
-  }
-  .plan {
-    background: #fff;
-    border: 1px solid #e5e5e5;
-    border-radius: 10px;
-    padding: 24px;
-    margin-bottom: 16px;
-  }
-  .plan.highlight { border-color: #16a34a; border-width: 2px; }
-  .plan .plan-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 12px;
-  }
-  .plan h3 { font-size: 1.1em; color: #111; }
-  .plan .price { font-size: 1.5em; font-weight: 800; color: #111; }
-  .plan .price span { font-size: 0.55em; color: #888; font-weight: 400; }
-  .plan .plan-desc {
-    font-size: 0.88em;
-    color: #666;
-    margin-bottom: 14px;
-  }
-  .plan ul {
-    list-style: none;
-    margin-bottom: 16px;
-  }
-  .plan ul li {
-    padding: 4px 0;
-    font-size: 0.88em;
-    color: #444;
-  }
-  .plan ul li::before {
-    content: '+ ';
-    color: #16a34a;
-    font-weight: 700;
-  }
-  .btn-plan {
-    display: inline-block;
-    padding: 10px 24px;
-    border-radius: 6px;
-    font-weight: 600;
-    font-size: 0.88em;
-    background: #16a34a;
+    font-weight: 800;
+    font-size: 0.7em;
     color: #fff;
   }
-  .btn-plan:hover { background: #15803d; }
-  .btn-outline {
-    background: transparent;
-    border: 1px solid #d1d5db;
-    color: #333;
+  .phone-name { font-weight: 600; font-size: 0.88em; }
+  .phone-status { font-size: 0.7em; color: var(--green); }
+  .phone-body { padding: 16px; }
+  .wa-bubble {
+    background: #1f3a1f;
+    border-radius: 12px 12px 12px 0;
+    padding: 12px 14px;
+    font-size: 0.82em;
+    line-height: 1.55;
+    color: #ddd;
+    max-width: 90%;
+    transform: translateZ(10px);
   }
-  .btn-outline:hover { border-color: #16a34a; }
+  .wa-time {
+    text-align: right;
+    font-size: 0.65em;
+    color: #555;
+    margin-top: 4px;
+  }
+  .phone-shadow {
+    position: absolute;
+    bottom: -40px;
+    left: 10%;
+    width: 80%;
+    height: 40px;
+    background: radial-gradient(ellipse, rgba(22,163,74,0.15) 0%, transparent 70%);
+    filter: blur(15px);
+    transform: translateZ(-10px);
+  }
 
-  /* FAQ - conversational */
-  .faq { margin-top: 12px; }
-  .faq-item {
-    border-bottom: 1px solid #f0f0f0;
-    padding: 14px 0;
+  /* SECTION */
+  .section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 80px 32px;
   }
+  .section-label {
+    display: inline-block;
+    font-size: 0.75em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--green);
+    margin-bottom: 12px;
+  }
+  .section h2 {
+    font-size: 2.4em;
+    font-weight: 800;
+    margin-bottom: 12px;
+    letter-spacing: -0.8px;
+    line-height: 1.15;
+  }
+  .section .lead {
+    color: var(--text-dim);
+    font-size: 1.05em;
+    max-width: 560px;
+    line-height: 1.6;
+    margin-bottom: 40px;
+  }
+
+  /* PROBLEM CARDS - 3D tilt */
+  .problem-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 700px) { .problem-grid { grid-template-columns: 1fr; } }
+  .problem-card {
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    transition: all 0.35s ease;
+    transform-style: preserve-3d;
+    perspective: 800px;
+    cursor: default;
+  }
+  .problem-card:hover {
+    border-color: rgba(22,163,74,0.3);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 60px rgba(22,163,74,0.05);
+  }
+  .problem-card .icon {
+    width: 48px; height: 48px;
+    background: rgba(22,163,74,0.1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    font-size: 1.4em;
+  }
+  .problem-card h3 { font-size: 1.05em; font-weight: 700; margin-bottom: 8px; }
+  .problem-card p { font-size: 0.88em; color: var(--text-dim); line-height: 1.55; }
+
+  /* HOW IT WORKS - 3D timeline */
+  .steps-3d { position: relative; padding-left: 40px; }
+  .steps-3d::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--green), rgba(22,163,74,0.1));
+  }
+  .step-3d {
+    position: relative;
+    margin-bottom: 40px;
+    padding: 24px;
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    transition: all 0.3s ease;
+    transform-style: preserve-3d;
+  }
+  .step-3d:hover {
+    border-color: rgba(22,163,74,0.3);
+    transform: translateX(4px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  }
+  .step-3d::before {
+    content: '';
+    position: absolute;
+    left: -33px;
+    top: 28px;
+    width: 14px;
+    height: 14px;
+    background: var(--green);
+    border-radius: 50%;
+    border: 3px solid var(--dark);
+    box-shadow: 0 0 15px rgba(22,163,74,0.4);
+  }
+  .step-3d .step-num {
+    font-size: 0.7em;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--green);
+    margin-bottom: 8px;
+  }
+  .step-3d h3 { font-size: 1.1em; font-weight: 700; margin-bottom: 6px; }
+  .step-3d p { font-size: 0.9em; color: var(--text-dim); line-height: 1.55; }
+
+  /* FEATURES - glass grid */
+  .features-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  @media (max-width: 700px) { .features-grid { grid-template-columns: 1fr; } }
+  .feature-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 18px;
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: all 0.25s;
+  }
+  .feature-item:hover {
+    border-color: rgba(22,163,74,0.2);
+    background: rgba(22,163,74,0.03);
+  }
+  .feature-icon {
+    width: 36px; height: 36px;
+    background: rgba(22,163,74,0.1);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--green);
+    font-weight: 800;
+    font-size: 0.9em;
+  }
+  .feature-text { font-size: 0.9em; line-height: 1.5; }
+
+  /* PRICING - 3D cards */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    perspective: 1200px;
+  }
+  @media (max-width: 800px) { .pricing-grid { grid-template-columns: 1fr; } }
+  .price-card {
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 32px 28px;
+    transition: all 0.4s ease;
+    transform-style: preserve-3d;
+    position: relative;
+  }
+  .price-card:hover {
+    transform: translateY(-8px) rotateX(2deg);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.4), 0 0 80px rgba(22,163,74,0.08);
+  }
+  .price-card.featured {
+    border-color: var(--green);
+    background: rgba(22,163,74,0.05);
+  }
+  .price-card.featured::before {
+    content: 'MOST POPULAR';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--green);
+    color: #fff;
+    padding: 3px 14px;
+    border-radius: 12px;
+    font-size: 0.65em;
+    font-weight: 800;
+    letter-spacing: 1px;
+  }
+  .price-card h3 {
+    font-size: 1.1em;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .price-card .price {
+    font-size: 2.6em;
+    font-weight: 900;
+    letter-spacing: -1px;
+    margin: 12px 0;
+  }
+  .price-card .price span { font-size: 0.4em; color: var(--text-dim); font-weight: 400; }
+  .price-card .desc {
+    font-size: 0.85em;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+  }
+  .price-card ul { list-style: none; margin-bottom: 24px; }
+  .price-card ul li {
+    padding: 5px 0;
+    font-size: 0.85em;
+    color: #bbb;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .price-card ul li::before {
+    content: '';
+    width: 5px; height: 5px;
+    background: var(--green);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .btn-price {
+    display: block;
+    text-align: center;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.9em;
+    transition: all 0.2s;
+  }
+  .btn-price.primary { background: var(--green); color: #fff; }
+  .btn-price.primary:hover { background: var(--green-dim); }
+  .btn-price.outline { border: 1px solid var(--border); color: var(--text); }
+  .btn-price.outline:hover { border-color: var(--green); }
+
+  /* FAQ */
+  .faq-list { max-width: 640px; }
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+    padding: 18px 0;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .faq-item:hover { padding-left: 4px; }
   .faq-item h4 {
     font-size: 0.95em;
     font-weight: 600;
-    cursor: pointer;
-    color: #111;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
-  .faq-item h4::before {
-    content: '+ ';
-    color: #16a34a;
+  .faq-item h4::after {
+    content: '+';
+    color: var(--green);
     font-weight: 700;
+    font-size: 1.2em;
+    transition: transform 0.2s;
   }
+  .faq-item.open h4::after { transform: rotate(45deg); }
   .faq-item p {
     font-size: 0.88em;
-    color: #666;
-    margin-top: 8px;
-    line-height: 1.5;
+    color: var(--text-dim);
+    margin-top: 10px;
+    line-height: 1.55;
     display: none;
   }
+  .faq-item.open p { display: block; }
 
-  /* CTA - simple, not pushy */
-  .cta-bottom {
-    text-align: left;
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 48px 24px;
-    border-top: 1px solid #e5e5e5;
+  /* CTA */
+  .cta-section {
+    text-align: center;
+    padding: 100px 32px;
+    position: relative;
   }
-  .cta-bottom h2 {
-    font-size: 1.5em;
-    margin-bottom: 8px;
-    color: #111;
+  .cta-section h2 {
+    font-size: 2.4em;
+    font-weight: 900;
+    margin-bottom: 12px;
+    letter-spacing: -0.8px;
   }
-  .cta-bottom p {
-    color: #666;
-    margin-bottom: 20px;
-    font-size: 0.95em;
+  .cta-section p {
+    color: var(--text-dim);
+    font-size: 1.05em;
+    margin-bottom: 32px;
     max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
   }
-  .cta-bottom .btn-main {
-    display: inline-block;
-    background: #16a34a;
-    color: #fff;
-    padding: 12px 28px;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 0.95em;
-  }
-  .cta-bottom .btn-main:hover { background: #15803d; }
-  .cta-bottom .alt {
-    display: inline-block;
-    margin-left: 12px;
-    color: #666;
-    font-size: 0.9em;
-  }
-  .cta-bottom .alt:hover { color: #16a34a; }
-  .cta-bottom .contact-info {
+  .cta-section .contact-line {
     margin-top: 16px;
     font-size: 0.82em;
-    color: #999;
+    color: #555;
   }
 
   /* FOOTER */
   .footer {
     text-align: center;
-    padding: 32px 24px;
-    border-top: 1px solid #e5e5e5;
-    color: #999;
-    font-size: 0.82em;
+    padding: 32px;
+    border-top: 1px solid var(--border);
+    color: #444;
+    font-size: 0.8em;
+  }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   @media (max-width: 600px) {
-    .hero h1 { font-size: 1.8em; }
-    .nav { padding: 12px 16px; }
-    .proof { gap: 20px; }
+    .hero h1 { font-size: 2.2em; }
+    .nav { padding: 14px 16px; }
+    .stats-bar { gap: 24px; }
+    .stat .num { font-size: 1.6em; }
+    .phone-3d { width: 240px; }
   }
 </style>
 </head>
 <body>
+
+<!-- 3D Background Scene -->
+<div class="scene-3d">
+  <div class="house-3d">
+    <svg viewBox="0 0 200 180" fill="none"><path d="M100 10L190 80V170H110V120H90V170H10V80L100 10Z" stroke="white" stroke-width="2"/><rect x="120" y="90" width="30" height="30" rx="2" stroke="white" stroke-width="1.5"/><rect x="50" y="90" width="30" height="30" rx="2" stroke="white" stroke-width="1.5"/></svg>
+  </div>
+  <div class="house-3d">
+    <svg viewBox="0 0 200 180" fill="none"><path d="M100 10L190 80V170H110V120H90V170H10V80L100 10Z" stroke="white" stroke-width="2"/><rect x="120" y="90" width="30" height="30" rx="2" stroke="white" stroke-width="1.5"/><rect x="50" y="90" width="30" height="30" rx="2" stroke="white" stroke-width="1.5"/></svg>
+  </div>
+  <div class="house-3d">
+    <svg viewBox="0 0 200 180" fill="none"><path d="M100 10L190 80V170H110V120H90V170H10V80L100 10Z" stroke="white" stroke-width="2"/><rect x="120" y="90" width="30" height="30" rx="2" stroke="white" stroke-width="1.5"/><rect x="50" y="90" width="30" height="30" rx="2" stroke="white" stroke-width="1.5"/></svg>
+  </div>
+  <div class="house-3d">
+    <svg viewBox="0 0 200 180" fill="none"><path d="M100 10L190 80V170H110V120H90V170H10V80L100 10Z" stroke="white" stroke-width="2"/><rect x="120" y="90" width="30" height="30" rx="2" stroke="white" stroke-width="1.5"/><rect x="50" y="90" width="30" height="30" rx="2" stroke="white" stroke-width="1.5"/></svg>
+  </div>
+  <div class="house-3d">
+    <svg viewBox="0 0 200 180" fill="none"><path d="M100 10L190 80V170H110V120H90V170H10V80L100 10Z" stroke="white" stroke-width="2"/><rect x="120" y="90" width="30" height="30" rx="2" stroke="white" stroke-width="1.5"/><rect x="50" y="90" width="30" height="30" rx="2" stroke="white" stroke-width="1.5"/></svg>
+  </div>
+</div>
+<div class="grid-overlay"></div>
+<div class="glow-orb"></div>
+
+<div class="content">
 
 <div class="nav">
   <div class="logo">Speed2<span>Lead</span></div>
   <a href="#pricing" class="cta-sm">Get started</a>
 </div>
 
+<!-- HERO -->
 <div class="hero">
-  <div class="tag">Built for Tampa real estate agents</div>
-  <h1>Your leads text at 2 AM. They get an answer in 10 seconds.</h1>
-  <p>Speed2Lead AI replies to new leads on WhatsApp before they even finish reading your listing. It qualifies them, asks the right questions, and books appointments into your calendar. You wake up to a full pipeline.</p>
-  <a href="#pricing" class="btn-main">See pricing</a>
-  <div class="sub">Setup takes about 2 days. Month-to-month, no contracts.</div>
-</div>
-
-<div class="proof">
-  <div class="proof-item"><strong>10 seconds</strong> average first reply</div>
-  <div class="proof-item"><strong>24/7</strong> even on weekends and holidays</div>
-  <div class="proof-item"><strong>WhatsApp</strong> where your clients actually are</div>
-</div>
-
-<div class="section">
-  <h2>The problem</h2>
-  <p class="lead">Most leads call the first agent who responds. If that's not you, it's the agent down the street.</p>
-
-  <div class="problem">
-    <h3>The 5-minute gap</h3>
-    <p>Study after study shows that responding to a lead within 5 minutes makes you 21x more likely to qualify them. After 30 minutes, that drops to几乎 nothing. Most agents take hours. Some take days. The lead has already called three other people.</p>
+  <div class="hero-tag"><span class="dot"></span> Built for Tampa real estate agents</div>
+  <h1>Your leads text at <span class="highlight">2 AM.</span><br>They get an answer in <span class="highlight">10 seconds.</span></h1>
+  <p>Speed2Lead AI replies to new leads on WhatsApp before they even finish reading your listing. Qualifies them, asks the right questions, and books appointments into your calendar.</p>
+  <div class="hero-actions">
+    <a href="#pricing" class="btn-main">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+      See pricing
+    </a>
+    <a href="speed2lead-demo.html" class="btn-ghost">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5,3 19,12 5,21"/></svg>
+      Try live demo
+    </a>
   </div>
-
-  <div class="problem">
-    <h3>You can't be everywhere</h3>
-    <p>You're at a showing. You're with clients. You're at your kid's soccer game. Meanwhile, 4 new leads came in and nobody answered. By the time you see them, they've moved on.</p>
-  </div>
+  <div class="hero-sub">Setup takes about 2 days. Month-to-month. No contracts.</div>
 </div>
 
-<div class="section">
-  <h2>How it works</h2>
-  <p class="lead">Three steps. No technical setup on your end.</p>
+<!-- STATS -->
+<div class="stats-bar reveal">
+  <div class="stat"><div class="num">10s</div><div class="label">Average first reply</div></div>
+  <div class="stat"><div class="num">24/7</div><div class="label">Even on weekends</div></div>
+  <div class="stat"><div class="num">60s</div><div class="label">Lead qualified</div></div>
+  <div class="stat"><div class="num">$0</div><div class="label">Setup cost</div></div>
+</div>
 
-  <div class="steps">
-    <div class="step">
-      <div class="step-num">1</div>
-      <div class="step-content">
-        <h3>Lead comes in</h3>
-        <p>Someone fills out your Zillow form, texts your number, or messages you on Facebook. It's 2 AM on a Saturday.</p>
+<!-- 3D PHONE MOCKUP -->
+<div class="phone-scene reveal">
+  <div class="phone-3d" id="phone3d">
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <div class="phone-header">
+          <div class="phone-avatar">S2L</div>
+          <div>
+            <div class="phone-name">Speed2Lead AI</div>
+            <div class="phone-status">online</div>
+          </div>
+        </div>
+        <div class="phone-body">
+          <div class="wa-bubble">Hey Sarah! I saw your interest in waterfront homes in South Tampa under $800K.
+
+Good timing — I have a 3BR/2BA in Ballast Point that just came on the market. $749K, private dock, no bridges to the bay.
+
+Want me to send details?</div>
+          <div class="wa-time">2:03 AM ✓✓</div>
+        </div>
       </div>
     </div>
-    <div class="step">
-      <div class="step-num">2</div>
-      <div class="step-content">
-        <h3>Speed2Lead replies on WhatsApp</h3>
-        <p>Within 10 seconds, the lead gets a personal WhatsApp message. It uses their name, references the property they asked about, and asks a qualifying question. It sounds like you, not a bot.</p>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-num">3</div>
-      <div class="step-content">
-        <h3>Appointment gets booked</h3>
-        <p>The AI qualifies the lead, asks about their timeline and budget, and books them directly into your calendar. If the question is too complex, it forwards the conversation to you immediately.</p>
-      </div>
-    </div>
+    <div class="phone-shadow"></div>
   </div>
 </div>
 
-<div class="section">
-  <h2>What you get</h2>
-  <p class="lead">Everything you need. Nothing you don't.</p>
+<!-- PROBLEM -->
+<div class="section reveal">
+  <div class="section-label">The problem</div>
+  <h2>Most leads call the first agent who responds</h2>
+  <p class="lead">If that's not you, it's the agent down the street. Every minute you're慢 is a listing someone else closes.</p>
 
-  <ul class="features-list">
-    <li><span class="check">+</span> <span>WhatsApp auto-replies that sound like a real person (because we train it on your actual speaking style)</span></li>
-    <li><span class="check">+</span> <span>Lead scoring: HOT / WARM / COLD so you know who to call first</span></li>
-    <li><span class="check">+</span> <span>Follow-up sequence at 24 hours, 3 days, and 7 days (stops automatically when they reply or book)</span></li>
-    <li><span class="check">+</span> <span>Calendar booking: leads pick a time and it's on your schedule</span></li>
-    <li><span class="check">+</span> <span>TCPA-compliant opt-in/opt-out logging from day one</span></li>
-    <li><span class="check">+</span> <span>Airtable CRM integration (or your existing CRM via API)</span></li>
-    <li><span class="check">+</span> <span>Hot lead alerts: instant notification when someone scores HOT</span></li>
-  </ul>
+  <div class="problem-grid">
+    <div class="problem-card">
+      <div class="icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+      </div>
+      <h3>The 5-minute gap</h3>
+      <p>Respond within 5 minutes and you're 21x more likely to qualify a lead. After 30 minutes, it drops to almost nothing. Most agents take hours.</p>
+    </div>
+    <div class="problem-card">
+      <div class="icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+      </div>
+      <h3>You can't be everywhere</h3>
+      <p>You're at a showing. With clients. At your kid's game. Meanwhile, 4 leads came in and nobody answered. By the time you see them, they've moved on.</p>
+    </div>
+  </div>
 </div>
 
+<!-- HOW IT WORKS -->
+<div class="section reveal">
+  <div class="section-label">How it works</div>
+  <h2>Three steps. No technical setup.</h2>
+
+  <div class="steps-3d">
+    <div class="step-3d">
+      <div class="step-num">Step 01</div>
+      <h3>Lead comes in</h3>
+      <p>Someone fills out your Zillow form, texts your number, or messages you on Facebook. It's 2 AM on a Saturday.</p>
+    </div>
+    <div class="step-3d">
+      <div class="step-num">Step 02</div>
+      <h3>Speed2Lead replies on WhatsApp</h3>
+      <p>Within 10 seconds, the lead gets a personal WhatsApp message. Uses their name, references the property, and asks a qualifying question. Sounds like you, not a bot.</p>
+    </div>
+    <div class="step-3d">
+      <div class="step-num">Step 03</div>
+      <h3>Appointment gets booked</h3>
+      <p>The AI qualifies the lead, asks about timeline and budget, and books them directly into your calendar. Complex questions get forwarded to you immediately.</p>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<div class="section reveal">
+  <div class="section-label">What you get</div>
+  <h2>Everything you need. Nothing you don't.</h2>
+
+  <div class="features-grid">
+    <div class="feature-item">
+      <div class="feature-icon">→</div>
+      <div class="feature-text">WhatsApp auto-replies that sound like a real person. Trained on your actual speaking style.</div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">↑</div>
+      <div class="feature-text">Lead scoring: HOT / WARM / COLD so you know who to call first.</div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">↻</div>
+      <div class="feature-text">Follow-up sequence at 24h, 3 days, and 7 days. Stops when they reply or book.</div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">◉</div>
+      <div class="feature-text">Calendar booking: leads pick a time and it's on your schedule.</div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">✓</div>
+      <div class="feature-text">TCPA-compliant opt-in/opt-out logging from day one.</div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">↗</div>
+      <div class="feature-text">Airtable CRM integration or your existing CRM via API.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRICING -->
 <div class="section" id="pricing">
-  <h2>Pricing</h2>
-  <p class="pricing-note">All plans are month-to-month. No contracts. Cancel whenever.</p>
+  <div class="section-label">Pricing</div>
+  <h2>Month-to-month. No contracts.</h2>
 
-  <div class="plan">
-    <div class="plan-header">
+  <div class="pricing-grid reveal">
+    <div class="price-card">
       <h3>Starter</h3>
       <div class="price">$500<span>/mo</span></div>
+      <div class="desc">For solo agents up to 100 leads/month.</div>
+      <ul>
+        <li>WhatsApp AI responses</li>
+        <li>Lead scoring (HOT / WARM / COLD)</li>
+        <li>3-touch follow-up sequence</li>
+        <li>Airtable CRM integration</li>
+        <li>TCPA compliance logging</li>
+      </ul>
+      <a href="#contact" class="btn-price outline">Get started</a>
     </div>
-    <div class="plan-desc">For solo agents getting up to 100 leads per month.</div>
-    <ul>
-      <li>WhatsApp AI responses</li>
-      <li>Lead scoring (HOT / WARM / COLD)</li>
-      <li>3-touch follow-up sequence</li>
-      <li>Airtable CRM integration</li>
-      <li>TCPA compliance logging</li>
-    </ul>
-    <a href="#contact" class="btn-plan btn-outline">Get started</a>
-  </div>
 
-  <div class="plan highlight">
-    <div class="plan-header">
+    <div class="price-card featured">
       <h3>Growth</h3>
       <div class="price">$1,500<span>/mo</span></div>
+      <div class="desc">For agents doing 100-500 leads/month.</div>
+      <ul>
+        <li>Everything in Starter</li>
+        <li>Hot lead alerts</li>
+        <li>Calendar booking integration</li>
+        <li>WhatsApp + SMS + Email</li>
+        <li>Priority support</li>
+      </ul>
+      <a href="#contact" class="btn-price primary">Get started</a>
     </div>
-    <div class="plan-desc">For agents doing 100-500 leads per month. Most popular.</div>
-    <ul>
-      <li>Everything in Starter</li>
-      <li>Hot lead alerts (instant WhatsApp notification)</li>
-      <li>Calendar booking integration</li>
-      <li>Multi-channel: WhatsApp + SMS + Email</li>
-      <li>Priority support</li>
-    </ul>
-    <a href="#contact" class="btn-plan">Get started</a>
-  </div>
 
-  <div class="plan">
-    <div class="plan-header">
+    <div class="price-card">
       <h3>Team</h3>
       <div class="price">$2,250<span>/mo</span></div>
+      <div class="desc">For teams of 2-5 agents. Up to 1,000 leads.</div>
+      <ul>
+        <li>Everything in Growth</li>
+        <li>Up to 5 agent seats</li>
+        <li>Custom AI voice training</li>
+        <li>Dedicated account manager</li>
+        <li>White-label option</li>
+      </ul>
+      <a href="#contact" class="btn-price outline">Get started</a>
     </div>
-    <div class="plan-desc">For teams of 2-5 agents. Up to 1,000 leads per month.</div>
-    <ul>
-      <li>Everything in Growth</li>
-      <li>Up to 5 agent seats</li>
-      <li>Custom AI training on your team's voice</li>
-      <li>Dedicated account manager</li>
-      <li>White-label option</li>
-    </ul>
-    <a href="#contact" class="btn-plan btn-outline">Get started</a>
   </div>
 </div>
 
-<div class="section">
-  <h2>Questions</h2>
-  <div class="faq">
-    <div class="faq-item" onclick="this.querySelector('p').style.display=this.querySelector('p').style.display==='block'?'none':'block'">
+<!-- FAQ -->
+<div class="section reveal">
+  <div class="section-label">Questions</div>
+  <h2>FAQ</h2>
+
+  <div class="faq-list">
+    <div class="faq-item" onclick="this.classList.toggle('open')">
       <h4>How long does setup take?</h4>
-      <p>About 2 days. We connect your WhatsApp, train the AI on your listings and speaking style, and you're live. Nothing for you to install or configure.</p>
+      <p>About 2 days. We connect your WhatsApp, train the AI on your listings and speaking style, and you're live. Nothing for you to install.</p>
     </div>
-    <div class="faq-item" onclick="this.querySelector('p').style.display=this.querySelector('p').style.display==='block'?'none':'block'">
+    <div class="faq-item" onclick="this.classList.toggle('open')">
       <h4>Do I need to change my CRM?</h4>
-      <p>No. We connect to Airtable out of the box, or we can connect to your existing CRM through an API. No migration needed.</p>
+      <p>No. We connect to Airtable out of the box, or your existing CRM through an API. No migration needed.</p>
     </div>
-    <div class="faq-item" onclick="this.querySelector('p').style.display=this.querySelector('p').style.display==='block'?'none':'block'">
+    <div class="faq-item" onclick="this.classList.toggle('open')">
       <h4>What if the AI can't answer a question?</h4>
-      <p>It forwards the conversation to you right away. The AI knows its limits. It's good at qualifying and scheduling, but it won't try to negotiate a deal for you.</p>
+      <p>It forwards the conversation to you right away. The AI knows its limits — good at qualifying and scheduling, won't negotiate a deal for you.</p>
     </div>
-    <div class="faq-item" onclick="this.querySelector('p').style.display=this.querySelector('p').style.display==='block'?'none':'block'">
+    <div class="faq-item" onclick="this.classList.toggle('open')">
       <h4>Is this compliant with real estate regulations?</h4>
-      <p>Yes. Every opt-in and opt-out is logged. All conversations are stored. We built TCPA compliance into the system from the start, not as an afterthought.</p>
+      <p>Yes. Every opt-in and opt-out is logged. All conversations stored. TCPA compliance built in from the start, not an afterthought.</p>
     </div>
-    <div class="faq-item" onclick="this.querySelector('p').style.display=this.querySelector('p').style.display==='block'?'none':'block'">
+    <div class="faq-item" onclick="this.classList.toggle('open')">
       <h4>Can I try it first?</h4>
-      <p>Yes. Free 7-day trial. No credit card required. You'll see real leads getting real responses before you pay anything.</p>
+      <p>Yes. Free 7-day trial. No credit card. You'll see real leads getting real responses before you pay anything.</p>
     </div>
   </div>
 </div>
 
-<div id="contact" class="cta-bottom">
+<!-- CTA -->
+<div class="cta-section reveal">
   <h2>Want to see it work on your leads?</h2>
   <p>Send us a message and we'll set up a quick demo with your actual listing data. Takes about 15 minutes.</p>
-  <a href="https://wa.me/14026212519" target="_blank" class="btn-main">WhatsApp us</a>
-  <a href="https://mail.google.com/mail/?view=cm&fs=1&to=speedtoolead@gmail.com" class="alt">or email</a>
-  <div class="contact-info">
-    WhatsApp: +1 (402) 621-2519 &middot; Email: speedtoolead@gmail.com
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+    <a href="https://wa.me/14026212519" target="_blank" class="btn-main">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      WhatsApp us
+    </a>
+    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=speedtoolead@gmail.com" class="btn-ghost">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      or email
+    </a>
   </div>
+  <div class="contact-line">WhatsApp: +1 (402) 621-2519 &middot; Email: speedtoolead@gmail.com</div>
 </div>
 
 <div class="footer">
   Speed2Lead AI &copy; 2026 &middot; Tampa, FL
 </div>
+
+</div>
+
+<script>
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// 3D phone tilt on mouse
+const phone = document.getElementById('phone3d');
+if (phone) {
+  document.addEventListener('mousemove', (e) => {
+    const x = (e.clientX / window.innerWidth - 0.5) * 12;
+    const y = (e.clientY / window.innerHeight - 0.5) * 8;
+    phone.style.transform = `rotateY(${-8 + x}deg) rotateX(${4 - y}deg)`;
+  });
+}
+
+// Parallax houses on scroll
+window.addEventListener('scroll', () => {
+  const s = window.scrollY;
+  document.querySelectorAll('.house-3d').forEach((h, i) => {
+    const speed = 0.02 + i * 0.01;
+    h.style.transform = `translateY(${s * speed}px) translateZ(${40 + i * 20}px) rotateY(${i * 5}deg)`;
+  });
+});
+</script>
 
 </body>
 </html>
