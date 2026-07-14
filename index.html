@@ -5,38 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Speed2Lead AI — WhatsApp Lead Response for Realtors</title>
 <meta name="description" content="Speed2Lead AI sends a WhatsApp reply to your real estate leads within 10 seconds. Built for solo agents in Tampa who lose deals to slow follow-up.">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
-  :root{
-    --cream:#f5f0e8;--warm:#e8ddd0;--gold:#c9a84c;--gold-dim:#b8963f;
-    --brown:#2c1810;--brown-light:#5a3d2b;--brown-muted:#8b7355;
-    --dark:#1a1208;--text:#3d2e1f;--text-light:#7a6b5a;
-    --white:#faf8f5;--card:rgba(255,255,252,0.8);
-    --border:rgba(139,115,85,0.12);
-  }
   html{scroll-behavior:smooth}
-  body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--text);line-height:1.6;overflow-x:hidden}
+  body{font-family:'Inter',sans-serif;background:#fff;color:#000;line-height:1.6;overflow-x:hidden}
   a{text-decoration:none;color:inherit}
-
-  /* THREE.JS */
-  #scene3d{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0}
-  .content{position:relative;z-index:1}
 
   /* NAV */
   .nav{
     display:flex;justify-content:space-between;align-items:center;
-    padding:20px 48px;border-bottom:1px solid var(--border);
-    backdrop-filter:blur(30px);background:rgba(245,240,232,0.8);
-    position:sticky;top:0;z-index:100;
+    padding:20px 48px;border-bottom:1px solid #e5e5e5;
+    position:sticky;top:0;z-index:100;background:#fff;
   }
-  .nav .logo{font-family:'Playfair Display',serif;font-size:1.3em;font-weight:700;color:var(--brown);letter-spacing:-0.5px}
-  .nav .logo span{color:var(--gold)}
+  .nav .logo{font-size:1.2em;font-weight:800;color:#000;letter-spacing:-0.5px}
+  .nav .logo span{font-weight:400;color:#666}
   .nav a.cta-sm{
-    background:var(--brown);color:var(--cream);padding:10px 24px;border-radius:6px;
-    font-weight:600;font-size:0.85em;transition:all 0.25s;letter-spacing:0.3px;
+    font-weight:600;font-size:0.85em;color:#000;
+    transition:opacity 0.2s;
   }
-  .nav a.cta-sm:hover{background:var(--gold);color:var(--white);transform:translateY(-1px)}
+  .nav a.cta-sm:hover{opacity:0.6}
 
   /* HERO */
   .hero{
@@ -48,35 +36,31 @@
   .hero-text{animation:fadeUp 0.7s ease both}
   .hero-tag{
     display:inline-flex;align-items:center;gap:8px;
-    background:rgba(201,168,76,0.1);color:var(--gold-dim);
-    padding:6px 16px;border-radius:20px;font-size:0.75em;font-weight:600;
-    margin-bottom:24px;border:1px solid rgba(201,168,76,0.2);letter-spacing:0.5px;
+    font-size:0.72em;font-weight:600;color:#666;
+    margin-bottom:24px;letter-spacing:1px;text-transform:uppercase;
   }
-  .hero-tag .dot{width:6px;height:6px;background:var(--gold);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+  .hero-tag .dot{width:6px;height:6px;background:#000;border-radius:50%;animation:pulse 2s ease-in-out infinite}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
   .hero h1{
-    font-family:'Playfair Display',serif;
     font-size:3.6em;font-weight:800;line-height:1.08;margin-bottom:20px;
-    color:var(--brown);letter-spacing:-1px;
+    color:#000;letter-spacing:-1.5px;
   }
-  .hero h1 .hl{color:var(--gold)}
-  .hero p{font-size:1.1em;color:var(--text-light);max-width:480px;line-height:1.65;margin-bottom:32px}
+  .hero p{font-size:1.05em;color:#666;max-width:480px;line-height:1.65;margin-bottom:32px}
   .hero-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
   .btn-main{
     display:inline-flex;align-items:center;gap:8px;
-    background:var(--brown);color:var(--cream);padding:15px 36px;border-radius:6px;
-    font-size:0.95em;font-weight:600;transition:all 0.3s;letter-spacing:0.3px;
-    box-shadow:0 4px 20px rgba(44,24,16,0.15);
+    background:#000;color:#fff;padding:15px 36px;
+    font-size:0.95em;font-weight:600;transition:all 0.3s;
   }
-  .btn-main:hover{background:var(--gold);color:var(--white);transform:translateY(-2px);box-shadow:0 8px 30px rgba(201,168,76,0.25)}
+  .btn-main:hover{background:#333}
   .btn-ghost{
     display:inline-flex;align-items:center;gap:8px;
-    padding:15px 28px;border-radius:6px;font-weight:600;font-size:0.9em;
-    border:1px solid var(--border);color:var(--brown-muted);transition:all 0.3s;
-    background:var(--card);
+    padding:15px 28px;font-weight:600;font-size:0.9em;
+    border:1px solid #ddd;color:#666;transition:all 0.3s;
+    background:transparent;
   }
-  .btn-ghost:hover{border-color:var(--gold);color:var(--brown)}
-  .hero-sub{color:var(--brown-muted);font-size:0.8em;margin-top:14px;font-style:italic}
+  .btn-ghost:hover{border-color:#000;color:#000}
+  .hero-sub{color:#999;font-size:0.8em;margin-top:14px}
   @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 
   /* PHONE MOCKUP */
@@ -92,156 +76,146 @@
     50%{transform:rotateY(-5deg) rotateX(2deg) translateZ(20px)}
   }
   .phone-frame{
-    background:var(--white);border-radius:36px;border:2px solid var(--warm);
+    background:#fff;border-radius:36px;border:2px solid #e5e5e5;
     padding:14px;
-    box-shadow:0 30px 80px rgba(44,24,16,0.12),0 0 60px rgba(201,168,76,0.06),
-    inset 0 1px 0 rgba(255,255,255,0.8);
+    box-shadow:0 30px 80px rgba(0,0,0,0.08);
     transform:translateZ(20px);
   }
-  .phone-screen{background:#f0ebe3;border-radius:24px;overflow:hidden;min-height:480px}
+  .phone-screen{background:#fafafa;border-radius:24px;overflow:hidden;min-height:480px}
   .phone-header{
-    background:var(--white);padding:16px;border-bottom:1px solid var(--warm);
+    background:#fff;padding:16px;border-bottom:1px solid #e5e5e5;
     display:flex;align-items:center;gap:10px;
   }
   .phone-avatar{
-    width:34px;height:34px;background:var(--gold);border-radius:50%;
+    width:34px;height:34px;background:#000;border-radius:50%;
     display:flex;align-items:center;justify-content:center;
-    font-weight:800;font-size:0.7em;color:var(--white);
+    font-weight:800;font-size:0.7em;color:#fff;
   }
-  .phone-name{font-weight:600;font-size:0.88em;color:var(--brown)}
-  .phone-status{font-size:0.7em;color:var(--gold-dim)}
+  .phone-name{font-weight:600;font-size:0.88em;color:#000}
+  .phone-status{font-size:0.7em;color:#666}
   .phone-body{padding:18px}
   .wa-bubble-3d{
-    background:var(--white);border:1px solid var(--warm);
+    background:#fff;border:1px solid #e5e5e5;
     border-radius:14px 14px 14px 2px;padding:14px 16px;
-    font-size:0.82em;line-height:1.55;color:var(--text);
-    box-shadow:0 2px 8px rgba(44,24,16,0.05);
+    font-size:0.82em;line-height:1.55;color:#000;
   }
-  .wa-time-3d{text-align:right;font-size:0.65em;color:var(--brown-muted);margin-top:4px}
+  .wa-time-3d{text-align:right;font-size:0.65em;color:#999;margin-top:4px}
   .phone-shadow{
     position:absolute;bottom:-40px;left:10%;width:80%;height:40px;
-    background:radial-gradient(ellipse,rgba(44,24,16,0.08) 0%,transparent 70%);
+    background:radial-gradient(ellipse,rgba(0,0,0,0.06) 0%,transparent 70%);
     filter:blur(15px);transform:translateZ(-10px);
   }
 
   /* STATS */
   .stats-bar{
     display:flex;justify-content:center;gap:56px;padding:48px;
-    border-top:1px solid var(--border);border-bottom:1px solid var(--border);
-    background:var(--card);flex-wrap:wrap;
+    border-top:1px solid #e5e5e5;border-bottom:1px solid #e5e5e5;
+    background:#000;color:#fff;flex-wrap:wrap;
   }
   .stat{text-align:center}
-  .stat .num{font-family:'Playfair Display',serif;font-size:2.4em;font-weight:800;color:var(--brown)}
-  .stat .label{font-size:0.82em;color:var(--brown-muted);margin-top:4px}
+  .stat .num{font-size:2.4em;font-weight:800;letter-spacing:-1px}
+  .stat .label{font-size:0.82em;color:#999;margin-top:4px}
 
   /* SECTIONS */
   .section{max-width:1100px;margin:0 auto;padding:96px 48px}
   .section-label{
     display:inline-block;font-size:0.72em;font-weight:700;
-    text-transform:uppercase;letter-spacing:3px;color:var(--gold);margin-bottom:12px;
+    text-transform:uppercase;letter-spacing:3px;color:#999;margin-bottom:12px;
   }
   .section h2{
-    font-family:'Playfair Display',serif;font-size:2.6em;font-weight:800;
-    margin-bottom:12px;letter-spacing:-0.5px;line-height:1.15;color:var(--brown);
+    font-size:2.6em;font-weight:800;
+    margin-bottom:12px;letter-spacing:-0.5px;line-height:1.15;color:#000;
   }
-  .section .lead{color:var(--text-light);font-size:1.05em;max-width:560px;line-height:1.65;margin-bottom:40px}
+  .section .lead{color:#666;font-size:1.05em;max-width:560px;line-height:1.65;margin-bottom:40px}
 
   /* PROBLEM */
-  .problem-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .problem-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#e5e5e5;border:1px solid #e5e5e5}
   @media(max-width:700px){.problem-grid{grid-template-columns:1fr}}
   .problem-card{
-    background:var(--card);border:1px solid var(--border);border-radius:14px;
-    padding:32px;transition:all 0.35s ease;
+    background:#fff;padding:36px;
   }
-  .problem-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(44,24,16,0.08)}
-  .problem-card .icon{
-    width:48px;height:48px;background:rgba(201,168,76,0.1);border-radius:10px;
-    display:flex;align-items:center;justify-content:center;margin-bottom:18px;
-  }
-  .problem-card h3{font-family:'Playfair Display',serif;font-size:1.1em;font-weight:700;margin-bottom:8px;color:var(--brown)}
-  .problem-card p{font-size:0.9em;color:var(--text-light);line-height:1.6}
+  .problem-card h3{font-size:1.1em;font-weight:700;margin-bottom:8px;color:#000}
+  .problem-card p{font-size:0.9em;color:#666;line-height:1.6}
 
   /* STEPS */
-  .steps-3d{position:relative;padding-left:44px}
-  .steps-3d::before{
-    content:'';position:absolute;left:16px;top:0;bottom:0;width:2px;
-    background:linear-gradient(to bottom,var(--gold),rgba(201,168,76,0.1));
+  .steps-list{position:relative;padding-left:24px}
+  .steps-list::before{
+    content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:#e5e5e5;
   }
-  .step-3d{
-    position:relative;margin-bottom:36px;padding:28px;
-    background:var(--card);border:1px solid var(--border);border-radius:14px;
-    transition:all 0.3s ease;
+  .step-item{
+    position:relative;margin-bottom:36px;padding-left:24px;
   }
-  .step-3d:hover{transform:translateX(4px);box-shadow:0 10px 30px rgba(44,24,16,0.06)}
-  .step-3d::before{
-    content:'';position:absolute;left:-36px;top:32px;width:12px;height:12px;
-    background:var(--gold);border-radius:50%;border:3px solid var(--cream);
-    box-shadow:0 0 12px rgba(201,168,76,0.3);
+  .step-item::before{
+    content:'';position:absolute;left:-28px;top:6px;width:8px;height:8px;
+    background:#000;border-radius:50%;
   }
-  .step-3d .step-num{font-size:0.68em;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--gold);margin-bottom:8px}
-  .step-3d h3{font-family:'Playfair Display',serif;font-size:1.1em;font-weight:700;margin-bottom:6px;color:var(--brown)}
-  .step-3d p{font-size:0.9em;color:var(--text-light);line-height:1.6}
+  .step-item .step-num{font-size:0.68em;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#999;margin-bottom:8px}
+  .step-item h3{font-size:1.1em;font-weight:700;margin-bottom:6px;color:#000}
+  .step-item p{font-size:0.9em;color:#666;line-height:1.6}
 
   /* FEATURES */
-  .features-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .features-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#e5e5e5;border:1px solid #e5e5e5}
   @media(max-width:700px){.features-grid{grid-template-columns:1fr}}
   .feature-item{
-    display:flex;gap:14px;align-items:flex-start;padding:20px;
-    background:var(--card);border:1px solid var(--border);border-radius:12px;
-    transition:all 0.25s;
+    display:flex;gap:14px;align-items:flex-start;padding:24px;
+    background:#fff;
   }
-  .feature-item:hover{border-color:rgba(201,168,76,0.3);background:rgba(201,168,76,0.03)}
   .feature-icon{
-    width:36px;height:36px;background:rgba(201,168,76,0.1);border-radius:8px;
+    width:32px;height:32px;border:1px solid #e5e5e5;
     display:flex;align-items:center;justify-content:center;flex-shrink:0;
-    color:var(--gold);font-weight:800;font-size:0.85em;
+    font-weight:800;font-size:0.75em;color:#000;
   }
-  .feature-text{font-size:0.9em;line-height:1.55;color:var(--text)}
+  .feature-text{font-size:0.88em;line-height:1.55;color:#333}
 
   /* PRICING */
-  .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;perspective:1200px}
+  .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#e5e5e5;border:1px solid #e5e5e5}
   @media(max-width:868px){.pricing-grid{grid-template-columns:1fr}}
   .price-card{
-    background:var(--card);border:1px solid var(--border);border-radius:16px;
-    padding:36px 32px;transition:all 0.4s ease;position:relative;
+    background:#fff;padding:36px 32px;position:relative;
   }
-  .price-card:hover{transform:translateY(-8px);box-shadow:0 24px 60px rgba(44,24,16,0.1)}
-  .price-card.featured{border-color:var(--gold);background:rgba(201,168,76,0.04)}
+  .price-card.featured{background:#000;color:#fff}
   .price-card.featured::before{
-    content:'MOST POPULAR';position:absolute;top:-10px;left:50%;transform:translateX(-50%);
-    background:var(--gold);color:var(--white);padding:4px 16px;border-radius:10px;
-    font-size:0.62em;font-weight:800;letter-spacing:1px;
+    content:'MOST POPULAR';position:absolute;top:16px;right:16px;
+    border:1px solid #fff;padding:3px 10px;
+    font-size:0.58em;font-weight:700;letter-spacing:1px;color:#fff;
   }
-  .price-card h3{font-family:'Playfair Display',serif;font-size:1.15em;font-weight:700;color:var(--brown)}
-  .price-card .price{font-family:'Playfair Display',serif;font-size:2.8em;font-weight:900;letter-spacing:-1px;margin:14px 0;color:var(--brown)}
-  .price-card .price span{font-size:0.38em;color:var(--brown-muted);font-weight:400}
-  .price-card .desc{font-size:0.85em;color:var(--text-light);margin-bottom:22px}
+  .price-card h3{font-size:1.15em;font-weight:700;color:inherit}
+  .price-card .price{font-size:2.8em;font-weight:900;letter-spacing:-2px;margin:14px 0}
+  .price-card .price span{font-size:0.38em;color:#999;font-weight:400}
+  .price-card.featured .price span{color:#666}
+  .price-card .desc{font-size:0.85em;color:#666;margin-bottom:22px}
+  .price-card.featured .desc{color:#999}
   .price-card ul{list-style:none;margin-bottom:28px}
-  .price-card ul li{padding:5px 0;font-size:0.85em;color:var(--text);display:flex;gap:8px;align-items:center}
-  .price-card ul li::before{content:'';width:5px;height:5px;background:var(--gold);border-radius:50%;flex-shrink:0}
-  .btn-price{display:block;text-align:center;padding:13px;border-radius:6px;font-weight:700;font-size:0.88em;transition:all 0.25s;letter-spacing:0.3px}
-  .btn-price.primary{background:var(--brown);color:var(--cream)}
-  .btn-price.primary:hover{background:var(--gold);color:var(--white)}
-  .btn-price.outline{border:1px solid var(--border);color:var(--brown);background:transparent}
-  .btn-price.outline:hover{border-color:var(--gold);color:var(--brown)}
+  .price-card ul li{padding:5px 0;font-size:0.85em;color:inherit;display:flex;gap:8px;align-items:center}
+  .price-card ul li::before{content:'—';color:#ccc;font-weight:400}
+  .price-card.featured ul li::before{color:#666}
+  .btn-price{display:block;text-align:center;padding:13px;font-weight:700;font-size:0.88em;transition:all 0.25s;border:1px solid #e5e5e5}
+  .btn-price.primary{background:#000;color:#fff;border-color:#000}
+  .btn-price.primary:hover{background:#333}
+  .btn-price.outline{background:transparent;color:#000;border-color:#e5e5e5}
+  .btn-price.outline:hover{border-color:#000}
 
   /* FAQ */
   .faq-list{max-width:640px}
-  .faq-item{border-bottom:1px solid var(--border);padding:18px 0;cursor:pointer;transition:all 0.2s}
+  .faq-item{border-bottom:1px solid #e5e5e5;padding:18px 0;cursor:pointer;transition:all 0.2s}
   .faq-item:hover{padding-left:4px}
-  .faq-item h4{font-size:0.95em;font-weight:600;display:flex;justify-content:space-between;align-items:center;color:var(--brown)}
-  .faq-item h4::after{content:'+';color:var(--gold);font-weight:700;font-size:1.2em;transition:transform 0.2s}
+  .faq-item h4{font-size:0.95em;font-weight:600;display:flex;justify-content:space-between;align-items:center;color:#000}
+  .faq-item h4::after{content:'+';color:#999;font-weight:700;font-size:1.2em;transition:transform 0.2s}
   .faq-item.open h4::after{transform:rotate(45deg)}
-  .faq-item p{font-size:0.88em;color:var(--text-light);margin-top:10px;line-height:1.6;display:none}
+  .faq-item p{font-size:0.88em;color:#666;margin-top:10px;line-height:1.6;display:none}
   .faq-item.open p{display:block}
 
   /* CTA */
-  .cta-section{text-align:center;padding:100px 48px}
-  .cta-section h2{font-family:'Playfair Display',serif;font-size:2.6em;font-weight:900;margin-bottom:12px;color:var(--brown)}
-  .cta-section p{color:var(--text-light);font-size:1.05em;margin-bottom:32px;max-width:480px;margin-left:auto;margin-right:auto}
-  .cta-section .contact-line{margin-top:16px;font-size:0.82em;color:var(--brown-muted)}
+  .cta-section{text-align:center;padding:100px 48px;background:#000;color:#fff}
+  .cta-section h2{font-size:2.6em;font-weight:900;margin-bottom:12px}
+  .cta-section p{color:#999;font-size:1.05em;margin-bottom:32px;max-width:480px;margin-left:auto;margin-right:auto}
+  .cta-section .contact-line{margin-top:16px;font-size:0.82em;color:#666}
+  .cta-section .btn-main{background:#fff;color:#000}
+  .cta-section .btn-main:hover{background:#e5e5e5}
+  .cta-section .btn-ghost{border-color:#333;color:#999}
+  .cta-section .btn-ghost:hover{border-color:#fff;color:#fff}
 
-  .footer{text-align:center;padding:36px;border-top:1px solid var(--border);color:var(--brown-muted);font-size:0.8em}
+  .footer{text-align:center;padding:36px;border-top:1px solid #e5e5e5;color:#999;font-size:0.8em}
 
   .reveal{opacity:0;transform:translateY(30px);transition:all 0.7s cubic-bezier(0.16,1,0.3,1)}
   .reveal.visible{opacity:1;transform:translateY(0)}
@@ -255,23 +229,19 @@
 </head>
 <body>
 
-<canvas id="scene3d"></canvas>
-
-<div class="content">
-
 <div class="nav">
   <div class="logo">Speed2<span>Lead</span></div>
-  <a href="#pricing" class="cta-sm">Get started</a>
+  <a href="#pricing" class="cta-sm">Get started →</a>
 </div>
 
 <div class="hero">
   <div class="hero-text">
     <div class="hero-tag"><span class="dot"></span> Built for Tampa real estate agents</div>
-    <h1>Your leads text at <span class="hl">2 AM.</span><br>They get an answer in <span class="hl">10 seconds.</span></h1>
+    <h1>Your leads text at 2 AM. They get an answer in 10 seconds.</h1>
     <p>Speed2Lead AI replies to new leads on WhatsApp before they even finish reading your listing. Qualifies them, asks the right questions, and books appointments into your calendar.</p>
     <div class="hero-actions">
       <a href="#pricing" class="btn-main">See pricing</a>
-      <a href="speed2lead-demo.html" class="btn-ghost">Try live demo</a>
+      <a href="speed2lead-demo.html" class="btn-ghost">Try live demo →</a>
     </div>
     <div class="hero-sub">Setup takes about 2 days. Month-to-month. No contracts.</div>
   </div>
@@ -314,12 +284,10 @@ Want me to send details?</div>
   <p class="lead">If that's not you, it's the agent down the street. Every minute you're slow is a listing someone else closes.</p>
   <div class="problem-grid">
     <div class="problem-card">
-      <div class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg></div>
       <h3>The 5-minute gap</h3>
       <p>Respond within 5 minutes and you're 21x more likely to qualify a lead. After 30 minutes, it drops to almost nothing. Most agents take hours.</p>
     </div>
     <div class="problem-card">
-      <div class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg></div>
       <h3>You can't be everywhere</h3>
       <p>You're at a showing. With clients. At your kid's game. Meanwhile, 4 leads came in and nobody answered. By the time you see them, they've moved on.</p>
     </div>
@@ -329,10 +297,10 @@ Want me to send details?</div>
 <div class="section reveal">
   <div class="section-label">How it works</div>
   <h2>Three steps. No technical setup.</h2>
-  <div class="steps-3d">
-    <div class="step-3d"><div class="step-num">Step 01</div><h3>Lead comes in</h3><p>Someone fills out your Zillow form, texts your number, or messages you on Facebook. It's 2 AM on a Saturday.</p></div>
-    <div class="step-3d"><div class="step-num">Step 02</div><h3>Speed2Lead replies on WhatsApp</h3><p>Within 10 seconds, the lead gets a personal WhatsApp message. Uses their name, references the property, and asks a qualifying question.</p></div>
-    <div class="step-3d"><div class="step-num">Step 03</div><h3>Appointment gets booked</h3><p>The AI qualifies the lead, asks about timeline and budget, and books them directly into your calendar.</p></div>
+  <div class="steps-list">
+    <div class="step-item"><div class="step-num">Step 01</div><h3>Lead comes in</h3><p>Someone fills out your Zillow form, texts your number, or messages you on Facebook. It's 2 AM on a Saturday.</p></div>
+    <div class="step-item"><div class="step-num">Step 02</div><h3>Speed2Lead replies on WhatsApp</h3><p>Within 10 seconds, the lead gets a personal WhatsApp message. Uses their name, references the property, and asks a qualifying question.</p></div>
+    <div class="step-item"><div class="step-num">Step 03</div><h3>Appointment gets booked</h3><p>The AI qualifies the lead, asks about timeline and budget, and books them directly into your calendar.</p></div>
   </div>
 </div>
 
@@ -382,356 +350,37 @@ Want me to send details?</div>
     <div class="faq-item" onclick="this.classList.toggle('open')"><h4>Do I need to change my CRM?</h4><p>No. We connect to Airtable out of the box, or your existing CRM through an API.</p></div>
     <div class="faq-item" onclick="this.classList.toggle('open')"><h4>What if the AI can't answer a question?</h4><p>It forwards the conversation to you right away. The AI knows its limits.</p></div>
     <div class="faq-item" onclick="this.classList.toggle('open')"><h4>Is this compliant with real estate regulations?</h4><p>Yes. Every opt-in and opt-out is logged. All conversations stored. TCPA compliance built in from the start.</p></div>
-    <div class="faq-item" onclick="this.classList.toggle('open')"><h4>Can I try it first?</h4><p>Yes. Free 7-day trial. No credit card. You'll see real leads getting real responses before you pay anything.</p></div>
+    <div class="faq-item" onclick="this.classList.toggle('open')"><h4>Can I try it first?</h4><p>Yes. Send us your listing data and we'll build a free demo in 15 minutes.</p></div>
   </div>
 </div>
 
-<div class="cta-section reveal">
+<div class="cta-section reveal" id="contact">
   <h2>Want to see it work on your leads?</h2>
   <p>Send us a message and we'll set up a quick demo with your actual listing data. Takes about 15 minutes.</p>
   <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
     <a href="https://wa.me/14026212519" target="_blank" class="btn-main">WhatsApp us</a>
     <a href="https://mail.google.com/mail/?view=cm&fs=1&to=speedtoolead@gmail.com" class="btn-ghost">or email</a>
   </div>
-  <div class="contact-line">WhatsApp: +1 (402) 621-2519 &middot; Email: speedtoolead@gmail.com</div>
+  <div class="contact-line">WhatsApp: +1 (402) 621-2519 · Email: speedtoolead@gmail.com</div>
 </div>
 
-<div class="footer">Speed2Lead AI &copy; 2026 &middot; Tampa, FL</div>
+<div class="footer">© 2026 Speed2Lead AI · Tampa, FL</div>
 
-</div>
+<script>
+  // Phone mouse tilt
+  const phone = document.getElementById('phone3d');
+  document.addEventListener('mousemove', (e) => {
+    if (!phone) return;
+    const x = (e.clientX / window.innerWidth - 0.5) * 2;
+    const y = (e.clientY / window.innerHeight - 0.5) * 2;
+    phone.style.transform = `rotateY(${-8 + x * 12}deg) rotateX(${4 - y * 8}deg)`;
+  });
 
-<script type="importmap">
-{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js" } }
-</script>
-<script type="module">
-import * as THREE from 'three';
-
-const canvas = document.getElementById('scene3d');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 0.9;
-
-const scene = new THREE.Scene();
-scene.fog = new THREE.FogExp2(0xf5f0e8, 0.006);
-
-const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 500);
-camera.position.set(0, 8, 28);
-camera.lookAt(0, 3, 0);
-
-// Warm lighting
-scene.add(new THREE.AmbientLight(0xfff5e6, 0.6));
-const sunLight = new THREE.DirectionalLight(0xffeedd, 0.8);
-sunLight.position.set(10, 20, 10);
-sunLight.castShadow = true;
-sunLight.shadow.mapSize.set(2048, 2048);
-scene.add(sunLight);
-const warmFill = new THREE.PointLight(0xc9a84c, 0.6, 60);
-warmFill.position.set(-8, 6, 5);
-scene.add(warmFill);
-
-// Materials — warm, realistic
-const matWall = new THREE.MeshStandardMaterial({ color: 0xf0e6d6, roughness: 0.85, metalness: 0.0 });
-const matWallDark = new THREE.MeshStandardMaterial({ color: 0xd4c4a8, roughness: 0.8, metalness: 0.0 });
-const matRoof = new THREE.MeshStandardMaterial({ color: 0x8b4513, roughness: 0.7, metalness: 0.0 });
-const matStone = new THREE.MeshStandardMaterial({ color: 0xb8a88a, roughness: 0.9, metalness: 0.0 });
-const matWood = new THREE.MeshStandardMaterial({ color: 0x6b4226, roughness: 0.75, metalness: 0.0 });
-const matGlass = new THREE.MeshPhysicalMaterial({ color: 0xddeeff, roughness: 0.05, metalness: 0.1, transparent: true, opacity: 0.25, envMapIntensity: 0.5 });
-const matGold = new THREE.MeshStandardMaterial({ color: 0xc9a84c, roughness: 0.3, metalness: 0.6 });
-const matPool = new THREE.MeshPhysicalMaterial({ color: 0x66bbaa, roughness: 0.0, metalness: 0.1, transparent: true, opacity: 0.6 });
-const matGrass = new THREE.MeshStandardMaterial({ color: 0x7a9a5a, roughness: 0.9, metalness: 0.0 });
-const matGround = new THREE.MeshStandardMaterial({ color: 0xe8ddd0, roughness: 0.9, metalness: 0.0 });
-const matPalm = new THREE.MeshStandardMaterial({ color: 0x5a3d2b, roughness: 0.85, metalness: 0.0 });
-const matLeaf = new THREE.MeshStandardMaterial({ color: 0x4a7a3a, roughness: 0.7, metalness: 0.0 });
-
-// Ground
-const ground = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), matGround);
-ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true;
-scene.add(ground);
-
-// Grass patch around villa
-const grass = new THREE.Mesh(new THREE.PlaneGeometry(30, 20), matGrass);
-grass.rotation.x = -Math.PI / 2; grass.position.set(0, 0.02, 5);
-scene.add(grass);
-
-// ===== LUXURY VILLA (realistic) =====
-const villa = new THREE.Group();
-
-// Main body — wide, low luxury
-const mainBody = new THREE.Mesh(new THREE.BoxGeometry(10, 3.2, 7), matWall);
-mainBody.position.y = 1.6; mainBody.castShadow = true; mainBody.receiveShadow = true;
-villa.add(mainBody);
-
-// Roof — terracotta hip roof
-const roofBase = new THREE.Mesh(new THREE.BoxGeometry(11, 0.3, 8), matRoof);
-roofBase.position.y = 3.35;
-villa.add(roofBase);
-
-// Roof slopes (4 sides)
-const roofSlopeF = new THREE.Mesh(new THREE.BoxGeometry(11, 0.15, 2), matRoof);
-roofSlopeF.position.set(0, 3.7, 3); roofSlopeF.rotation.x = -0.5;
-villa.add(roofSlopeF);
-const roofSlopeB = new THREE.Mesh(new THREE.BoxGeometry(11, 0.15, 2), matRoof);
-roofSlopeB.position.set(0, 3.7, -3); roofSlopeB.rotation.x = 0.5;
-villa.add(roofSlopeB);
-
-// Second floor (set back)
-const upper = new THREE.Mesh(new THREE.BoxGeometry(6, 2.8, 5), matWall);
-upper.position.set(1, 4.75, 0); upper.castShadow = true;
-villa.add(upper);
-
-const upperRoof = new THREE.Mesh(new THREE.BoxGeometry(6.6, 0.25, 5.6), matRoof);
-upperRoof.position.y = 6.3;
-villa.add(upperRoof);
-
-// Stone accent wall (front)
-const stoneWall = new THREE.Mesh(new THREE.BoxGeometry(10.1, 3.2, 0.3), matStone);
-stoneWall.position.set(0, 1.6, 3.65);
-villa.add(stoneWall);
-
-// Large windows (warm glass)
-for (let i = 0; i < 4; i++) {
-  const win = new THREE.Mesh(new THREE.BoxGeometry(1.6, 2.2, 0.08), matGlass);
-  win.position.set(-3.5 + i * 2.4, 1.8, 3.7);
-  villa.add(win);
-  // Window frame
-  const frame = new THREE.Mesh(new THREE.BoxGeometry(1.8, 2.4, 0.05), matWood);
-  frame.position.set(-3.5 + i * 2.4, 1.8, 3.72);
-  villa.add(frame);
-}
-
-// Upper windows
-for (let i = 0; i < 2; i++) {
-  const win = new THREE.Mesh(new THREE.BoxGeometry(1.4, 1.8, 0.08), matGlass);
-  win.position.set(-0.5 + i * 2.2, 4.8, 2.55);
-  villa.add(win);
-}
-
-// Entrance portico
-const portico = new THREE.Mesh(new THREE.BoxGeometry(2.5, 3.5, 1.5), matWall);
-portico.position.set(-4.2, 1.75, 3.5);
-villa.add(portico);
-const porticoRoof = new THREE.Mesh(new THREE.BoxGeometry(3, 0.2, 2), matRoof);
-porticoRoof.position.set(-4.2, 3.6, 3.5);
-villa.add(porticoRoof);
-
-// Front door
-const door = new THREE.Mesh(new THREE.BoxGeometry(0.9, 2, 0.1), matWood);
-door.position.set(-4.2, 1.1, 4.26);
-villa.add(door);
-const doorKnob = new THREE.Mesh(new THREE.SphereGeometry(0.06, 8, 8), matGold);
-doorKnob.position.set(-3.9, 1.1, 4.32);
-villa.add(doorKnob);
-
-// Garage (left side)
-const garage = new THREE.Mesh(new THREE.BoxGeometry(4, 2.8, 5.5), matWallDark);
-garage.position.set(-7, 1.4, -0.5); garage.castShadow = true;
-villa.add(garage);
-const garageDoor = new THREE.Mesh(new THREE.BoxGeometry(2.8, 2, 0.1), matWood);
-garageDoor.position.set(-7, 1.2, 2.36);
-villa.add(garageDoor);
-
-// Chimney
-const chimney = new THREE.Mesh(new THREE.BoxGeometry(0.8, 2, 0.8), matStone);
-chimney.position.set(3, 5.5, -1);
-villa.add(chimney);
-
-// Pool
-const pool = new THREE.Mesh(new THREE.BoxGeometry(5, 0.1, 2.5), matPool);
-pool.position.set(1, 0.05, 7);
-villa.add(pool);
-const poolDeck = new THREE.Mesh(new THREE.BoxGeometry(6, 0.08, 3.5), matStone);
-poolDeck.position.set(1, -0.02, 7);
-villa.add(poolDeck);
-
-// Pool water shimmer
-const poolInner = new THREE.Mesh(new THREE.BoxGeometry(4.6, 0.05, 2.1),
-  new THREE.MeshPhysicalMaterial({ color: 0x55aacc, roughness: 0.0, transparent: true, opacity: 0.4, emissive: 0x55aacc, emissiveIntensity: 0.1 }));
-poolInner.position.set(1, 0.08, 7);
-villa.add(poolInner);
-
-// Patio furniture (simple)
-function bench(x, z) {
-  const seat = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.08, 0.4), matWood);
-  seat.position.set(x, 0.45, z);
-  villa.add(seat);
-  const leg1 = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.45, 0.06), matWood);
-  leg1.position.set(x - 0.5, 0.22, z);
-  villa.add(leg1);
-  const leg2 = leg1.clone(); leg2.position.x = x + 0.5;
-  villa.add(leg2);
-}
-bench(3, 8.5);
-bench(-1, 8.5);
-
-// Outdoor table
-const table = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 0.06, 16), matStone);
-table.position.set(1, 0.7, 8.5);
-villa.add(table);
-const tableLeg = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.7, 8), matStone);
-tableLeg.position.set(1, 0.35, 8.5);
-villa.add(tableLeg);
-
-// Palm trees
-function palmTree(px, pz, s = 1) {
-  const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.08 * s, 0.14 * s, 5 * s, 8), matPalm);
-  trunk.position.set(px, 2.5 * s, pz); trunk.castShadow = true;
-  villa.add(trunk);
-  for (let i = 0; i < 7; i++) {
-    const leaf = new THREE.Mesh(new THREE.BoxGeometry(2.5 * s, 0.04 * s, 0.35 * s), matLeaf);
-    leaf.position.set(px, 5.2 * s, pz);
-    leaf.rotation.y = (i / 7) * Math.PI * 2;
-    leaf.rotation.z = 0.45;
-    villa.add(leaf);
-  }
-}
-palmTree(8, 6, 0.8);
-palmTree(-9, 4, 0.7);
-palmTree(6, 10, 0.6);
-
-// Hedge bushes
-function hedge(x, z) {
-  const bush = new THREE.Mesh(new THREE.SphereGeometry(0.5, 8, 6), matLeaf);
-  bush.position.set(x, 0.4, z); bush.scale.y = 0.7;
-  villa.add(bush);
-}
-for (let i = 0; i < 6; i++) hedge(-4 + i * 1.6, 9.5);
-
-// Driveway
-const driveway = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.02, 8), matStone);
-driveway.position.set(-5.5, 0.01, -4);
-villa.add(driveway);
-
-villa.position.set(0, 0, 2);
-scene.add(villa);
-
-// ===== BACKGROUND VILLAS =====
-function createBgVilla(x, z, s = 0.6) {
-  const g = new THREE.Group();
-  const body = new THREE.Mesh(new THREE.BoxGeometry(6 * s, 2.5 * s, 4 * s), matWall);
-  body.position.y = 1.25 * s; body.castShadow = true;
-  g.add(body);
-  const roof = new THREE.Mesh(new THREE.BoxGeometry(6.6 * s, 0.2, 4.6 * s), matRoof);
-  roof.position.y = 2.65 * s;
-  g.add(roof);
-  // windows
-  for (let i = 0; i < 2; i++) {
-    const w = new THREE.Mesh(new THREE.BoxGeometry(0.8 * s, 1 * s, 0.06), matGlass);
-    w.position.set(-0.8 * s + i * 1.6 * s, 1.3 * s, 2.02 * s);
-    g.add(w);
-  }
-  g.position.set(x, 0, z);
-  scene.add(g);
-  return g;
-}
-createBgVilla(-18, -6, 0.8);
-createBgVilla(16, -4, 0.7);
-createBgVilla(-12, -14, 0.6);
-createBgVilla(14, -12, 0.65);
-createBgVilla(0, -18, 0.55);
-createBgVilla(-20, -18, 0.5);
-createBgVilla(20, -16, 0.5);
-
-// ===== FLOATING HOUSE ICON =====
-const floatHouse = new THREE.Group();
-const fhBody = new THREE.Mesh(new THREE.BoxGeometry(2, 1.4, 1.6), matWall);
-fhBody.position.y = 0.7;
-floatHouse.add(fhBody);
-const fhRoof = new THREE.Mesh(new THREE.ConeGeometry(1.5, 1, 4), matRoof);
-fhRoof.position.y = 1.9; fhRoof.rotation.y = Math.PI / 4;
-floatHouse.add(fhRoof);
-const fhWin = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.5, 0.04), matGlass);
-fhWin.position.set(-0.4, 0.8, 0.81);
-floatHouse.add(fhWin);
-const fhWin2 = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.5, 0.04), matGlass);
-fhWin2.position.set(0.4, 0.8, 0.81);
-floatHouse.add(fhWin2);
-const fhDoor = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.6, 0.05), matWood);
-fhDoor.position.set(0, 0.4, 0.81);
-floatHouse.add(fhDoor);
-const ring = new THREE.Mesh(new THREE.TorusGeometry(1.8, 0.025, 8, 64), new THREE.MeshBasicMaterial({ color: 0xc9a84c, transparent: true, opacity: 0.25 }));
-ring.rotation.x = Math.PI / 2; ring.position.y = -0.2;
-floatHouse.add(ring);
-floatHouse.position.set(-7, 7, 10);
-scene.add(floatHouse);
-
-// ===== FLOATING KEY =====
-const keyGroup = new THREE.Group();
-const keyHead2 = new THREE.Mesh(new THREE.TorusGeometry(0.35, 0.05, 8, 16), matGold);
-keyGroup.add(keyHead2);
-const keyShaft = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.9, 0.06), matGold);
-keyShaft.position.y = -0.8;
-keyGroup.add(keyShaft);
-const keyBit = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.06, 0.06), matGold);
-keyBit.position.set(0.08, -1.2, 0);
-keyGroup.add(keyBit);
-keyGroup.position.set(8, 6, 12);
-keyGroup.rotation.z = 0.3;
-scene.add(keyGroup);
-
-// ===== ANIMATION =====
-let scrollProg = 0;
-let mouseX = 0, mouseY = 0;
-
-window.addEventListener('scroll', () => {
-  scrollProg = window.scrollY / (document.body.scrollHeight - window.innerHeight);
-});
-document.addEventListener('mousemove', (e) => {
-  mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-  mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
-});
-
-const phone = document.getElementById('phone3d');
-
-function animate() {
-  requestAnimationFrame(animate);
-  const t = Date.now() * 0.001;
-
-  // Camera
-  camera.position.x = mouseX * 1.5;
-  camera.position.y = 8 + scrollProg * 10;
-  camera.lookAt(mouseX * 0.5, 3 + scrollProg * 5, 0);
-
-  // Villa subtle sway
-  villa.rotation.y = Math.sin(t * 0.15) * 0.02;
-
-  // Floating house
-  floatHouse.position.y = 7 + Math.sin(t * 0.6) * 0.4;
-  floatHouse.rotation.y = t * 0.12;
-  ring.rotation.z = t * 0.3;
-
-  // Key
-  keyGroup.position.y = 6 + Math.sin(t * 0.8 + 1) * 0.5;
-  keyGroup.rotation.y = t * 0.25;
-
-  // Phone tilt (CSS handles it, but we can add subtle Z)
-  if (phone) {
-    const tiltX = -8 + mouseX * 6;
-    const tiltY = 4 - mouseY * 4;
-    phone.style.transform = `rotateY(${tiltX}deg) rotateX(${tiltY}deg)`;
-  }
-
-  // Fog clears slightly on scroll
-  scene.fog.density = 0.006 - scrollProg * 0.002;
-
-  renderer.render(scene, camera);
-}
-animate();
-
-window.addEventListener('resize', () => {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-});
-
-// Scroll reveal
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.1 });
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
 
 </body>

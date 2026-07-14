@@ -4,55 +4,41 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Speed2Lead AI — See it in action</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
-  :root{
-    --cream:#f5f0e8;--warm:#e8ddd0;--gold:#c9a84c;--gold-dim:#b8963f;
-    --brown:#2c1810;--brown-light:#5a3d2b;--brown-muted:#8b7355;
-    --dark:#1a1208;--text:#3d2e1f;--text-light:#7a6b5a;
-    --white:#faf8f5;--card:rgba(255,255,252,0.85);
-    --border:rgba(139,115,85,0.12);
-  }
-  body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--text);line-height:1.6;overflow-x:hidden}
+  body{font-family:'Inter',sans-serif;background:#fff;color:#000;line-height:1.6;overflow-x:hidden}
   a{text-decoration:none;color:inherit}
-
-  #scene3d{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0}
-  .content{position:relative;z-index:1}
 
   /* NAV */
   .nav{
     display:flex;justify-content:space-between;align-items:center;
-    padding:16px 32px;border-bottom:1px solid var(--border);
-    backdrop-filter:blur(30px);background:rgba(245,240,232,0.8);
-    position:sticky;top:0;z-index:100;
+    padding:16px 32px;border-bottom:1px solid #e5e5e5;
+    position:sticky;top:0;z-index:100;background:#fff;
   }
-  .nav .logo{font-family:'Playfair Display',serif;font-size:1.15em;font-weight:700;color:var(--brown)}
-  .nav .logo span{color:var(--gold)}
+  .nav .logo{font-size:1.15em;font-weight:800;color:#000}
+  .nav .logo span{font-weight:400;color:#666}
   .nav-links{display:flex;gap:16px;align-items:center}
-  .nav-links a{font-size:0.85em;color:var(--brown-muted);transition:color 0.2s}
-  .nav-links a:hover{color:var(--brown)}
-  .nav-links .cta-sm{background:var(--brown);color:var(--cream)!important;padding:8px 18px;border-radius:6px;font-weight:600}
-  .nav-links .cta-sm:hover{background:var(--gold);color:var(--white)!important}
+  .nav-links a{font-size:0.85em;color:#666;transition:color 0.2s}
+  .nav-links a:hover{color:#000}
+  .nav-links .cta-sm{color:#000;font-weight:600}
 
   /* HERO */
   .hero{max-width:1100px;margin:0 auto;padding:80px 48px 40px;text-align:left}
   .hero-tag{
     display:inline-flex;align-items:center;gap:8px;
-    background:rgba(201,168,76,0.1);color:var(--gold-dim);
-    padding:6px 14px;border-radius:20px;font-size:0.72em;font-weight:600;
-    margin-bottom:20px;border:1px solid rgba(201,168,76,0.2);letter-spacing:0.5px;
+    font-size:0.72em;font-weight:600;color:#666;
+    margin-bottom:20px;letter-spacing:1px;text-transform:uppercase;
     animation:fadeUp 0.5s ease both;
   }
-  .hero-tag .dot{width:6px;height:6px;background:var(--gold);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+  .hero-tag .dot{width:6px;height:6px;background:#000;border-radius:50%;animation:pulse 2s ease-in-out infinite}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
   .hero h1{
-    font-family:'Playfair Display',serif;font-size:2.8em;font-weight:900;
-    line-height:1.08;letter-spacing:-0.8px;margin-bottom:14px;color:var(--brown);
+    font-size:2.8em;font-weight:900;
+    line-height:1.08;letter-spacing:-1px;margin-bottom:14px;color:#000;
     animation:fadeUp 0.5s ease 0.1s both;
   }
-  .hero h1 .hl{color:var(--gold)}
-  .hero p{color:var(--text-light);font-size:1.05em;max-width:520px;animation:fadeUp 0.5s ease 0.2s both}
+  .hero p{color:#666;font-size:1.05em;max-width:520px;animation:fadeUp 0.5s ease 0.2s both}
   @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 
   /* MAIN GRID */
@@ -61,37 +47,36 @@
 
   /* CARDS */
   .card{
-    background:var(--card);border:1px solid var(--border);border-radius:14px;
-    padding:28px;backdrop-filter:blur(20px);transition:all 0.3s ease;
+    background:#fff;border:1px solid #e5e5e5;
+    padding:28px;transition:all 0.3s ease;
   }
-  .card:hover{box-shadow:0 12px 40px rgba(44,24,16,0.06)}
   .card-title{
     font-size:0.75em;font-weight:700;text-transform:uppercase;letter-spacing:2px;
-    color:var(--brown-muted);margin-bottom:18px;display:flex;align-items:center;gap:8px;
+    color:#999;margin-bottom:18px;display:flex;align-items:center;gap:8px;
   }
-  .card-title .dot{width:6px;height:6px;background:var(--gold);border-radius:50%}
+  .card-title .dot{width:6px;height:6px;background:#000}
 
   /* FORM */
-  label{display:block;font-size:0.75em;color:var(--brown-muted);margin-bottom:4px;font-weight:500}
+  label{display:block;font-size:0.75em;color:#666;margin-bottom:4px;font-weight:500}
   input,select,textarea{
-    width:100%;padding:10px 12px;border-radius:8px;
-    border:1px solid var(--border);background:var(--white);
-    color:var(--text);font-size:0.88em;margin-bottom:14px;font-family:inherit;transition:all 0.2s;
+    width:100%;padding:10px 12px;
+    border:1px solid #e5e5e5;background:#fff;
+    color:#000;font-size:0.88em;margin-bottom:14px;font-family:inherit;transition:all 0.2s;
   }
-  input:focus,textarea:focus,select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 16px rgba(201,168,76,0.1)}
+  input:focus,textarea:focus,select:focus{outline:none;border-color:#000}
   select{cursor:pointer}
-  select option{background:var(--white);color:var(--text)}
+  select option{background:#fff;color:#000}
 
   .btn{
-    width:100%;padding:13px;border:none;border-radius:8px;font-size:0.92em;
+    width:100%;padding:13px;border:none;font-size:0.92em;
     font-weight:700;cursor:pointer;transition:all 0.25s;font-family:inherit;
-    display:flex;align-items:center;justify-content:center;gap:8px;letter-spacing:0.3px;
+    display:flex;align-items:center;justify-content:center;gap:8px;
   }
-  .btn-primary{background:var(--brown);color:var(--cream);box-shadow:0 4px 16px rgba(44,24,16,0.12)}
-  .btn-primary:hover{background:var(--gold);color:var(--white);transform:translateY(-1px)}
+  .btn-primary{background:#000;color:#fff}
+  .btn-primary:hover{background:#333}
   .btn-primary:disabled{opacity:0.4;cursor:not-allowed;transform:none}
 
-  .spinner{display:inline-block;width:16px;height:16px;border:2px solid var(--cream);border-top-color:transparent;border-radius:50%;animation:spin 0.6s linear infinite}
+  .spinner{display:inline-block;width:16px;height:16px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin 0.6s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
 
   /* WHATSAPP */
@@ -100,72 +85,71 @@
   @keyframes slideIn{from{opacity:0;transform:translateY(12px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
   .wa-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
   .wa-avatar{
-    width:38px;height:38px;background:var(--gold);border-radius:50%;
-    display:flex;align-items:center;justify-content:center;color:var(--white);
-    font-weight:800;font-size:0.75em;box-shadow:0 4px 12px rgba(201,168,76,0.25);
+    width:38px;height:38px;background:#000;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;color:#fff;
+    font-weight:800;font-size:0.75em;
   }
-  .wa-name{font-weight:600;font-size:0.9em;color:var(--brown)}
-  .wa-status{font-size:0.7em;color:var(--gold-dim)}
+  .wa-name{font-weight:600;font-size:0.9em;color:#000}
+  .wa-status{font-size:0.7em;color:#666}
 
   .wa-bubble{
-    background:var(--white);border:1px solid var(--warm);
+    background:#fafafa;border:1px solid #e5e5e5;
     border-radius:14px 14px 14px 2px;padding:14px 16px;max-width:92%;
-    white-space:pre-wrap;line-height:1.55;font-size:0.88em;color:var(--text);
-    box-shadow:0 2px 8px rgba(44,24,16,0.04);
+    white-space:pre-wrap;line-height:1.55;font-size:0.88em;color:#000;
   }
-  .wa-time{text-align:right;font-size:0.65em;color:var(--brown-muted);margin-top:6px}
+  .wa-time{text-align:right;font-size:0.65em;color:#999;margin-top:6px}
   .score-badge{
-    display:inline-block;padding:4px 12px;border-radius:6px;font-size:0.72em;
+    display:inline-block;padding:4px 12px;font-size:0.72em;
     font-weight:700;margin-top:10px;text-transform:uppercase;letter-spacing:0.5px;
+    border:1px solid #e5e5e5;
   }
-  .score-hot{background:rgba(180,60,40,0.1);color:#b43c28;border:1px solid rgba(180,60,40,0.15)}
-  .score-warm{background:rgba(180,140,40,0.1);color:#a08a20;border:1px solid rgba(180,140,40,0.15)}
-  .score-cold{background:rgba(100,130,160,0.1);color:#6482a0;border:1px solid rgba(100,130,160,0.15)}
+  .score-hot{border-color:#000;color:#000}
+  .score-warm{border-color:#999;color:#666}
+  .score-cold{border-color:#ccc;color:#999}
 
-  .placeholder-msg{text-align:center;padding:48px 0;color:var(--brown-muted);font-size:0.88em}
+  .placeholder-msg{text-align:center;padding:48px 0;color:#999;font-size:0.88em}
 
   /* TIMELINE */
   .timeline-card{margin-top:14px;opacity:0;transform:translateY(10px);transition:all 0.4s ease}
   .timeline-card.show{opacity:1;transform:translateY(0)}
   .tl-item{display:flex;gap:12px;margin-bottom:10px;align-items:flex-start}
   .tl-dot{width:8px;height:8px;border-radius:50%;margin-top:6px;flex-shrink:0}
-  .tl-dot.done{background:var(--gold);box-shadow:0 0 10px rgba(201,168,76,0.3)}
-  .tl-dot.pending{background:var(--warm)}
-  .tl-text{font-size:0.82em;color:var(--text-light)}
-  .tl-text strong{color:var(--brown)}
+  .tl-dot.done{background:#000}
+  .tl-dot.pending{background:#e5e5e5}
+  .tl-text{font-size:0.82em;color:#666}
+  .tl-text strong{color:#000}
 
   /* LOG */
   .log{max-width:1000px;margin:0 auto;padding:0 48px}
   .log-box{
-    background:var(--brown);border-radius:12px;
+    background:#000;
     padding:14px;max-height:180px;overflow-y:auto;font-family:'Courier New',monospace;
-    font-size:0.72em;display:none;margin-bottom:20px;color:var(--warm);
+    font-size:0.72em;display:none;margin-bottom:20px;color:#999;
   }
   .log-box.show{display:block;animation:fadeUp 0.3s ease}
   .log-line{padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.06)}
   .log-line .ts{color:rgba(255,255,255,0.3)}
-  .log-line .ok{color:#a8d48a}
-  .log-line .info{color:#c9a84c}
-  .log-line .warn{color:#e8c86a}
+  .log-line .ok{color:#fff}
+  .log-line .info{color:#999}
+  .log-line .warn{color:#ccc}
 
   /* CTA */
   .cta-section{max-width:1000px;margin:0 auto;padding:60px 48px}
   .cta-box{
-    background:var(--card);border:1px solid var(--border);border-radius:14px;
+    background:#000;border:1px solid #000;
     padding:36px;display:flex;justify-content:space-between;align-items:center;
-    gap:24px;flex-wrap:wrap;transition:all 0.3s;
+    gap:24px;flex-wrap:wrap;
   }
-  .cta-box:hover{box-shadow:0 12px 40px rgba(44,24,16,0.06)}
-  .cta-text h3{font-family:'Playfair Display',serif;font-size:1.2em;font-weight:800;margin-bottom:6px;color:var(--brown)}
-  .cta-text p{color:var(--text-light);font-size:0.9em;max-width:440px}
+  .cta-text h3{font-size:1.2em;font-weight:800;margin-bottom:6px;color:#fff}
+  .cta-text p{color:#999;font-size:0.9em;max-width:440px}
   .cta-actions{display:flex;gap:10px;flex-wrap:wrap}
-  .btn-cta{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:6px;font-weight:700;font-size:0.88em;transition:all 0.25s;letter-spacing:0.3px}
-  .btn-cta.primary{background:var(--brown);color:var(--cream)}
-  .btn-cta.primary:hover{background:var(--gold);color:var(--white);transform:translateY(-1px)}
-  .btn-cta.ghost{border:1px solid var(--border);color:var(--brown-muted);background:transparent}
-  .btn-cta.ghost:hover{border-color:var(--gold);color:var(--brown)}
+  .btn-cta{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;font-weight:700;font-size:0.88em;transition:all 0.25s}
+  .btn-cta.primary{background:#fff;color:#000}
+  .btn-cta.primary:hover{background:#e5e5e5}
+  .btn-cta.ghost{border:1px solid #333;color:#999;background:transparent}
+  .btn-cta.ghost:hover{border-color:#fff;color:#fff}
 
-  .footer{text-align:center;padding:32px;border-top:1px solid var(--border);color:var(--brown-muted);font-size:0.78em}
+  .footer{text-align:center;padding:32px;border-top:1px solid #e5e5e5;color:#999;font-size:0.78em}
 
   @media(max-width:600px){
     .hero h1{font-size:1.8em}.nav{padding:12px 16px}.main-grid{padding:16px}
@@ -176,22 +160,18 @@
 </head>
 <body>
 
-<canvas id="scene3d"></canvas>
-
-<div class="content">
-
 <div class="nav">
   <div class="logo">Speed2<span>Lead</span></div>
   <div class="nav-links">
     <a href="index.html">Home</a>
     <a href="index.html#pricing">Pricing</a>
-    <a href="https://wa.me/14026212519" target="_blank" class="cta-sm">Get started</a>
+    <a href="https://wa.me/14026212519" target="_blank" class="cta-sm">Get started →</a>
   </div>
 </div>
 
 <div class="hero">
   <div class="hero-tag"><span class="dot"></span> LIVE DEMO</div>
-  <h1>See what happens when<br>a lead texts at <span class="hl">2 AM</span></h1>
+  <h1>See what happens when a lead texts at 2 AM</h1>
   <p>Fill in the form. The AI responds exactly like it would for a real lead — in under 10 seconds.</p>
 </div>
 
@@ -269,199 +249,7 @@
   </div>
 </div>
 
-<div class="footer">Speed2Lead AI &copy; 2026 &middot; Tampa, FL</div>
-
-</div>
-
-<script type="importmap">
-{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js" } }
-</script>
-<script type="module">
-import * as THREE from 'three';
-
-const canvas = document.getElementById('scene3d');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-renderer.shadowMap.enabled = true;
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 0.85;
-
-const scene = new THREE.Scene();
-scene.fog = new THREE.FogExp2(0xf5f0e8, 0.01);
-
-const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 300);
-camera.position.set(0, 6, 18);
-camera.lookAt(0, 2, 0);
-
-// Warm lighting
-scene.add(new THREE.AmbientLight(0xfff5e6, 0.5));
-const sun = new THREE.DirectionalLight(0xffeedd, 0.7);
-sun.position.set(8, 15, 8); sun.castShadow = true;
-scene.add(sun);
-const warmPt = new THREE.PointLight(0xc9a84c, 0.8, 50);
-warmPt.position.set(0, 5, 0);
-scene.add(warmPt);
-
-// Materials
-const matWall = new THREE.MeshStandardMaterial({ color: 0xf0e6d6, roughness: 0.85, metalness: 0.0 });
-const matWallD = new THREE.MeshStandardMaterial({ color: 0xd4c4a8, roughness: 0.8, metalness: 0.0 });
-const matRoof = new THREE.MeshStandardMaterial({ color: 0x8b4513, roughness: 0.7, metalness: 0.0 });
-const matStone = new THREE.MeshStandardMaterial({ color: 0xb8a88a, roughness: 0.9, metalness: 0.0 });
-const matWood = new THREE.MeshStandardMaterial({ color: 0x6b4226, roughness: 0.75, metalness: 0.0 });
-const matGlass = new THREE.MeshPhysicalMaterial({ color: 0xddeeff, roughness: 0.05, metalness: 0.1, transparent: true, opacity: 0.25 });
-const matGold = new THREE.MeshStandardMaterial({ color: 0xc9a84c, roughness: 0.3, metalness: 0.6 });
-const matPool = new THREE.MeshPhysicalMaterial({ color: 0x66bbaa, roughness: 0.0, transparent: true, opacity: 0.55 });
-const matGrass = new THREE.MeshStandardMaterial({ color: 0x7a9a5a, roughness: 0.9 });
-const matGround = new THREE.MeshStandardMaterial({ color: 0xe8ddd0, roughness: 0.9 });
-const matPalm = new THREE.MeshStandardMaterial({ color: 0x5a3d2b, roughness: 0.85 });
-const matLeaf = new THREE.MeshStandardMaterial({ color: 0x4a7a3a, roughness: 0.7 });
-
-// Ground
-const ground = new THREE.Mesh(new THREE.PlaneGeometry(150, 150), matGround);
-ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true;
-scene.add(ground);
-const grass = new THREE.Mesh(new THREE.PlaneGeometry(24, 16), matGrass);
-grass.rotation.x = -Math.PI / 2; grass.position.set(0, 0.02, 4);
-scene.add(grass);
-
-// ===== MAIN VILLA =====
-const villa = new THREE.Group();
-const mb = new THREE.Mesh(new THREE.BoxGeometry(8, 3, 6), matWall);
-mb.position.y = 1.5; mb.castShadow = true; mb.receiveShadow = true;
-villa.add(mb);
-const rb = new THREE.Mesh(new THREE.BoxGeometry(8.6, 0.25, 6.6), matRoof);
-rb.position.y = 3.12;
-villa.add(rb);
-const upper = new THREE.Mesh(new THREE.BoxGeometry(5, 2.5, 4.5), matWall);
-upper.position.set(0.8, 4.35, 0); upper.castShadow = true;
-villa.add(upper);
-const ur = new THREE.Mesh(new THREE.BoxGeometry(5.5, 0.2, 5), matRoof);
-ur.position.y = 5.7;
-villa.add(ur);
-// Stone accent
-const sw = new THREE.Mesh(new THREE.BoxGeometry(8.05, 3, 0.25), matStone);
-sw.position.set(0, 1.5, 3.12);
-villa.add(sw);
-// Windows
-for (let i = 0; i < 3; i++) {
-  const w = new THREE.Mesh(new THREE.BoxGeometry(1.4, 2, 0.06), matGlass);
-  w.position.set(-2.5 + i * 2.5, 1.7, 3.2);
-  villa.add(w);
-  const f = new THREE.Mesh(new THREE.BoxGeometry(1.6, 2.2, 0.04), matWood);
-  f.position.set(-2.5 + i * 2.5, 1.7, 3.22);
-  villa.add(f);
-}
-for (let i = 0; i < 2; i++) {
-  const w = new THREE.Mesh(new THREE.BoxGeometry(1.2, 1.5, 0.06), matGlass);
-  w.position.set(-0.3 + i * 2, 4.5, 2.28);
-  villa.add(w);
-}
-// Door
-const dr = new THREE.Mesh(new THREE.BoxGeometry(0.8, 1.8, 0.1), matWood);
-dr.position.set(-3.2, 0.9, 3.26);
-villa.add(dr);
-const dk = new THREE.Mesh(new THREE.SphereGeometry(0.05, 8, 8), matGold);
-dk.position.set(-2.95, 0.9, 3.32);
-villa.add(dk);
-// Pool
-const pl = new THREE.Mesh(new THREE.BoxGeometry(4, 0.08, 2), matPool);
-pl.position.set(0, 0.04, 6);
-villa.add(pl);
-const pd = new THREE.Mesh(new THREE.BoxGeometry(4.6, 0.06, 2.6), matStone);
-pd.position.set(0, -0.01, 6);
-villa.add(pd);
-// Palm
-function palm(px, pz, s) {
-  const t = new THREE.Mesh(new THREE.CylinderGeometry(0.07*s, 0.12*s, 4*s, 8), matPalm);
-  t.position.set(px, 2*s, pz); t.castShadow = true; villa.add(t);
-  for (let i = 0; i < 6; i++) {
-    const l = new THREE.Mesh(new THREE.BoxGeometry(2*s, 0.03*s, 0.3*s), matLeaf);
-    l.position.set(px, 4.2*s, pz); l.rotation.y = (i/6)*Math.PI*2; l.rotation.z = 0.4;
-    villa.add(l);
-  }
-}
-palm(6, 5, 0.7); palm(-6, 4, 0.6);
-// Hedge
-for (let i = 0; i < 5; i++) {
-  const b = new THREE.Mesh(new THREE.SphereGeometry(0.4, 8, 6), matLeaf);
-  b.position.set(-3 + i * 1.5, 0.35, 8); b.scale.y = 0.65;
-  villa.add(b);
-}
-villa.position.set(0, 0, 2);
-scene.add(villa);
-
-// ===== BG VILLAS =====
-function bgVilla(x, z, s) {
-  const g = new THREE.Group();
-  const b = new THREE.Mesh(new THREE.BoxGeometry(5*s, 2*s, 3.5*s), matWall);
-  b.position.y = s; b.castShadow = true; g.add(b);
-  const r = new THREE.Mesh(new THREE.BoxGeometry(5.5*s, 0.15, 4*s), matRoof);
-  r.position.y = 2.1*s; g.add(r);
-  for (let i = 0; i < 2; i++) {
-    const w = new THREE.Mesh(new THREE.BoxGeometry(0.7*s, 0.9*s, 0.05), matGlass);
-    w.position.set(-0.7*s + i*1.4*s, 1.1*s, 1.78*s); g.add(w);
-  }
-  g.position.set(x, 0, z); scene.add(g);
-}
-bgVilla(-14, -5, 0.7); bgVilla(12, -3, 0.65); bgVilla(-8, -12, 0.55);
-bgVilla(10, -10, 0.6); bgVilla(0, -16, 0.5); bgVilla(-16, -14, 0.45);
-
-// ===== FLOATING HOUSE =====
-const fh = new THREE.Group();
-const fhB = new THREE.Mesh(new THREE.BoxGeometry(1.6, 1.1, 1.3), matWall);
-fhB.position.y = 0.55; fh.add(fhB);
-const fhR = new THREE.Mesh(new THREE.ConeGeometry(1.2, 0.8, 4), matRoof);
-fhR.position.y = 1.5; fhR.rotation.y = Math.PI/4; fh.add(fhR);
-const fhW = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.45, 0.04), matGlass);
-fhW.position.set(-0.35, 0.65, 0.66); fh.add(fhW);
-const fhW2 = fhW.clone(); fhW2.position.x = 0.35; fh.add(fhW2);
-const fhD = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.5, 0.05), matWood);
-fhD.position.set(0, 0.35, 0.66); fh.add(fhD);
-const ring = new THREE.Mesh(new THREE.TorusGeometry(1.4, 0.02, 8, 64), new THREE.MeshBasicMaterial({ color: 0xc9a84c, transparent: true, opacity: 0.2 }));
-ring.rotation.x = Math.PI/2; ring.position.y = -0.15; fh.add(ring);
-fh.position.set(-5, 5, 8);
-scene.add(fh);
-
-// ===== FLOATING KEY =====
-const kg = new THREE.Group();
-const kh = new THREE.Mesh(new THREE.TorusGeometry(0.3, 0.04, 8, 16), matGold);
-kg.add(kh);
-const ks = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.8, 0.05), matGold);
-ks.position.y = -0.7; kg.add(ks);
-const kb = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.05, 0.05), matGold);
-kb.position.set(0.06, -1.05, 0); kg.add(kb);
-kg.position.set(6, 5, 10); kg.rotation.z = 0.3;
-scene.add(kg);
-
-// ===== ANIMATION =====
-let sp = 0, mx = 0, my = 0;
-window.addEventListener('scroll', () => { sp = window.scrollY / (document.body.scrollHeight - window.innerHeight); });
-document.addEventListener('mousemove', (e) => { mx = (e.clientX/window.innerWidth-0.5)*2; my = (e.clientY/window.innerHeight-0.5)*2; });
-
-function animate() {
-  requestAnimationFrame(animate);
-  const t = Date.now() * 0.001;
-  camera.position.x = mx * 1.5;
-  camera.position.y = 6 + sp * 5;
-  camera.lookAt(mx * 0.3, 2 + sp * 3, 0);
-  villa.rotation.y = Math.sin(t * 0.12) * 0.03;
-  fh.position.y = 5 + Math.sin(t * 0.6) * 0.4;
-  fh.rotation.y = t * 0.15;
-  ring.rotation.z = t * 0.35;
-  kg.position.y = 5 + Math.sin(t * 0.7 + 1) * 0.4;
-  kg.rotation.y = t * 0.2;
-  warmPt.intensity = 0.8 + Math.sin(t * 1.2) * 0.15;
-  renderer.render(scene, camera);
-}
-animate();
-
-window.addEventListener('resize', () => {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-});
-</script>
+<div class="footer">© 2026 Speed2Lead AI · Tampa, FL</div>
 
 <script>
 function appendLog(text, cls) {
