@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Speed2Lead AI — WhatsApp Lead Response for Realtors</title>
+<meta name="description" content="Speed2Lead AI sends a WhatsApp reply to your real estate leads within 10 seconds. Built for solo agents in Tampa who lose deals to slow follow-up.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050505;
+    --bg-card: #0a0a0b;
+    --line: rgba(255,255,255,0.08);
+    --line-strong: rgba(255,255,255,0.16);
+    --text: #f5f5f5;
+    --muted: #8a8a8e;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  a{text-decoration:none;color:inherit}
+  .mono{font-family:'JetBrains Mono',monospace}
+
+  /* GRID + NOISE */
+  .grid-bg{position:fixed;inset:0;background-image:linear-gradient(to right,rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse 80% 70% at 50% 50%,#000 40%,transparent 100%);-webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 50%,#000 40%,transparent 100%);pointer-events:none;z-index:0}
+  .noise{position:fixed;inset:0;opacity:0.03;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.6'/></svg>");mix-blend-mode:overlay;pointer-events:none;z-index:0}
+
+  /* GLOW */
+  .glow{position:fixed;border-radius:9999px;filter:blur(80px);pointer-events:none;z-index:0}
+
+  /* CORNER MARKS */
+  .corner-mark{position:fixed;width:14px;height:14px;border-color:rgba(255,255,255,0.15);z-index:1}
+
+  /* NAV */
+  .nav{display:flex;justify-content:space-between;align-items:center;padding:20px 48px;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:100;background:rgba(5,5,5,0.8);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+  .nav .logo{font-size:1.2em;font-weight:800;color:#fff;letter-spacing:-0.5px}
+  .nav .logo span{font-weight:400;color:rgba(255,255,255,0.4)}
+  .nav-links{display:flex;gap:24px;align-items:center}
+  .nav-links a{font-size:0.85em;color:rgba(255,255,255,0.5);transition:color 0.2s}
+  .nav-links a:hover{color:#fff}
+  .btn-nav{padding:8px 20px;border:1px solid var(--line-strong);font-size:0.82em;font-weight:600;color:#fff;transition:all 0.3s}
+  .btn-nav:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.3)}
+
+  /* HERO */
+  .hero{max-width:1200px;margin:0 auto;padding:120px 48px 100px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;min-height:90vh;position:relative;z-index:1}
+  @media(max-width:868px){.hero{grid-template-columns:1fr;text-align:center;padding:80px 24px 40px;gap:40px}}
+  .hero-tag{display:inline-flex;align-items:center;gap:8px;font-size:0.68em;font-weight:600;color:rgba(255,255,255,0.4);margin-bottom:24px;letter-spacing:2px;text-transform:uppercase}
+  .hero-tag .dot{width:6px;height:6px;background:#fff;border-radius:50%;animation:pulse 2s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,255,255,0.5)}50%{opacity:0.3;box-shadow:0 0 0 6px rgba(255,255,255,0)}}
+  .hero-chip{display:inline-block;border:1px solid var(--line-strong);background:rgba(255,255,255,0.02);backdrop-filter:blur(6px);border-radius:999px;padding:4px 14px;font-size:0.62em;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.6);margin-bottom:20px}
+  .hero h1{font-size:3.8em;font-weight:900;line-height:1.05;margin-bottom:24px;letter-spacing:-2px;background:linear-gradient(180deg,#ffffff 0%,#b8b8bc 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+  @media(max-width:868px){.hero h1{font-size:2.4em}}
+  .hero p{font-size:1.05em;color:rgba(255,255,255,0.55);max-width:480px;line-height:1.7;margin-bottom:36px}
+  .hero p strong{color:#fff;font-weight:600}
+  .hero-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  @media(max-width:868px){.hero-actions{justify-content:center}}
+  .btn-main{display:inline-flex;align-items:center;gap:8px;background:#fff;color:#000;padding:15px 36px;font-size:0.92em;font-weight:700;transition:all 0.3s;letter-spacing:-0.3px}
+  .btn-main:hover{background:rgba(255,255,255,0.85)}
+  .btn-ghost{display:inline-flex;align-items:center;gap:8px;padding:15px 28px;font-weight:600;font-size:0.88em;border:1px solid var(--line-strong);color:rgba(255,255,255,0.6);transition:all 0.3s;background:transparent}
+  .btn-ghost:hover{border-color:rgba(255,255,255,0.4);color:#fff}
+  .hero-sub{color:rgba(255,255,255,0.35);font-size:0.78em;margin-top:16px}
+
+  /* TIMER */
+  .timer-wrap{margin-top:36px;max-width:400px}
+  @media(max-width:868px){.timer-wrap{margin:36px auto 0}}
+  .timer-header{display:flex;justify-content:space-between;margin-bottom:8px;font-size:0.62em;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.35)}
+  .timer-header .count{color:rgba(255,255,255,0.8);font-variant-numeric:tabular-nums}
+  .timer-track{height:2px;background:rgba(255,255,255,0.08);border-radius:999px;overflow:hidden;position:relative}
+  .timer-fill{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,rgba(255,255,255,0.9),rgba(255,255,255,0.5));border-radius:999px;width:0%;animation:fill 10s linear infinite}
+  @keyframes fill{0%{width:0%}100%{width:100%}}
+  .timer-labels{display:flex;justify-content:space-between;margin-top:6px;font-size:0.58em;color:rgba(255,255,255,0.25)}
+
+  /* PHONE */
+  .phone-scene{display:flex;justify-content:center;perspective:1000px}
+  .phone-3d{width:280px;position:relative;transform:rotateY(-8deg) rotateX(4deg);transform-style:preserve-3d;animation:phoneFloat 6s ease-in-out infinite;transition:transform 0.4s ease}
+  .phone-3d:hover{transform:rotateY(0deg) rotateX(0deg) scale(1.02)}
+  @keyframes phoneFloat{0%,100%{transform:rotateY(-8deg) rotateX(4deg) translateZ(0)}50%{transform:rotateY(-5deg) rotateX(2deg) translateZ(20px)}}
+  .phone-frame{background:var(--bg-card);border-radius:36px;border:1px solid var(--line-strong);padding:14px;box-shadow:0 30px 80px rgba(0,0,0,0.4);transform:translateZ(20px)}
+  .phone-screen{background:#080808;border-radius:24px;overflow:hidden;min-height:480px}
+  .phone-header{background:var(--bg-card);padding:16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+  .phone-avatar{width:34px;height:34px;background:rgba(255,255,255,0.1);border:1px solid var(--line-strong);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.65em;color:#fff}
+  .phone-name{font-weight:600;font-size:0.88em;color:#fff}
+  .phone-status{font-size:0.7em;color:rgba(255,255,255,0.4)}
+  .phone-body{padding:18px}
+  .wa-bubble-3d{background:rgba(255,255,255,0.06);border:1px solid var(--line);border-radius:14px 14px 14px 2px;padding:14px 16px;font-size:0.82em;line-height:1.55;color:rgba(255,255,255,0.8)}
+  .wa-time-3d{text-align:right;font-size:0.65em;color:rgba(255,255,255,0.3);margin-top:4px}
+  .phone-shadow{position:absolute;bottom:-40px;left:10%;width:80%;height:40px;background:radial-gradient(ellipse,rgba(255,255,255,0.03) 0%,transparent 70%);filter:blur(15px);transform:translateZ(-10px)}
+
+  /* STATS */
+  .stats-bar{display:flex;justify-content:center;gap:60px;padding:48px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:rgba(10,10,11,0.6);backdrop-filter:blur(8px);flex-wrap:wrap;position:relative;z-index:1}
+  .stat{text-align:center}
+  .stat .num{font-size:2.4em;font-weight:800;letter-spacing:-1px;background:linear-gradient(180deg,#fff,#b8b8bc);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .stat .label{font-size:0.75em;color:rgba(255,255,255,0.4);margin-top:4px;letter-spacing:1px;text-transform:uppercase}
+
+  /* SECTIONS */
+  .section{max-width:1100px;margin:0 auto;padding:96px 48px;position:relative;z-index:1}
+  .section-label{display:inline-flex;align-items:center;gap:8px;font-size:0.62em;font-weight:700;text-transform:uppercase;letter-spacing:3px;color:rgba(255,255,255,0.35);margin-bottom:16px}
+  .section-label::before{content:'';width:20px;height:1px;background:var(--line-strong)}
+  .section h2{font-size:2.6em;font-weight:900;margin-bottom:12px;letter-spacing:-1px;line-height:1.15;background:linear-gradient(180deg,#fff,#b8b8bc);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .section .lead{color:rgba(255,255,255,0.5);font-size:1.05em;max-width:560px;line-height:1.7;margin-bottom:40px}
+
+  /* PROBLEM */
+  .problem-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line)}
+  @media(max-width:700px){.problem-grid{grid-template-columns:1fr}}
+  .problem-card{background:var(--bg-card);padding:36px}
+  .problem-card h3{font-size:1.1em;font-weight:700;margin-bottom:8px;color:#fff}
+  .problem-card p{font-size:0.9em;color:rgba(255,255,255,0.45);line-height:1.65}
+
+  /* STEPS */
+  .steps-list{position:relative;padding-left:24px}
+  .steps-list::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:var(--line)}
+  .step-item{position:relative;margin-bottom:36px;padding-left:24px}
+  .step-item::before{content:'';position:absolute;left:-28px;top:6px;width:8px;height:8px;background:rgba(255,255,255,0.8);border-radius:50%;box-shadow:0 0 12px rgba(255,255,255,0.3)}
+  .step-item .step-num{font-size:0.62em;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,0.3);margin-bottom:8px}
+  .step-item h3{font-size:1.1em;font-weight:700;margin-bottom:6px;color:#fff}
+  .step-item p{font-size:0.9em;color:rgba(255,255,255,0.45);line-height:1.65}
+
+  /* FEATURES */
+  .features-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line)}
+  @media(max-width:700px){.features-grid{grid-template-columns:1fr}}
+  .feature-item{display:flex;gap:14px;align-items:flex-start;padding:24px;background:var(--bg-card)}
+  .feature-icon{width:32px;height:32px;border:1px solid var(--line-strong);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:800;font-size:0.75em;color:rgba(255,255,255,0.7)}
+  .feature-text{font-size:0.88em;line-height:1.6;color:rgba(255,255,255,0.6)}
+
+  /* PRICING */
+  .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+  @media(max-width:868px){.pricing-grid{grid-template-columns:1fr}}
+  .price-card{background:var(--bg-card);padding:36px 32px;position:relative}
+  .price-card.featured{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.12)}
+  .price-card.featured::before{content:'MOST POPULAR';position:absolute;top:16px;right:16px;border:1px solid rgba(255,255,255,0.2);padding:3px 10px;font-size:0.55em;font-weight:700;letter-spacing:1px;color:rgba(255,255,255,0.6)}
+  .price-card h3{font-size:1.15em;font-weight:700;color:#fff}
+  .price-card .price{font-size:2.8em;font-weight:900;letter-spacing:-2px;margin:14px 0;background:linear-gradient(180deg,#fff,#b8b8bc);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .price-card .price span{font-size:0.38em;color:rgba(255,255,255,0.4);font-weight:400;background:none;-webkit-background-clip:unset;background-clip:unset}
+  .price-card .desc{font-size:0.85em;color:rgba(255,255,255,0.4);margin-bottom:22px}
+  .price-card ul{list-style:none;margin-bottom:28px}
+  .price-card ul li{padding:5px 0;font-size:0.85em;color:rgba(255,255,255,0.6);display:flex;gap:8px;align-items:center}
+  .price-card ul li::before{content:'—';color:rgba(255,255,255,0.2);font-weight:400}
+  .btn-price{display:block;text-align:center;padding:13px;font-weight:700;font-size:0.88em;transition:all 0.25s;border:1px solid var(--line-strong)}
+  .btn-price.primary{background:#fff;color:#000;border-color:#fff}
+  .btn-price.primary:hover{background:rgba(255,255,255,0.85)}
+  .btn-price.outline{background:transparent;color:#fff;border-color:var(--line-strong)}
+  .btn-price.outline:hover{border-color:rgba(255,255,255,0.4);background:rgba(255,255,255,0.04)}
+
+  /* FAQ */
+  .faq-list{max-width:640px}
+  .faq-item{border-bottom:1px solid var(--line);padding:18px 0;cursor:pointer;transition:all 0.2s}
+  .faq-item:hover{padding-left:4px}
+  .faq-item h4{font-size:0.95em;font-weight:600;display:flex;justify-content:space-between;align-items:center;color:#fff}
+  .faq-item h4::after{content:'+';color:rgba(255,255,255,0.3);font-weight:700;font-size:1.2em;transition:transform 0.2s}
+  .faq-item.open h4::after{transform:rotate(45deg)}
+  .faq-item p{font-size:0.88em;color:rgba(255,255,255,0.45);margin-top:10px;line-height:1.65;display:none}
+  .faq-item.open p{display:block}
+
+  /* CTA */
+  .cta-section{text-align:center;padding:120px 48px;position:relative;z-index:1}
+  .cta-section h2{font-size:2.8em;font-weight:900;margin-bottom:12px;letter-spacing:-1px;background:linear-gradient(180deg,#fff,#b8b8bc);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .cta-section p{color:rgba(255,255,255,0.45);font-size:1.05em;margin-bottom:36px;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.7}
+  .cta-section .contact-line{margin-top:20px;font-size:0.78em;color:rgba(255,255,255,0.3)}
+  .cta-section .btn-main{background:#fff;color:#000}
+  .cta-section .btn-main:hover{background:rgba(255,255,255,0.85)}
+  .cta-section .btn-ghost{border-color:var(--line-strong);color:rgba(255,255,255,0.5)}
+  .cta-section .btn-ghost:hover{border-color:rgba(255,255,255,0.4);color:#fff}
+
+  /* MARQUEE */
+  .marquee-wrap{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:rgba(10,10,11,0.6);backdrop-filter:blur(8px);padding:14px 0;overflow:hidden;position:relative;z-index:1}
+  .marquee{animation:scroll 30s linear infinite;display:flex;whitespace:nowrap;font-size:0.68em;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3)}
+  .marquee span{padding:0 24px}
+  .marquee .sep{color:rgba(255,255,255,0.1)}
+  @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  .footer{text-align:center;padding:36px;color:rgba(255,255,255,0.25);font-size:0.75em;position:relative;z-index:1}
+
+  .reveal{opacity:0;transform:translateY(30px);transition:all 0.7s cubic-bezier(0.16,1,0.3,1)}
+  .reveal.visible{opacity:1;transform:translateY(0)}
+
+  /* SOURCES */
+  .sources-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+  @media(max-width:700px){.sources-grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:480px){.sources-grid{grid-template-columns:1fr}}
+  .source-card{background:var(--bg-card);padding:28px;text-align:center;transition:background 0.3s}
+  .source-card:hover{background:rgba(255,255,255,0.04)}
+  .source-icon{width:48px;height:48px;margin:0 auto 14px;border:1px solid var(--line-strong);border-radius:12px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.7)}
+  .source-name{font-weight:700;font-size:0.95em;color:#fff;margin-bottom:4px}
+  .source-desc{font-size:0.78em;color:rgba(255,255,255,0.4);line-height:1.5}
+
+  /* NEIGHBORHOODS */
+  .neighborhoods{display:flex;flex-wrap:wrap;gap:10px}
+  .hood-tag{border:1px solid var(--line-strong);background:rgba(255,255,255,0.02);backdrop-filter:blur(6px);padding:8px 18px;font-size:0.82em;color:rgba(255,255,255,0.6);transition:all 0.3s}
+  .hood-tag:hover{border-color:rgba(255,255,255,0.3);color:#fff;background:rgba(255,255,255,0.06)}
+
+  /* FLOW */
+  .flow-container{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;padding:40px 0}
+  .flow-step{background:var(--bg-card);border:1px solid var(--line);padding:24px 20px;text-align:center;min-width:140px;transition:all 0.4s}
+  .flow-step:hover{border-color:rgba(255,255,255,0.2);background:rgba(255,255,255,0.03)}
+  .flow-icon{width:44px;height:44px;margin:0 auto 12px;border:1px solid var(--line-strong);border-radius:12px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.5);transition:all 0.4s}
+  .flow-icon.active{border-color:rgba(255,255,255,0.4);color:#fff;box-shadow:0 0 20px rgba(255,255,255,0.1)}
+  .flow-icon.done{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.3);color:#fff}
+  .flow-label{font-size:0.82em;font-weight:600;color:rgba(255,255,255,0.7);margin-bottom:4px}
+  .flow-time{font-size:0.68em;color:rgba(255,255,255,0.35);letter-spacing:1px}
+  .flow-arrow{color:rgba(255,255,255,0.2);font-size:1.2em}
+  @media(max-width:700px){.flow-arrow{display:none}.flow-container{gap:8px}.flow-step{min-width:100px;padding:16px 12px}}
+
+  /* TRUST */
+  .trust-bar{display:flex;justify-content:center;align-items:center;gap:32px;padding:40px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:rgba(10,10,11,0.4);backdrop-filter:blur(8px);flex-wrap:wrap;position:relative;z-index:1}
+  .trust-item{display:flex;align-items:center;gap:10px}
+  .trust-icon{width:36px;height:36px;border:1px solid var(--line-strong);border-radius:8px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.6)}
+  .trust-text{font-size:0.78em;font-weight:600;color:rgba(255,255,255,0.5);letter-spacing:0.5px}
+  .trust-divider{width:1px;height:24px;background:var(--line)}
+  @media(max-width:600px){.trust-bar{gap:16px}.trust-divider{display:none}}
+
+  @media(max-width:600px){.hero h1{font-size:2.2em}.nav{padding:14px 20px}.stats-bar{gap:28px}.stat .num{font-size:1.8em}.section{padding:60px 24px}}
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div class="noise"></div>
+<div class="glow" style="width:800px;height:800px;background:rgba(255,255,255,0.04);top:-300px;left:-200px"></div>
+<div class="glow" style="width:600px;height:600px;background:rgba(255,255,255,0.03);bottom:-200px;right:-100px"></div>
+
+<div class="corner-mark border-l border-t" style="top:20px;left:20px;border-left:1px solid;border-top:1px solid"></div>
+<div class="corner-mark border-r border-t" style="top:20px;right:20px;border-right:1px solid;border-top:1px solid"></div>
+<div class="corner-mark border-l border-b" style="bottom:20px;left:20px;border-left:1px solid;border-bottom:1px solid"></div>
+<div class="corner-mark border-r border-b" style="bottom:20px;right:20px;border-right:1px solid;border-bottom:1px solid"></div>
+
+<div class="nav">
+  <div class="logo">Speed2<span>Lead</span></div>
+  <div class="nav-links">
+    <a href="#how">How it works</a>
+    <a href="#pricing">Pricing</a>
+    <a href="speed2lead-demo.html">Live demo</a>
+    <a href="#contact" class="btn-nav">Get started</a>
+  </div>
+</div>
+
+<div class="hero">
+  <div>
+    <div class="hero-chip">AI · Lead Response · Real Estate</div>
+    <div class="hero-tag"><span class="dot"></span> Built for Tampa agents</div>
+    <h1>Your leads text at 2 AM. They get an answer in 10 seconds.</h1>
+    <p>Speed2Lead AI replies to new leads on WhatsApp before they even finish reading your listing. <strong>Qualifies them, asks the right questions, and books appointments</strong> into your calendar.</p>
+    <div class="hero-actions">
+      <a href="#pricing" class="btn-main">See pricing</a>
+      <a href="speed2lead-demo.html" class="btn-ghost">Try live demo →</a>
+    </div>
+    <div class="hero-sub">Setup takes about 2 days · Month-to-month · No contracts</div>
+    <div class="timer-wrap">
+      <div class="timer-header"><span>Response Window</span><span class="count mono" id="counter">00.00s</span></div>
+      <div class="timer-track"><div class="timer-fill"></div></div>
+      <div class="timer-labels mono"><span>0s</span><span>2s</span><span>4s</span><span>6s</span><span>8s</span><span>10s</span></div>
+    </div>
+  </div>
+  <div class="phone-scene">
+    <div class="phone-3d" id="phone3d">
+      <div class="phone-frame">
+        <div class="phone-screen">
+          <div class="phone-header">
+            <div class="phone-avatar">S2L</div>
+            <div><div class="phone-name">Speed2Lead AI</div><div class="phone-status">online</div></div>
+          </div>
+          <div class="phone-body">
+            <div class="wa-bubble-3d">Hey Sarah! I saw your interest in waterfront homes in South Tampa under $800K.
+
+Good timing — I have a 3BR/2BA in Ballast Point that just came on the market. $749K, private dock, no bridges to the bay.
+
+Want me to send details?</div>
+            <div class="wa-time-3d">2:03 AM ✓✓</div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-shadow"></div>
+    </div>
+  </div>
+</div>
+
+<div class="marquee-wrap">
+  <div class="marquee">
+    <span>Instant WhatsApp Reply</span><span class="sep">◆</span>
+    <span>24/7 AI Coverage</span><span class="sep">◆</span>
+    <span>Lead Qualification</span><span class="sep">◆</span>
+    <span>Calendar Booking</span><span class="sep">◆</span>
+    <span>TCPA Compliant</span><span class="sep">◆</span>
+    <span>Speed-to-Lead &lt; 10s</span><span class="sep">◆</span>
+    <span>Instant WhatsApp Reply</span><span class="sep">◆</span>
+    <span>24/7 AI Coverage</span><span class="sep">◆</span>
+    <span>Lead Qualification</span><span class="sep">◆</span>
+    <span>Calendar Booking</span><span class="sep">◆</span>
+    <span>TCPA Compliant</span><span class="sep">◆</span>
+    <span>Speed-to-Lead &lt; 10s</span><span class="sep">◆</span>
+  </div>
+</div>
+
+<div class="stats-bar reveal">
+  <div class="stat"><div class="num">10s</div><div class="label">Average first reply</div></div>
+  <div class="stat"><div class="num">24/7</div><div class="label">Even on weekends</div></div>
+  <div class="stat"><div class="num">60s</div><div class="label">Lead qualified</div></div>
+  <div class="stat"><div class="num">$0</div><div class="label">Setup cost</div></div>
+</div>
+
+<div class="section reveal">
+  <div class="section-label">Lead sources</div>
+  <h2>Works with every lead source you use</h2>
+  <p class="lead">Zillow, Realtor.com, Facebook, Google — doesn't matter where they come from. Speed2Lead responds to all of them.</p>
+  <div class="sources-grid">
+    <div class="source-card">
+      <div class="source-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+      </div>
+      <div class="source-name">Zillow</div>
+      <div class="source-desc">Inquiries, showing requests, saved searches</div>
+    </div>
+    <div class="source-card">
+      <div class="source-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </div>
+      <div class="source-name">Realtor.com</div>
+      <div class="source-desc">Property inquiries, agent connections</div>
+    </div>
+    <div class="source-card">
+      <div class="source-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+      </div>
+      <div class="source-name">Facebook</div>
+      <div class="source-desc">Messenger, ads, marketplace leads</div>
+    </div>
+    <div class="source-card">
+      <div class="source-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+      </div>
+      <div class="source-name">Google</div>
+      <div class="source-desc">Search ads, business profile, website forms</div>
+    </div>
+    <div class="source-card">
+      <div class="source-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      </div>
+      <div class="source-name">MLS</div>
+      <div class="source-desc">Direct MLS integration, auto-assignment</div>
+    </div>
+    <div class="source-card">
+      <div class="source-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      </div>
+      <div class="source-name">Direct text</div>
+      <div class="source-desc">SMS, missed calls, voicemail drops</div>
+    </div>
+  </div>
+</div>
+
+<div class="section reveal">
+  <div class="section-label">Tampa Bay</div>
+  <h2>Serving every neighborhood</h2>
+  <p class="lead">From waterfront estates in South Tampa to family homes in Brandon — we cover the entire Bay area.</p>
+  <div class="neighborhoods">
+    <span class="hood-tag">South Tampa</span>
+    <span class="hood-tag">Hyde Park</span>
+    <span class="hood-tag">Ybor City</span>
+    <span class="hood-tag">Westchase</span>
+    <span class="hood-tag">Carrollwood</span>
+    <span class="hood-tag">Brandon</span>
+    <span class="hood-tag">Riverview</span>
+    <span class="hood-tag">Ballast Point</span>
+    <span class="hood-tag">Davis Islands</span>
+    <span class="hood-tag">Channelside</span>
+    <span class="hood-tag">Temple Terrace</span>
+    <span class="hood-tag">New Tampa</span>
+  </div>
+</div>
+
+<!-- LEAD FLOW VISUALIZATION -->
+<div class="section reveal">
+  <div class="section-label">In real time</div>
+  <h2>Watch a lead come in</h2>
+  <div class="flow-container">
+    <div class="flow-step" id="flow1">
+      <div class="flow-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      </div>
+      <div class="flow-label">Lead submits form</div>
+      <div class="flow-time mono">0s</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step" id="flow2">
+      <div class="flow-icon active">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z"/><path d="M12 6v6l4 2"/></svg>
+      </div>
+      <div class="flow-label">AI analyzes intent</div>
+      <div class="flow-time mono">2s</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step" id="flow3">
+      <div class="flow-icon active">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      </div>
+      <div class="flow-label">WhatsApp sent</div>
+      <div class="flow-time mono">8s</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step" id="flow4">
+      <div class="flow-icon done">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
+      </div>
+      <div class="flow-label">Lead qualified</div>
+      <div class="flow-time mono">60s</div>
+    </div>
+  </div>
+</div>
+
+<!-- TRUST BADGES -->
+<div class="trust-bar reveal">
+  <div class="trust-item">
+    <div class="trust-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    </div>
+    <div class="trust-text">TCPA Compliant</div>
+  </div>
+  <div class="trust-divider"></div>
+  <div class="trust-item">
+    <div class="trust-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+    </div>
+    <div class="trust-text">SOC2 Ready</div>
+  </div>
+  <div class="trust-divider"></div>
+  <div class="trust-item">
+    <div class="trust-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    </div>
+    <div class="trust-text">24/7 Support</div>
+  </div>
+  <div class="trust-divider"></div>
+  <div class="trust-item">
+    <div class="trust-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
+    </div>
+    <div class="trust-text">No Contracts</div>
+  </div>
+</div>
+
+<div class="section reveal">
+  <div class="section-label">The problem</div>
+  <h2>Most leads call the first agent who responds</h2>
+  <p class="lead">If that's not you, it's the agent down the street. Every minute you're slow is a listing someone else closes.</p>
+  <div class="problem-grid">
+    <div class="problem-card">
+      <h3>The 5-minute gap</h3>
+      <p>Respond within 5 minutes and you're 21x more likely to qualify a lead. After 30 minutes, it drops to almost nothing. Most agents take hours.</p>
+    </div>
+    <div class="problem-card">
+      <h3>You can't be everywhere</h3>
+      <p>You're at a showing. With clients. At your kid's game. Meanwhile, 4 leads came in and nobody answered. By the time you see them, they've moved on.</p>
+    </div>
+  </div>
+</div>
+
+<div class="section reveal" id="how">
+  <div class="section-label">How it works</div>
+  <h2>Three steps. No technical setup.</h2>
+  <div class="steps-list">
+    <div class="step-item"><div class="step-num">Step 01</div><h3>Lead comes in</h3><p>Someone fills out your Zillow form, texts your number, or messages you on Facebook. It's 2 AM on a Saturday.</p></div>
+    <div class="step-item"><div class="step-num">Step 02</div><h3>Speed2Lead replies on WhatsApp</h3><p>Within 10 seconds, the lead gets a personal WhatsApp message. Uses their name, references the property, and asks a qualifying question.</p></div>
+    <div class="step-item"><div class="step-num">Step 03</div><h3>Appointment gets booked</h3><p>The AI qualifies the lead, asks about timeline and budget, and books them directly into your calendar.</p></div>
+  </div>
+</div>
+
+<div class="section reveal">
+  <div class="section-label">What you get</div>
+  <h2>Everything you need. Nothing you don't.</h2>
+  <div class="features-grid">
+    <div class="feature-item"><div class="feature-icon">→</div><div class="feature-text">WhatsApp auto-replies that sound like a real person. Trained on your actual speaking style.</div></div>
+    <div class="feature-item"><div class="feature-icon">↑</div><div class="feature-text">Lead scoring: HOT / WARM / COLD so you know who to call first.</div></div>
+    <div class="feature-item"><div class="feature-icon">↻</div><div class="feature-text">Follow-up sequence at 24h, 3 days, and 7 days. Stops when they reply or book.</div></div>
+    <div class="feature-item"><div class="feature-icon">◉</div><div class="feature-text">Calendar booking: leads pick a time and it's on your schedule.</div></div>
+    <div class="feature-item"><div class="feature-icon">✓</div><div class="feature-text">TCPA-compliant opt-in/opt-out logging from day one.</div></div>
+    <div class="feature-item"><div class="feature-icon">↗</div><div class="feature-text">Airtable CRM integration or your existing CRM via API.</div></div>
+  </div>
+</div>
+
+<div class="section" id="pricing">
+  <div class="section-label">Pricing</div>
+  <h2>Month-to-month. No contracts.</h2>
+  <div class="pricing-grid reveal">
+    <div class="price-card">
+      <h3>Starter</h3><div class="price">$500<span>/mo</span></div>
+      <div class="desc">For solo agents up to 100 leads/month.</div>
+      <ul><li>WhatsApp AI responses</li><li>Lead scoring (HOT / WARM / COLD)</li><li>3-touch follow-up sequence</li><li>Airtable CRM integration</li><li>TCPA compliance logging</li></ul>
+      <a href="#contact" class="btn-price outline">Get started</a>
+    </div>
+    <div class="price-card featured">
+      <h3>Growth</h3><div class="price">$1,500<span>/mo</span></div>
+      <div class="desc">For agents doing 100-500 leads/month.</div>
+      <ul><li>Everything in Starter</li><li>Hot lead alerts</li><li>Calendar booking integration</li><li>WhatsApp + SMS + Email</li><li>Priority support</li></ul>
+      <a href="#contact" class="btn-price primary">Get started</a>
+    </div>
+    <div class="price-card">
+      <h3>Team</h3><div class="price">$2,250<span>/mo</span></div>
+      <div class="desc">For teams of 2-5 agents. Up to 1,000 leads.</div>
+      <ul><li>Everything in Growth</li><li>Up to 5 agent seats</li><li>Custom AI voice training</li><li>Dedicated account manager</li><li>White-label option</li></ul>
+      <a href="#contact" class="btn-price outline">Get started</a>
+    </div>
+  </div>
+</div>
+
+<div class="section reveal">
+  <div class="section-label">Questions</div>
+  <h2>FAQ</h2>
+  <div class="faq-list">
+    <div class="faq-item" onclick="this.classList.toggle('open')"><h4>How long does setup take?</h4><p>About 2 days. We connect your WhatsApp, train the AI on your listings and speaking style, and you're live.</p></div>
+    <div class="faq-item" onclick="this.classList.toggle('open')"><h4>Do I need to change my CRM?</h4><p>No. We connect to Airtable out of the box, or your existing CRM through an API.</p></div>
+    <div class="faq-item" onclick="this.classList.toggle('open')"><h4>What if the AI can't answer a question?</h4><p>It forwards the conversation to you right away. The AI knows its limits.</p></div>
+    <div class="faq-item" onclick="this.classList.toggle('open')"><h4>Is this compliant with real estate regulations?</h4><p>Yes. Every opt-in and opt-out is logged. All conversations stored. TCPA compliance built in from the start.</p></div>
+    <div class="faq-item" onclick="this.classList.toggle('open')"><h4>Can I try it first?</h4><p>Yes. Send us your listing data and we'll build a free demo in 15 minutes.</p></div>
+  </div>
+</div>
+
+<div class="cta-section reveal" id="contact">
+  <h2>Want to see it work on your leads?</h2>
+  <p>Send us a message and we'll set up a quick demo with your actual listing data. Takes about 15 minutes.</p>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+    <a href="https://wa.me/14026212519" target="_blank" class="btn-main">WhatsApp us</a>
+    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=speedtoolead@gmail.com" class="btn-ghost">or email</a>
+  </div>
+  <div class="contact-line">WhatsApp: +1 (402) 621-2519 · Email: speedtoolead@gmail.com</div>
+</div>
+
+<div class="footer">Speed2Lead AI · Serving Tampa Bay — South Tampa, Hyde Park, Ybor City, Westchase, Carrollwood, Brandon, Riverview · © 2026</div>
+
+<script>
+  // Phone mouse tilt
+  const phone = document.getElementById('phone3d');
+  document.addEventListener('mousemove', (e) => {
+    if (!phone) return;
+    const x = (e.clientX / window.innerWidth - 0.5) * 2;
+    const y = (e.clientY / window.innerHeight - 0.5) * 2;
+    phone.style.transform = `rotateY(${-8 + x * 12}deg) rotateX(${4 - y * 8}deg)`;
+  });
+
+  // Timer counter
+  (function () {
+    const counter = document.getElementById('counter');
+    if (!counter) return;
+    const start = performance.now();
+    const duration = 10000;
+    function tick(now) {
+      const t = ((now - start) % duration) / duration;
+      const secs = (t * 10);
+      counter.textContent = secs.toFixed(2).padStart(5, '0') + 's';
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  })();
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

@@ -193,6 +193,46 @@
     .cta-box{flex-direction:column;text-align:center}
     .log{padding:0 16px}.cta-section{padding:40px 16px}
   }
+
+  /* SOURCES */
+  .sources-section{max-width:1000px;margin:0 auto;padding:40px 48px;text-align:center}
+  .sources-title{font-size:0.68em;font-weight:700;text-transform:uppercase;letter-spacing:3px;color:#999;margin-bottom:16px}
+  .sources-row{display:flex;justify-content:center;flex-wrap:wrap;gap:10px}
+  .source-pill{border:1px solid #e5e5e5;padding:8px 20px;font-size:0.85em;color:#666;transition:all 0.2s}
+  .source-pill:hover{border-color:#000;color:#000}
+
+  /* NEIGHBORHOODS */
+  .hoods-section{max-width:1000px;margin:0 auto;padding:0 48px 48px;text-align:center}
+  .hoods-title{font-size:0.68em;font-weight:700;text-transform:uppercase;letter-spacing:3px;color:#999;margin-bottom:16px}
+  .hoods-row{display:flex;justify-content:center;flex-wrap:wrap;gap:8px}
+  .hood-pill{border:1px solid #e5e5e5;padding:6px 16px;font-size:0.8em;color:#999}
+  .hood-pill:hover{border-color:#000;color:#000}
+
+  /* LIVE STATS */
+  .live-stats-section{max-width:1000px;margin:0 auto;padding:0 48px 40px}
+  .live-stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#e5e5e5;border:1px solid #e5e5e5}
+  @media(max-width:700px){.live-stats-grid{grid-template-columns:1fr 1fr}}
+  .live-stat-card{background:#fff;padding:24px;text-align:center;position:relative}
+  .live-dot{position:absolute;top:12px;right:12px;width:6px;height:6px;background:#000;border-radius:50%;animation:pulse 2s ease-in-out infinite}
+  .live-stat-num{font-size:1.8em;font-weight:800;color:#000;letter-spacing:-1px}
+  .live-stat-label{font-size:0.72em;color:#999;margin-top:4px;text-transform:uppercase;letter-spacing:1px}
+
+  /* PROPERTY CARD */
+  .property-section{max-width:1000px;margin:0 auto;padding:0 48px 48px}
+  .property-title{font-size:0.68em;font-weight:700;text-transform:uppercase;letter-spacing:3px;color:#999;margin-bottom:16px}
+  .property-card{border:1px solid #e5e5e5;overflow:hidden;display:grid;grid-template-columns:1fr 1fr}
+  @media(max-width:700px){.property-card{grid-template-columns:1fr}}
+  .property-image{background:linear-gradient(135deg,#1a1a1a 0%,#2a2a2a 100%);padding:40px;display:flex;flex-direction:column;justify-content:flex-end;min-height:280px;position:relative}
+  .property-badge{position:absolute;top:16px;left:16px;background:#000;color:#fff;padding:4px 12px;font-size:0.68em;font-weight:700;letter-spacing:1px}
+  .property-price{font-size:2.4em;font-weight:900;color:#fff;letter-spacing:-2px}
+  .property-details{padding:28px;background:#fff}
+  .property-address{font-size:1.1em;font-weight:700;color:#000;margin-bottom:8px}
+  .property-specs{display:flex;gap:6px;align-items:center;font-size:0.82em;color:#666;margin-bottom:20px}
+  .spec-dot{color:#ccc}
+  .property-ai-response{border:1px solid #e5e5e5;padding:16px;background:#fafafa}
+  .ai-response-header{display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:0.72em;color:#666;font-weight:600}
+  .ai-response-dot{width:6px;height:6px;background:#000;border-radius:50%;animation:pulse 2s ease-in-out infinite}
+  .ai-response-text{font-size:0.82em;color:#333;line-height:1.6;font-style:italic}
 </style>
 </head>
 <body>
@@ -297,6 +337,87 @@
   </div>
 </div>
 
+<div class="sources-section">
+  <div class="sources-title">Works with every lead source</div>
+  <div class="sources-row">
+    <div class="source-pill">Zillow</div>
+    <div class="source-pill">Realtor.com</div>
+    <div class="source-pill">Facebook</div>
+    <div class="source-pill">Google</div>
+    <div class="source-pill">MLS</div>
+    <div class="source-pill">Direct text</div>
+  </div>
+</div>
+
+<!-- LIVE STATS -->
+<div class="live-stats-section">
+  <div class="live-stats-grid">
+    <div class="live-stat-card">
+      <div class="live-dot"></div>
+      <div class="live-stat-num mono" id="leadsProcessed">2,847</div>
+      <div class="live-stat-label">Leads processed today</div>
+    </div>
+    <div class="live-stat-card">
+      <div class="live-stat-num mono">8.2s</div>
+      <div class="live-stat-label">Avg response time</div>
+    </div>
+    <div class="live-stat-card">
+      <div class="live-stat-num mono">94%</div>
+      <div class="live-stat-label">Response rate</div>
+    </div>
+    <div class="live-stat-card">
+      <div class="live-stat-num mono">312%</div>
+      <div class="live-stat-label">Conversion lift</div>
+    </div>
+  </div>
+</div>
+
+<!-- SAMPLE PROPERTY CARD -->
+<div class="property-section">
+  <div class="property-title">Example: How the AI handles a listing inquiry</div>
+  <div class="property-card">
+    <div class="property-image">
+      <div class="property-badge">SOLD IN 3 DAYS</div>
+      <div class="property-price">$749,000</div>
+    </div>
+    <div class="property-details">
+      <div class="property-address">Ballast Point, South Tampa</div>
+      <div class="property-specs">
+        <span>3 BD</span>
+        <span class="spec-dot">·</span>
+        <span>2 BA</span>
+        <span class="spec-dot">·</span>
+        <span>1,850 sqft</span>
+        <span class="spec-dot">·</span>
+        <span>Waterfront</span>
+      </div>
+      <div class="property-ai-response">
+        <div class="ai-response-header">
+          <div class="ai-response-dot"></div>
+          <span>Speed2Lead AI responded in 8 seconds</span>
+        </div>
+        <div class="ai-response-text">"Hey Sarah! I saw your interest in waterfront homes in South Tampa. Good timing — I have a 3BR/2BA in Ballast Point that just came on the market. $749K, private dock, no bridges to the bay. Want me to send details?"</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="hoods-section">
+  <div class="hoods-title">Serving Tampa Bay</div>
+  <div class="hoods-row">
+    <span class="hood-pill">South Tampa</span>
+    <span class="hood-pill">Hyde Park</span>
+    <span class="hood-pill">Ybor City</span>
+    <span class="hood-pill">Westchase</span>
+    <span class="hood-pill">Carrollwood</span>
+    <span class="hood-pill">Brandon</span>
+    <span class="hood-pill">Riverview</span>
+    <span class="hood-pill">Ballast Point</span>
+    <span class="hood-pill">Davis Islands</span>
+    <span class="hood-pill">Channelside</span>
+  </div>
+</div>
+
 <div class="footer">Speed2Lead AI · Serving Tampa Bay — South Tampa, Hyde Park, Ybor City, Westchase, Carrollwood, Brandon, Riverview &middot; © 2026</div>
 
 <script>
@@ -308,6 +429,17 @@ document.addEventListener('mousemove', (e) => {
   const y = (e.clientY / window.innerHeight - 0.5) * 2;
   phone.style.transform = `rotateY(${-6 + x * 10}deg) rotateX(${3 - y * 6}deg)`;
 });
+
+// Live counter animation
+(function() {
+  const el = document.getElementById('leadsProcessed');
+  if (!el) return;
+  let count = 2847;
+  setInterval(() => {
+    count += Math.floor(Math.random() * 3);
+    el.textContent = count.toLocaleString();
+  }, 3000);
+})();
 
 function appendLog(text, cls) {
   const box = document.getElementById('logBox');
